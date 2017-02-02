@@ -1,0 +1,176 @@
+@import "bootstrap";
+@import "bootstrap-theme";
+
+body {
+  font-family: Avenir;
+  padding-top: 60px;
+}
+
+.sidebar-wrapper {
+  z-index: 1000;
+  position: fixed;
+  right: 20px;
+  width: 52px;
+  @media (max-width: $screen-sm) {
+    width: 0px;
+  }
+  height: 100%;
+  margin-right: -20px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #e6e6e6;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+
+  #page-content-wrapper {
+      position: relative;
+      margin-right: 0;
+  }
+
+  &.toggled {
+    width: 200px;
+    #page-content-wrapper {
+      width: 100%;
+      padding: 20px;
+      position: relative;
+    }
+  }
+}
+
+.sidebar-nav {
+  position: absolute;
+  top: 0;
+  width: 250px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    text-indent: 20px;
+    line-height: 50px;
+
+    a {
+      display: block;
+      text-decoration: none;
+      color: black;
+
+      &:hover {
+        text-decoration: none;
+        color: #fff;
+        background: rgba(255,255,255,0.2);
+      }
+
+      &:active, &:focus {
+        text-decoration: none;
+      }
+
+      img {
+        margin-right: 20px;
+      }
+    }
+  }
+}
+
+.user-card {
+  padding: 0px 6px 6px 6px;
+  border: 1px solid lightgray;
+  font-family: Avenir;
+
+  .bookmark {
+    width: 50px;
+    float: left;
+    margin: -2px 0px 0px -5px;
+  }
+
+  .profile-info {
+    padding: 15px 10px 10px 10px;
+    background-color: white;
+
+    .profile-pic {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: none;
+      background-size: cover;
+      background-position: center;
+      margin: 0 auto;
+    }
+
+    .name-location {
+      clear: both;
+      text-align: center;
+      white-space: nowrap;
+
+      h3 {
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        margin: 10px 0;
+      }
+
+      h4 {
+        font-size: 14px;
+      }
+
+      .distance {
+        margin: 5px 0;
+        font-size: 12px;
+      }
+    }
+
+    .skill-icons {
+      overflow: hidden;
+      padding-top: 10px;
+    }
+
+    hr {
+      border-top: 1px dashed lightgray;
+      margin: 0px -15px;
+    }
+
+    p {
+      color: #18bc9c;
+      margin-top: 5px;
+    }
+
+    .popover {
+      width: 50%;
+    }
+  }
+
+  .about-me{
+    text-align: center;
+    font-weight:bold;
+  }
+
+  .about-me-note{
+    padding: 0px 6px 15px 6px;
+    text-align: center;
+  }
+
+  .action-calls {
+    text-align: center;
+    width: 100%;
+    padding: 10px 0px;
+    text-transform: uppercase;
+    box-shadow: 1px 1px 2px gray;
+  }
+}
+
+.skill-label {
+  display: inline-block;
+  padding: 3px 8px;
+  margin: 5px;
+  border: 1px solid black;
+  background-color: none;
+  border-radius: 2px;
+}
+
+.skill-select {
+  .skill-label.selected, .skill-label:hover {
+    color: white;
+    background-color: #4a4a4a;
+    cursor: pointer;
+  }
+}

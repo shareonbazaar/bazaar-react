@@ -1,0 +1,12 @@
+*.log
+
+# API keys and secrets
+.env
+
+# Dependency directory
+node_modules
+
+# OS metadata
+.DS_Store
+
+public/bundle.js
