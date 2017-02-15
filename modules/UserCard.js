@@ -20,7 +20,7 @@ export default class UserCard extends React.Component {
                     <div className='skill-icons'>
                         {this.props.user.skills.map((skill, i) => {
                             return (
-                                <div key={i} className='skill-label'>{skill.label}</div>
+                                <div key={i} className='skill-label'>{skill.label.en}</div>
                             );
                         })}
                     </div>

@@ -27,6 +27,8 @@ const passportConfig = require('./config/passport');
  * Controllers (route handlers).
  */
 const userController = require('./controllers/user');
+const transactionController = require('./controllers/transaction');
+
 
 /**
  * Connect to MongoDB.
@@ -49,6 +51,11 @@ app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.get('/api/users/:id', passport.authenticate('jwt', { session: false }), userController.apiGetUser);
+app.get('/api/users', passport.authenticate('jwt', { session: false }), userController.apiSearchUsers);
+app.get('/api/transactions', passport.authenticate('jwt', { session: false }), transactionController.apiGetTransactions);
+app.post('/api/transactions', passport.authenticate('jwt', { session: false }), transactionController.postTransaction);
+app.patch('/api/transactions/:id', passport.authenticate('jwt', { session: false }), transactionController.patchTransaction);
+app.post('/api/reviews', passport.authenticate('jwt', { session: false }), transactionController.postReview);
 
 
 // ...

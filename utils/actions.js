@@ -6,6 +6,39 @@ export const LOGIN_FAILURE = 'LOGIN_FAILURE'
 export const LOGOUT_CONFIRM = 'LOGOUT_CONFIRM'
 export const PROFILE_REQUEST = 'PROFILE_REQUEST'
 export const PROFILE_RECEIVED = 'PROFILE_RECEIVED'
+export const TRANSACTIONS_REQUEST = 'TRANSACTIONS_REQUEST'
+export const TRANSACTIONS_RECEIVED = 'TRANSACTIONS_RECEIVED'
+export const SET_TRANSACTION_STATUS = 'SET_TRANSACTION_STATUS'
+export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER'
+export const SUBMIT_REQUEST = 'SUBMIT_REQUEST'
+export const CONFIRM_REQUEST_SUBMISSION = 'CONFIRM_REQUEST_SUBMISSION'
+export const USERS_REQUEST = 'USERS_REQUEST'
+export const USERS_RECEIVED = 'USERS_RECEIVED'
+
+function callApi (endpoint, method='GET', data={}) {
+    var config = {
+        headers: {
+            token: localStorage.getItem('token'),
+        },
+        method,
+    };
+    if (method !== 'GET') {
+        config.headers['Content-Type'] = 'application/json';
+        config.body = JSON.stringify(data);
+    }
+    console.log(endpoint)
+    console.log(config)
+    return fetch(endpoint, config)
+    .then(response => response.json())
+}
+
+export const setVisibilityFilter = (filter) => {
+  return {
+    type: SET_VISIBILITY_FILTER,
+    filter,
+  }
+}
+
 
 function confirmLogout () {
     return {
@@ -20,6 +53,37 @@ export function requestLogout () {
     return dispatch => {
         localStorage.removeItem('token');
         dispatch(confirmLogout())
+    }
+}
+
+function submitRequest () {
+    return {
+        type: SUBMIT_REQUEST,
+    }
+}
+
+function confirmRequestSubmission (conf) {
+    return {
+        type: CONFIRM_REQUEST_SUBMISSION,
+    }
+}
+
+export function skillRequest (data) {
+    return dispatch => {
+        dispatch(submitRequest());
+        return callApi('/api/transactions', 'POST', data)
+        .then (confirmation => dispatch(confirmRequestSubmission(confirmation)))
+    }
+}
+
+export function submitReview (data) {
+    return dispatch => {
+        dispatch(submitRequest());
+        return callApi('/api/reviews', 'POST', data)
+        .then (confirmation => {
+            dispatch(confirmRequestSubmission(confirmation));
+            dispatch(loadTransactions());
+        })
     }
 }
 
@@ -38,19 +102,65 @@ function receiveProfile (user) {
 }
 
 export function loadProfile (id) {
-    return (dispatch, getState) => {
-        const config = {
-            headers: {
-                token: localStorage.getItem('token'),
-            }
-        };
+    return dispatch => {
         dispatch(requestProfile(id));
+        return callApi('/api/users/' + id)
+        .then(user => dispatch(receiveProfile(user)));
+    }
+}
 
-        return fetch('/api/users/' + id, config)
-        .then(response => response.json())
-        .then(user => {
-            dispatch(receiveProfile(user));
-        })
+function requestUsers () {
+    return {
+        type: USERS_REQUEST,
+    }
+}
+
+function receiveUsers (users) {
+    return {
+        type: USERS_RECEIVED,
+        users,
+    }
+}
+
+export function loadUsers () {
+    return dispatch => {
+        dispatch(requestUsers());
+        return callApi('/api/users')
+        .then(users => dispatch(receiveUsers(users)));
+    }
+}
+
+export function setTransactionStatus (t_id, status) {
+    return dispatch => {
+        dispatch({
+            type: SET_TRANSACTION_STATUS,
+            t_id,
+            status,
+        });
+        return callApi('/api/transactions/' + t_id, 'PATCH', {
+            status,
+        }).then(response => dispatch(loadTransactions()))
+    }
+}
+
+function requestTransactions () {
+    return {
+        type: TRANSACTIONS_REQUEST,
+    }
+}
+
+function receiveTransactions (transactions) {
+    return {
+        type: TRANSACTIONS_RECEIVED,
+        transactions,
+    }
+}
+
+export function loadTransactions () {
+    return dispatch => {
+        dispatch(requestTransactions());
+        return callApi('/api/transactions')
+        .then(transactions => dispatch(receiveTransactions(transactions)));
     }
 }
 
@@ -77,33 +187,22 @@ function loginError (message) {
 }
 
 export function loginUser (creds) {
-  let config = {
-    method: 'POST',
-    headers: { 
-        'Content-Type':'application/json'
-    },
-    body: JSON.stringify(creds.data),
-  }
+    return dispatch => {
+        dispatch(submitSkillRequest());
+        return callApi('/api/transactions', 'POST', creds.data)
+        .then (({user, response}) => {
 
-  return dispatch => {
-    // We dispatch requestLogin to kickoff the call to the API
-    dispatch(requestLogin(creds))
-
-    return fetch(creds.endpoint, config)
-      .then(response =>
-        response.json().then(user => ({ user, response }))
-            ).then(({ user, response }) =>  {
-        if (!response.ok) {
-          // If there was a problem, we want to
-          // dispatch the error condition
-          dispatch(loginError(user.message))
-          return Promise.reject(user)
-        } else {
-          // If login was successful, set the token in local storage
-          localStorage.setItem('token', user.token)
-          // Dispatch the success action
-          dispatch(receiveLogin(user.user))
-        }
-      }).catch(err => console.log("Error: ", err))
-  }
+            if (!response.ok) {
+                // If there was a problem, we want to
+                // dispatch the error condition
+                dispatch(loginError(user.message))
+                return Promise.reject(user)
+            } else {
+                // If login was successful, set the token in local storage
+                localStorage.setItem('token', user.token)
+                // Dispatch the success action
+                dispatch(receiveLogin(user.user))
+            }
+        }).catch(err => console.log("Error: ", err))
+    }
 }

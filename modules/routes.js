@@ -2,7 +2,7 @@ import React from 'react'
 import App from './App'
 import Community from './Community'
 import Splash from './Splash'
-import Transactions from './Transactions'
+import VisibleTransactionList from './VisibleTransactionList'
 import Profile from './Profile'
 import Login from './Login'
 
@@ -33,7 +33,7 @@ export default (store) => {
       <Route path="/" component={App}>
           <IndexRoute component={Home} />
           <Route path="login" component={Login} onEnter={bypassAuth} />
-          <Route path="transactions" component={Transactions} onEnter={requireAuth} />
+          <Route path="transactions" component={VisibleTransactionList} onEnter={requireAuth} />
           <Route path="profile/:id" component={Profile} onEnter={requireAuth} />
       </Route>
     )

@@ -12,7 +12,6 @@ import { push } from 'react-router-redux'
 export class Login extends React.Component {
   constructor (props) {
     super(props)
-    console.log("constructing login")
     this.state = {
       emailText: '',
       password: '',
