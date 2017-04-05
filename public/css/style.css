@@ -13,6 +13,14 @@ body {
   background-color: #f4f4f4;
 }
 
+.content-page {
+  margin: 0 auto;
+  @media (min-width: 1200px) {
+    width: 50%;
+  }
+}
+
+
 .overlay {
   opacity:    0.5;
   background: #000;
@@ -408,6 +416,68 @@ body {
      content: "\2605";
      position: absolute;
      color: gold;
+  }
+}
+
+.radio {
+  padding: 11px 0;
+  background: #e6e6e6;
+  font-style: italic;
+  text-align: center;
+  border: 1px solid #efefef;
+  width: 33%;
+  display: inline-block;
+  &.selected {
+    background-color: #98d9b5;
+  }
+}
+
+.edit-profile-page {
+  .label-top {
+    vertical-align: top;
+    padding-top: 5px;
+  }
+  .user-activities {
+    text-align: center;
+    ul {
+      text-align: left;
+    }
+  }
+
+  .form-control, .user-activities {
+    display: inline-block;
+    @media (min-width: 768px) {
+      width: 60%;
+    }
+  }
+
+  .control-label {
+    margin-right: 10px;
+    @media (min-width: 768px) {
+      text-align: right;
+      width: 25%;
+    }
+  }
+
+  .radio-block {
+    display: inline-block;
+    @media (min-width: 768px) {
+      width: 60%;
+    }
+  }
+
+  .save-button {
+    text-align: center;
+    @media (min-width: 768px) {
+      margin-left: 25%;
+      width: 60%;
+    }
+  }
+
+  .circular-img {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
   }
 }
 

@@ -2,6 +2,8 @@ const User = require('../models/User');
 const Skill = require('../models/Skill');
 const Enums = require('../models/Enums');
 const helpers = require('../utils/helpers');
+const aws = require('aws-sdk');
+
 
 
 function getPublicUserData (user) {
@@ -106,4 +108,54 @@ exports.apiSearchUsers = function (req, res) {
           }
       });
   }
+};
+
+function uploadPicture (filename, fileBuffer, mimetype, callback) {
+    //aws credentials
+    aws.config = new aws.Config();
+    aws.config.accessKeyId = process.env.AWS_ACCESS_KEY_ID;
+    aws.config.secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
+    aws.config.region = process.env.AWS_REGION;
+    var BUCKET_NAME = process.env.AWS_BUCKET_NAME;
+
+    var s3 = new aws.S3();
+    s3.putObject({
+      ACL: 'public-read',
+      Bucket: BUCKET_NAME,
+      Key: filename,
+      Body: fileBuffer,
+      ContentType: mimetype
+    }, (error, response) => {
+      console.log('uploaded file ' + filename);
+      callback(error);
+    });
+}
+
+exports.patchUser = (req, res) => {
+    const save = (req, res, pic={}) => {
+      User.findOneAndUpdate(
+        {_id: req.user.id},
+        Object.assign({}, req.body, {
+          _skills: JSON.parse(req.body._skills),
+          _interests: JSON.parse(req.body._interests),
+        }, pic),
+        {new: true},
+        helpers.respondToAjax(res));
+    }
+
+    if (req.file) {
+        var mimetype = req.file.mimetype;
+        var filename = req.user._id + '.' + mimetype.split('/').pop();
+        var picUrl = 'https://s3.' + process.env.AWS_REGION + '.' + 'amazonaws.com/' + process.env.AWS_BUCKET_NAME + '/' + filename;
+        uploadPicture(filename, req.file.buffer, mimetype, (error) => {
+          if (error) {
+            res.json({error: error});
+          } else {
+            save(req, res, {'profile.picture': picUrl});
+          }
+        });
+    } else {
+      save(req, res)
+    }
+
 };

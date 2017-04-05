@@ -47,11 +47,19 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
+const multer  = require('multer');
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage })
+app.use(upload.single('profilepic'));
+
+
+
 // serve our static stuff like index.css
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.get('/api/users/:id', passport.authenticate('jwt', { session: false }), userController.apiGetUser);
 app.get('/api/users', passport.authenticate('jwt', { session: false }), userController.apiSearchUsers);
+app.post('/api/users', passport.authenticate('jwt', { session: false }), userController.patchUser);
 app.get('/api/transactions', passport.authenticate('jwt', { session: false }), transactionController.apiGetTransactions);
 app.post('/api/transactions', passport.authenticate('jwt', { session: false }), transactionController.postTransaction);
 app.patch('/api/transactions/:id', passport.authenticate('jwt', { session: false }), transactionController.patchTransaction);

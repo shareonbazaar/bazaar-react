@@ -7,7 +7,8 @@ import {
   TRANSACTIONS_REQUEST, TRANSACTIONS_RECEIVED,
   SUBMIT_REQUEST, CONFIRM_REQUEST_SUBMISSION,
   USERS_REQUEST, USERS_RECEIVED,
-  SET_TRANSACTION_STATUS, SET_VISIBILITY_FILTER
+  SET_TRANSACTION_STATUS, SET_VISIBILITY_FILTER,
+  UPDATE_PROFILE_REQUEST, UPDATED_PROFILE_RECEIVED
 } from './actions'
 
 
@@ -48,6 +49,15 @@ function auth(state = {
                 isFetching: false,
                 isAuthenticated: false,
                 user: {},
+            })
+        case UPDATE_PROFILE_REQUEST:
+            return Object.assign({}, state, {
+                isFetching: true,
+            })
+        case UPDATED_PROFILE_RECEIVED:
+            return Object.assign({}, state, {
+                isFetching: false,
+                user: action.user,
             })
         default:
           return state

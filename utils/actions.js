@@ -14,6 +14,8 @@ export const SUBMIT_REQUEST = 'SUBMIT_REQUEST'
 export const CONFIRM_REQUEST_SUBMISSION = 'CONFIRM_REQUEST_SUBMISSION'
 export const USERS_REQUEST = 'USERS_REQUEST'
 export const USERS_RECEIVED = 'USERS_RECEIVED'
+export const UPDATE_PROFILE_REQUEST = 'UPDATE_PROFILE_REQUEST'
+export const UPDATED_PROFILE_RECEIVED = 'UPDATED_PROFILE_RECEIVED'
 
 function callApi (endpoint, method='GET', data={}) {
     var config = {
@@ -161,6 +163,46 @@ export function loadTransactions () {
         dispatch(requestTransactions());
         return callApi('/api/transactions')
         .then(transactions => dispatch(receiveTransactions(transactions)));
+    }
+}
+
+export function updateProfile (data) {
+    var config = {
+        headers: {
+            token: localStorage.getItem('token'),
+        },
+        method: 'POST',
+        body: data,
+    };
+    return dispatch => {
+        dispatch({
+            type: UPDATE_PROFILE_REQUEST,
+        });
+        return fetch('/api/users', config)
+        .then(response => response.json())
+        .then(({error, data}) => {
+            if (error) {
+                console.log(error)
+            } else {
+                dispatch({
+                    type: UPDATED_PROFILE_RECEIVED,
+                    user: data,
+                })
+            }
+        })
+    }
+}
+
+export function uploadPhoto ({file, name}) {
+    return dispatch => {
+        let data = new FormData();
+        data.append('file', file);
+        data.append('name', name);
+        return callApi('/api/uploadPhoto', 'POST', data)
+        .then(user => dispatch({
+            type: UPDATED_PROFILE_RECEIVED,
+            user,
+        }))
     }
 }
 
