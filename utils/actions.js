@@ -230,20 +230,19 @@ function loginError (message) {
 
 export function loginUser (creds) {
     return dispatch => {
-        dispatch(submitSkillRequest());
-        return callApi('/api/transactions', 'POST', creds.data)
-        .then (({user, response}) => {
-
-            if (!response.ok) {
+        dispatch(submitRequest());
+        return callApi(creds.endpoint || '/api/login', 'POST', creds.data)
+        .then (({user, error, token}) => {
+            if (error) {
                 // If there was a problem, we want to
                 // dispatch the error condition
-                dispatch(loginError(user.message))
+                dispatch(loginError(error))
                 return Promise.reject(user)
             } else {
                 // If login was successful, set the token in local storage
-                localStorage.setItem('token', user.token)
+                localStorage.setItem('token', token)
                 // Dispatch the success action
-                dispatch(receiveLogin(user.user))
+                dispatch(receiveLogin(user))
             }
         }).catch(err => console.log("Error: ", err))
     }
