@@ -13,10 +13,8 @@ class Profile extends React.Component {
 
     constructor (props) {
         super(props);
-        console.log("CONSTRUCTOR " + props.params.id)
         this.props.loadProfile(props.params.id)
     }
-
 
     componentWillReceiveProps (newProps) {
         console.log("WILL RECEIVE " + newProps.params.id)
@@ -34,13 +32,13 @@ class Profile extends React.Component {
             <div className='user-profile content-page'>
                 <Grid fluid={true}>
                     <Row>
-                        <Col md={6} className='info-box'>
+                        <Col md={12} className='info-box'>
                             <div className='box'>
                                 <div className='circular-img profile-pic'>
                                     <img src={this.props.profiledUser.picture} />
                                 </div>
                                 <div className='bio'>
-                                    <h3>{this.props.name}</h3>
+                                    <h3>{this.props.profiledUser.name}</h3>
                                     <div className='place'>{this.props.profiledUser.hometown}</div>
                                     <div className='place'>{this.props.profiledUser.location}</div>
                                     <div className='place'>Member since {moment(this.props.profiledUser.createdAt).format('MMM YYYY')}</div>
@@ -57,7 +55,9 @@ class Profile extends React.Component {
                                 )
                             }
                         </Col>
-                        <Col md={6} className='info-box'>
+                    </Row>
+                    <Row>
+                        <Col md={12} className='info-box'>
                             <div className='skills-box'>
                                 <div className='box'>
                                     <h4>I can offer</h4>

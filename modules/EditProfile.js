@@ -19,7 +19,8 @@ function UploadPhoto (props) {
     return (
         <div className={props.className}>
             <CircularImage imageUrl={props.imageUrl} />
-            <input className='fileInput' type='file' onChange={props.onImageChange} />
+            <label className='upload-message' htmlFor='fileInput'> Update photo</label>
+            <input id="fileInput" style={{display: 'none'}} type='file' onChange={props.onImageChange} />
         </div>
     )
 }
@@ -95,7 +96,7 @@ class EditProfile extends React.Component {
     render () {
         return (
           <div className='content-page edit-profile-page'>
-            <div className='page-header'><h3>Sign in</h3></div>
+            <div className='page-header'><h3>Edit your profile</h3></div>
             <div>
               <FormGroup>
                 <ControlLabel className='label-top'>Profile picture</ControlLabel>

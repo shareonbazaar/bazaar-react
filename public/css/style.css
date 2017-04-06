@@ -7,10 +7,14 @@ $screen-sm:                  768px !default;
 $screen-md:                  992px !default;
 $screen-lg:                  1200px !default;
 
+@font-face { font-family: 'Avenir';
+             src: url('/fonts/Avenir/AvenirLTStd-Medium.otf') format('truetype'); }
+
 body {
   font-family: Avenir;
   padding-top: 60px;
   background-color: #f4f4f4;
+  font-size: 15px;
 }
 
 .content-page {
@@ -47,6 +51,17 @@ body {
     text-transform: lowercase;
     font-size: 19px;
   }
+}
+
+.btn-primary {
+  margin: 0 auto;
+  display: block;
+  color: #fff;
+  background-color: #98D9B5;
+  border: none;
+  background-image: none;
+  text-shadow: none;
+  box-shadow: none;
 }
 
 .responsive-margins {
@@ -478,6 +493,61 @@ body {
     width: 150px;
     height: 150px;
     margin: 0 auto;
+  }
+
+  .upload-message {
+    display: block;
+    margin: 7px auto;
+    padding: 2px;
+    text-align: center;
+    width: 60%;
+    background-color: #464646;
+    color: white;
+    font-weight: 200;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+}
+
+.user-profile {
+  .bio {
+    display: inline-block;
+    margin-left: 10%;
+    vertical-align: top;
+    .place {
+      font-size: 13px;
+    }
+  }
+
+  .row {
+    &:nth-child(1) {
+      @media (min-width: $screen-md) {
+        display: flex;
+      }
+      .info-box {
+        display: flex;
+        flex-direction: column;
+        > div {
+          flex: 1;
+        }
+      }
+    }
+  }
+
+  .btn-primary {
+    width: 90%;
+    text-transform: none;
+    border-radius: 2px;
+    @media (max-width: $screen-sm) {
+      margin-bottom: 10px;
+    }
+  }
+
+  .profile-pic {
+    width: 30%;
+    padding-top: 30%;
+    display: inline-block;
   }
 }
 
