@@ -5,7 +5,6 @@ const helpers = require('../utils/helpers');
 const aws = require('aws-sdk');
 
 
-
 function getPublicUserData (user) {
     return {
         name: user.profile.name,
@@ -28,24 +27,24 @@ exports.apiGetUser = function (req, res) {
     console.log("API ")
     User.findById(req.params.id)
     .populate('_skills _interests')
-    .exec((err, user) => {
+    .exec()
+    .then((user) => {
         if (!user) {
             res.status(404).json(err);
         } else {
             res.json(getPublicUserData(user));
         }
+    }).catch((err) => {
+        res.status(500).json(err);
     });
 }
 
 const EARTH_RADIUS_KM = 6378.1;
-function performQuery (req, query, callback) {
+function performQuery (req, query) {
   // Default match is an EXCHANGE match - that is, user is interested
   // in both receiving and providing the service.
   if (!(query.skills instanceof Array)) {
-      callback({
-        error: "'skills' parameter is required and must be an array of skills",
-      });
-      return;
+    return Promise.reject(new Error("'skills' parameter is required and must be an array of skills"));
   }
 
   var db_query = {
@@ -68,9 +67,7 @@ function performQuery (req, query, callback) {
   // undefined will always get pushed to the end of the array, so this checks
   // that there is a defined value _and_ at least one undefined value.
   if ([distance, longitude, latitude].sort().indexOf(undefined) > 0) {
-      error = {error: 'Distance, latitude, and longitude must all be specified together (or not at all).'};
-      callback(error);
-      return;
+      return Promise.reject(new Error('Distance, latitude, and longitude must all be specified together (or not at all).'));
   }
 
   if (distance && longitude && latitude) {
@@ -88,25 +85,21 @@ function performQuery (req, query, callback) {
           '$geoWithin': {'$centerSphere': [ [Number(longitude), Number(latitude)], Number(distance) / EARTH_RADIUS_KM ] },
       }
   }
-  User.find(db_query).populate('_skills _interests').exec(callback);
+  return User.find(db_query).populate('_skills _interests').exec();
 }
 
 exports.apiSearchUsers = function (req, res) {
   if (Object.keys(req.query).length === 0) {
       User.find({_id: {'$ne': req.user.id}})
       .populate('_skills _interests')
-      .exec((err, results) => {
-          res.json(results.map(getPublicUserData));
-      });
+      .exec()
+      .then(results => res.json(results.map(getPublicUserData)))
+      .catch(err => res.status(500).json(err));
   } else {
       // FIXME: Use IP address to get long/lat?
-      performQuery(req, req.query, (err, results) => {
-          if (err) {
-            res.status(400).json(err);
-          } else {
-            res.json(results.map(getPublicUserData));
-          }
-      });
+      performQuery(req, req.query)
+      .then(results => res.json(results.map(getPublicUserData)))
+      .catch(err => res.status(500).json(err));
   }
 };
 
@@ -119,43 +112,36 @@ function uploadPicture (filename, fileBuffer, mimetype, callback) {
     var BUCKET_NAME = process.env.AWS_BUCKET_NAME;
 
     var s3 = new aws.S3();
-    s3.putObject({
-      ACL: 'public-read',
-      Bucket: BUCKET_NAME,
-      Key: filename,
-      Body: fileBuffer,
-      ContentType: mimetype
-    }, (error, response) => {
-      console.log('uploaded file ' + filename);
-      callback(error);
-    });
+    return s3.putObject({
+        ACL: 'public-read',
+        Bucket: BUCKET_NAME,
+        Key: filename,
+        Body: fileBuffer,
+        ContentType: mimetype
+    }).promise();
 }
 
 exports.patchUser = (req, res) => {
-    const save = (req, res, pic={}) => {
-      User.findOneAndUpdate(
-        {_id: req.user.id},
-        Object.assign({}, req.body, {
-          _skills: JSON.parse(req.body._skills),
-          _interests: JSON.parse(req.body._interests),
-        }, pic),
-        {new: true},
-        helpers.respondToAjax(res));
-    }
+    var prevPromise = new Promise((resolve) => resolve({}));
 
     if (req.file) {
         var mimetype = req.file.mimetype;
         var filename = req.user._id + '.' + mimetype.split('/').pop();
-        var picUrl = 'https://s3.' + process.env.AWS_REGION + '.' + 'amazonaws.com/' + process.env.AWS_BUCKET_NAME + '/' + filename;
-        uploadPicture(filename, req.file.buffer, mimetype, (error) => {
-          if (error) {
-            res.json({error: error});
-          } else {
-            save(req, res, {'profile.picture': picUrl});
-          }
-        });
-    } else {
-      save(req, res)
+        var picUrl = `https://s3.${process.env.AWS_REGION}.amazonaws.com/${process.env.AWS_BUCKET_NAME}/${filename}`;
+        prevPromise = uploadPicture(filename, req.file.buffer, mimetype)
+                      .then(() => {return {'profile.picture': picUrl}})
     }
 
+    prevPromise
+    .then((pic) => {
+        return User.findOneAndUpdate(
+          {_id: req.user.id},
+          Object.assign({}, req.body, {
+            _skills: JSON.parse(req.body._skills),
+            _interests: JSON.parse(req.body._interests),
+          }, pic),
+          {new: true}).exec();
+    })
+    .then((data) => res.json({error: null, data}))
+    .catch((err) => res.status(500).json({error: err}));
 };

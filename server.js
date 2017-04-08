@@ -6,6 +6,10 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const bodyParser = require('body-parser');
 
+// Use native promises
+mongoose.Promise = global.Promise;
+
+
 
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.

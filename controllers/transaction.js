@@ -98,10 +98,9 @@ exports.apiGetTransactions = (req, res) => {
             }
         },
     ])
-    .exec((err, transactions) => {
-        console.log("transactions " + transactions)
-        return res.json(transactions);
-    });
+    .exec()
+    .then(transactions => res.json(transactions))
+    .catch(err => res.status(500).json(err));
 };
 
 /**
@@ -112,10 +111,13 @@ exports.apiGetTransactions = (req, res) => {
 exports.patchTransaction = (req, res) => {
     // FIXME: May need more authentication checks here
     Transaction.findOneAndUpdate(
-      {_id: req.params.id,
-        _participants: req.user.id},
-      req.body,
-      helpers.respondToAjax(res));
+      {
+        _id: req.params.id,
+        _participants: req.user.id
+      },
+      req.body)
+    .then((data) => res.json({error: null, data}))
+    .catch((err) => res.status(500).json({error: err}));
 };
 
 
@@ -125,7 +127,6 @@ exports.patchTransaction = (req, res) => {
  * request so status is PROPOSED.
  */
 exports.postTransaction = (req, res) => {
-    console.log(req.body)
     var trans = new Transaction({
         service: req.body.service,
         request_type: req.body.request_type,
@@ -135,10 +136,9 @@ exports.postTransaction = (req, res) => {
         status: Enums.StatusType.PROPOSED,
     });
     console.log(trans)
-    trans.save(() => {
-        console.log("HALLO")
-        res.json({ok: 200})
-    });
+    trans.save()
+    .then((data) => res.json({error: null, data}))
+    .catch((err) => res.status(500).json({error: err}));
 };
 
 /**
@@ -155,5 +155,7 @@ exports.postReview = (req, res) => {
         _creator: req.user.id,
     });
 
-    review.save(helpers.respondToAjax(res));
+    review.save()
+    .then((data) => res.json({error: null, data}))
+    .catch((err) => res.status(500).json({error: err}));
 };
