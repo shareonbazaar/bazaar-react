@@ -93,7 +93,7 @@ class TransactionCollapsable extends React.Component {
 
     render () {
         if (this.state.inChatMode) {
-            return <Chat onBack={this.onChatClick} messages={this.props.content._messages} />
+            return <Chat t_id={this.props.content._id} onBack={this.onChatClick} messages={this.props.content._messages} />
         } else if (this.props.status === StatusType.PROPOSED) {
             return <Proposed content={this.props.content} userIsOwner={this.props.userIsOwner} onChatClick={this.onChatClick} />
         } else if (this.props.status === StatusType.ACCEPTED) {

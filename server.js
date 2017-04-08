@@ -32,6 +32,7 @@ const passportConfig = require('./config/passport');
  */
 const userController = require('./controllers/user');
 const transactionController = require('./controllers/transaction');
+const messageController = require('./controllers/message');
 
 
 /**
@@ -60,6 +61,9 @@ app.use(upload.single('profilepic'));
 
 // serve our static stuff like index.css
 app.use(express.static(path.join(__dirname, 'public')))
+
+// Initialize the sockets for sending and receiving messages
+messageController.initSockets(server);
 
 app.get('/api/users/:id', passport.authenticate('jwt', { session: false }), userController.apiGetUser);
 app.get('/api/users', passport.authenticate('jwt', { session: false }), userController.apiSearchUsers);

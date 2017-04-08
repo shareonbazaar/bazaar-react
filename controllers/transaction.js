@@ -33,6 +33,51 @@ exports.apiGetTransactions = (req, res) => {
             }
         },
         {
+            '$unwind': {path: '$_messages', preserveNullAndEmptyArrays: true}
+        },
+        {
+            '$lookup': {
+                'from': 'users',
+                'localField': '_messages._sender',
+                'foreignField': '_id',
+                'as': '_messages._sender',
+            }
+        },
+        {
+            '$unwind': {path: '$_messages._sender', preserveNullAndEmptyArrays: true}
+        },
+        {
+            '$group': {
+                '_id': '$_id',
+                'service': {'$first': '$service'},
+                '_creator': {'$first': '$_creator'},
+                '_messages': {'$push': '$_messages'},
+                'loc': {'$first': { '$ifNull': [ "$loc", {'$literal': {type: 'Point', coordinates: [null, null]}}] }},
+                'status': {'$first': '$status'},
+                'happenedAt': {'$first': '$happenedAt'},
+                'placeName': {'$first': '$placeName'},
+                'request_type': {'$first': '$request_type'},
+                '_participants': {'$first': '$_participants'},
+                'createdAt': {'$first': '$createdAt'}
+            }
+        },
+        // This $project is needed to remove empty objects from _messages array
+        // that were put there via the lookup to for _sender
+        {
+            '$project': {
+                '_messages': { '$setDifference': [ '$_messages', [{}] ] },
+                'service': 1,
+                '_creator': 1,
+                'loc': 1,
+                'status': 1,
+                'happenedAt': 1,
+                'placeName': 1,
+                'request_type': 1,
+                '_participants': 1,
+                'createdAt': 1,
+            }
+        },
+        {
             '$lookup': {
                 'from': 'reviews',
                 'localField': '_id',
