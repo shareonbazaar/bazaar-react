@@ -1,5 +1,6 @@
 import React, { PropTypes as T } from 'react'
 import { connect } from 'react-redux'
+import { Link } from 'react-router'
 import { loginUser } from '../utils/actions'
 
 import { Button, Modal, ControlLabel, FormGroup, FormControl } from 'react-bootstrap';
@@ -51,29 +52,54 @@ export class Login extends React.Component {
       })
     }
     return (
-      <div>
-        <h3>Sign in</h3>
-        <FormGroup>
-          <ControlLabel>Email</ControlLabel>
-          <FormControl type="text" value={this.state.emailText} placeholder="Email" onChange={(e) => {this.onChange(e, 'emailText')}}/>
-        </FormGroup>
-        <FormGroup>
-          <ControlLabel>Password</ControlLabel>
-          <FormControl type="password" value={this.state.password} placeholder="Password" onChange={(e) => {this.onChange(e, 'password')}}/>
-        </FormGroup>
-          <GoogleLogin
-            clientId="402876983916-k3pi2lsqh130r3a95o0rp1s3c2v0ugb2.apps.googleusercontent.com"
-            buttonText="Login"
-            onSuccess={responseGoogle}
-            onFailure={responseGoogle}
-            fetchBasicProfile={true}
-          />
-          <FacebookLogin
-            appId="542727669212147"
-            autoLoad={false}
-            fields="name,email,picture"
-            callback={responseFacebook}
-          />,
+      <div className='content-page form-page'>
+        <div className='page-header'><h3>Sign In</h3></div>
+        <div>
+          <FormGroup>
+            <ControlLabel>Email</ControlLabel>
+            <FormControl type="email" value={this.state.emailText} placeholder="Email" onChange={(e) => {this.onChange(e, 'emailText')}}/>
+          </FormGroup>
+          <FormGroup>
+            <ControlLabel>Password</ControlLabel>
+            <FormControl type="password" value={this.state.password} placeholder="Password" onChange={(e) => {this.onChange(e, 'password')}}/>
+          </FormGroup>
+          <FormGroup>
+            <div className='form-offset'>
+              <Button className='login-button' bsStyle='primary'>Login</Button>
+              <Link className='forgot-link' to='/forgot'>Forgot password?</Link>
+            </div>
+          </FormGroup>
+          <FormGroup>
+            <div className='form-offset'>
+              Don't have an account?
+              <Link className='sign-up-link' to='/signup'>Sign up</Link>
+            </div>
+          </FormGroup>
+          <FormGroup>
+            <div className='form-offset'>
+              <FacebookLogin
+                appId="542727669212147"
+                autoLoad={false}
+                fields="name,email,picture"
+                callback={responseFacebook}
+                icon="fa-facebook"
+                textButton="Sign in with Facebook"
+                cssClass='facebook-login'
+              />
+              <GoogleLogin
+                clientId="402876983916-k3pi2lsqh130r3a95o0rp1s3c2v0ugb2.apps.googleusercontent.com"
+                buttonText="Sign in with Google"
+                onSuccess={responseGoogle}
+                onFailure={responseGoogle}
+                fetchBasicProfile={true}
+                className='google-login'
+              >
+                <i className='fa fa-google'></i>
+                <span>Sign in with Google</span>
+              </GoogleLogin>
+            </div>
+          </FormGroup>
+        </div>
       </div>
     )
   }
