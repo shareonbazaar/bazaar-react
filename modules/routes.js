@@ -5,7 +5,7 @@ import Splash from './Splash'
 import VisibleTransactionList from './VisibleTransactionList'
 import Profile from './Profile'
 import EditProfile from './EditProfile'
-import Login from './Login'
+import { Login, Signup } from './Authentication'
 
 import { Route, IndexRoute } from 'react-router'
 
@@ -34,6 +34,7 @@ export default (store) => {
       <Route path="/" component={App}>
           <IndexRoute component={Home} />
           <Route path="login" component={Login} onEnter={bypassAuth} />
+          <Route path="signup" component={Signup} onEnter={bypassAuth} />
           <Route path="transactions" component={VisibleTransactionList} onEnter={requireAuth} />
           <Route path="profile/:id" component={Profile} onEnter={requireAuth} />
           <Route path="editprofile" component={EditProfile} onEnter={requireAuth} />

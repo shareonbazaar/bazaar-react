@@ -95,7 +95,7 @@ class EditProfile extends React.Component {
 
     render () {
         return (
-          <div className='content-page form-page'>
+          <div className='content-page edit-profile-page'>
             <div className='page-header'><h3>Edit your profile</h3></div>
             <div>
               <FormGroup>

@@ -447,7 +447,7 @@ body {
   }
 }
 
-.form-page {
+.edit-profile-page, .login-page, .signup-page {
   .label-top {
     vertical-align: top;
     padding-top: 5px;
@@ -468,6 +468,7 @@ body {
 
   .control-label {
     margin-right: 10px;
+    vertical-align: -webkit-baseline-middle;
     @media (min-width: 768px) {
       text-align: right;
       width: 25%;
@@ -508,40 +509,48 @@ body {
     border-radius: 4px;
     cursor: pointer;
   }
+  .forgot-link, .sign-up-link {
+    color: black;
+    &:hover {
+      text-decoration: none;
+      color: #999;
+    }
+  }
+
+  .forgot-link {
+    padding: 20px;
+  }
+
+  .sign-up-link {
+    margin-left: 5px;
+  }
+
+  .login-button {
+    margin: 0 0 0 10px;
+    padding: 10px 25px;
+    display: inline-block;
+  }
 
   .form-offset {
     margin-left: 25%;
-    .login-button {
-      margin: 0 0 0 10px;
-      padding: 10px 25px;
-      display: inline-block;
-    }
-    .forgot-link, .sign-up-link {
-      color: black;
-      &:hover {
-        text-decoration: none;
-        color: #999;
-      }
-    }
-
-    .forgot-link {
-      padding: 20px;
-    }
-
-    .sign-up-link {
-      margin-left: 5px;
-    }
   }
 }
 
-.facebook-login, .google-login {
+.login-page {
+
+  .social-media-buttons {
+    width: 60%;
+  }
+}
+
+.social-media-buttons {
+  width: 100%;
   border-radius: 3px;
   border: none;
   color: white;
   font-family: 'Avenir';
   display: block;
   text-align: left;
-  width: 60%;
   margin: 5px 0;
   i {
     padding: 10px 20px;
@@ -549,16 +558,16 @@ body {
     border-right: 1px solid rgba(0, 0, 0, 0.2);
     font-size: large;
   }
-}
 
-.facebook-login {
-  background-color: #3b5998;
-}
+  &.facebook-login {
+    background-color: #3b5998;
+  }
 
-.google-login {
-  background-color: #dd4b39;
-  i {
-    padding: 10px 17.5px;
+  &.google-login {
+    background-color: #dd4b39;
+    i {
+      padding: 10px 17.5px;
+    }
   }
 }
 
