@@ -3,7 +3,7 @@ import { Button, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
 import { connect } from 'react-redux'
 import CircularImage from './CircularImage'
 import SkillsModal from './SkillsModal'
-import { updateProfile, uploadPhoto } from '../utils/actions'
+import { updateProfile } from '../utils/actions'
 
 
 function Radio (props) {

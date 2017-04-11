@@ -193,19 +193,6 @@ export function updateProfile (data) {
     }
 }
 
-export function uploadPhoto ({file, name}) {
-    return dispatch => {
-        let data = new FormData();
-        data.append('file', file);
-        data.append('name', name);
-        return callApi('/api/uploadPhoto', 'POST', data)
-        .then(user => dispatch({
-            type: UPDATED_PROFILE_RECEIVED,
-            user,
-        }))
-    }
-}
-
 function requestLogin (creds) {
   return {
     type: LOGIN_REQUEST,
