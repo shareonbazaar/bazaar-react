@@ -86,7 +86,7 @@ app.post('/api/login', passportConfig.apiLogin);
  * OAuth authentication routes. (Sign in)
  */
 app.post('/auth/google', passportConfig.authenticate_google);
-// app.post('/auth/facebook', passportConfig.authenticate_facebook);
+app.post('/auth/facebook', passportConfig.authenticate_facebook);
 
 
 

@@ -5,6 +5,7 @@ const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const LocalStrategy = require('passport-local').Strategy;
 const GoogleAuth = require('google-auth-library');
+const requestify = require('requestify');
 
 
 const User = require('../models/User');
@@ -84,42 +85,100 @@ exports.authenticate_google = (req, res, done) => {
   var client = new auth.OAuth2(process.env.GOOGLE_ID, '', '');
   client.verifyIdToken(req.body.id_token, process.env.GOOGLE_ID, (e, login) => {
       var payload = login.getPayload();
-      if (req.user) {
-        User.findOne({ google: payload.sub }, (err, existingUser) => {
-          if (existingUser) {
-            req.flash('errors', { msg: 'There is already a Google account that belongs to you. Sign in with that account or delete it, then link it with your current account.' });
-            done(err);
-          } else {
-            User.findById(req.user.id, (err, user) => {
-              user.google = payload.sub;
-              user.profile.name = payload.name;
-              user.profile.picture = payload.picture;
-              user.save((err) => {
-                provideToken(req, res, user, err);
-              });
+      User.findOne({ google: payload.sub }).exec()
+      .then(existingUser => {
+        if (existingUser) {
+            res.json({
+                token: jwt.sign({ email: existingUser.email }, process.env.SESSION_SECRET),
+                user: existingUser,
+                error: null,
+                status: 200,
+            });
+        } else {
+            User.findOne({ email: payload.email }).exec()
+            .then(existingEmailUser => {
+                if (existingEmailUser) {
+                    res.status(CONFLICT).json({
+                        error: "There is already an account with this email address",
+                        status: CONFLICT,
+                    });
+                } else {
+                    const user = new User({
+                        email: payload.email,
+                        google: payload.sub,
+                        'profile.name': payload.name,
+                        'profile.picture': payload.picture,
+                    });
+                    user.save()
+                    // FIXME: .then(user => userController.sendWelcomeEmail())
+                    .then(data => res.json({
+                        token: jwt.sign({ email: user.email }, process.env.SESSION_SECRET),
+                        user: user,
+                        error: null,
+                        status: 200,
+                    }))
+                }
             });
           }
-        });
-      } else {
-        User.findOne({ google: payload.sub }, (err, existingUser) => {
-          if (existingUser) {
-            return provideToken(req, res, existingUser, err);
-          }
-          User.findOne({ email: payload.email }, (err, existingEmailUser) => {
-            if (existingEmailUser) {
-              provideToken(req, res, existingEmailUser, err);
-            } else {
-              const user = new User();
-              user.email = payload.email;
-              user.google = payload.sub;
-              user.profile.name = payload.name;
-              user.profile.picture = payload.picture;
-              saveNewUser(req, res, user);
-            }
-          });
-        });
-      }
+      })
+      .catch(err => res.status(500).json(err));
   });
+}
+
+const CONFLICT = 409;
+const FB_ENDPOINT = 'https://graph.facebook.com/me';
+exports.authenticate_facebook = (req, res, done) => {
+    console.log(req.body)
+    requestify.get(`${FB_ENDPOINT}`, {
+        params: {
+            fields: 'id,email,gender,location,hometown,name,picture',
+            access_token: req.body.access_token,
+        }
+    })
+    .then((response) => {
+        var payload = response.getBody();
+        User.findOne({ facebook: payload.id }).exec()
+        .then(existingUser => {
+            if (existingUser) {
+                //user has authenticated correctly thus we create a JWT token
+                res.json({
+                    token: jwt.sign({ email: existingUser.email }, process.env.SESSION_SECRET),
+                    user: existingUser,
+                    error: null,
+                    status: 200,
+                });
+            } else {
+                User.findOne({ email: payload.email }).exec()
+                .then(existingEmailUser => {
+                    if (existingEmailUser) {
+                        res.status(CONFLICT).json({
+                            error: "There is already an account with this email address",
+                            status: CONFLICT,
+                        });
+                    } else {
+                        const user = new User({
+                            email: payload.email,
+                            facebook: payload.id,
+                            'profile.name': payload.name,
+                            'profile.gender': payload.gender,
+                            'profile.hometown': payload.hometown.name,
+                            'profile.location': payload.location.name,
+                            'profile.picture': payload.picture.data.url,
+                        });
+                        user.save()
+                        // FIXME: .then(user => userController.sendWelcomeEmail())
+                        .then(data => res.json({
+                            token: jwt.sign({ email: user.email }, process.env.SESSION_SECRET),
+                            user: user,
+                            error: null,
+                            status: 200,
+                        }))
+                    }
+                })
+            }
+        })
+    })
+    .catch(err => res.status(500).json(err));
 }
 
 

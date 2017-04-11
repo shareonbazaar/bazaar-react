@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { loginUser } from '../utils/actions'
 
-import { Button, Modal, ControlLabel, FormGroup, FormControl } from 'react-bootstrap';
+import { Button, Modal, ControlLabel, FormGroup, FormControl, Alert } from 'react-bootstrap';
 import GoogleLogin from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
 
@@ -55,6 +55,11 @@ export class Login extends React.Component {
       <div className='content-page form-page'>
         <div className='page-header'><h3>Sign In</h3></div>
         <div>
+          {this.props.errorMessage &&
+            <Alert bsStyle='danger'>
+              <p>{this.props.errorMessage}</p>
+            </Alert>
+          }
           <FormGroup>
             <ControlLabel>Email</ControlLabel>
             <FormControl type="email" value={this.state.emailText} placeholder="Email" onChange={(e) => {this.onChange(e, 'emailText')}}/>
@@ -110,6 +115,7 @@ export class Login extends React.Component {
 function mapStateToProps(state, ownProps) {
   return {
     isAuthenticated: state.auth.isAuthenticated,
+    errorMessage: state.auth.errorMessage,
   }
 }
 
