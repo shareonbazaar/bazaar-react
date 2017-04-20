@@ -1,8 +1,9 @@
+const aws = require('aws-sdk');
+
 const User = require('../models/User');
 const Skill = require('../models/Skill');
 const Enums = require('../models/Enums');
 const helpers = require('../utils/helpers');
-const aws = require('aws-sdk');
 
 
 function getPublicUserData (user) {
@@ -24,7 +25,6 @@ function getPublicUserData (user) {
 };
 
 exports.apiGetUser = function (req, res) {
-    console.log("API ")
     User.findById(req.params.id)
     .populate('_skills _interests')
     .exec()

@@ -1,5 +1,3 @@
-const async = require('async');
-
 const Transaction = require('../models/Transaction');
 const Review = require('../models/Review');
 const Enums = require('../models/Enums');

@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const bodyParser = require('body-parser');
+const expressValidator = require('express-validator');
 
 // Use native promises
 mongoose.Promise = global.Promise;
@@ -48,6 +49,7 @@ app.set('port', process.env.PORT || 3000);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(expressValidator());
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -81,6 +83,7 @@ app.get('*', function (req, res) {
 })
 
 app.post('/api/login', passportConfig.apiLogin);
+app.post('/api/signup', passportConfig.apiSignup);
 
 /**
  * OAuth authentication routes. (Sign in)

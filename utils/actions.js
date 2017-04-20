@@ -217,8 +217,8 @@ function loginError (message) {
 
 export function loginUser (creds) {
     return dispatch => {
-        dispatch(submitRequest());
-        return callApi(creds.endpoint || '/api/login', 'POST', creds.data)
+        dispatch(requestLogin());
+        return callApi(creds.endpoint, 'POST', creds.data)
         .then (({user, error, token}) => {
             if (error) {
                 // If there was a problem, we want to

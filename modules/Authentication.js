@@ -6,6 +6,7 @@ import { loginUser } from '../utils/actions'
 import { Button, Grid, Col, Row, ControlLabel, FormGroup, FormControl, Alert } from 'react-bootstrap';
 import GoogleLogin from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
+import validator from 'email-validator';
 
 import { push } from 'react-router-redux'
 
@@ -48,6 +49,7 @@ class Signup extends React.Component {
       confirmPassword: '',
       firstName: '',
       lastName: '',
+      hasClickedSignup: false,
     }
     this.onChange = this.onChange.bind(this)
     this.responseGoogle = this.responseGoogle.bind(this)
@@ -86,6 +88,16 @@ class Signup extends React.Component {
   }
 
   render() {
+    let firstNameValid = this.state.firstName.length > 0;
+    let lastNameValid = this.state.lastName.length > 0;
+    let emailValid = validator.validate(this.state.emailText);
+    let passwordsValid = (this.state.password.length > 0 && this.state.password == this.state.confirmPassword)
+    const onSignupClicked = () => {
+      this.setState({hasClickedSignup: true})
+      if (firstNameValid && lastNameValid && emailValid && passwordsValid) {
+          this.props.onSignup(this.state);
+      }
+    }
     return (
       <div className='content-page signup-page'>
         <div className='page-header'><h3>Sign Up</h3></div>
@@ -98,15 +110,15 @@ class Signup extends React.Component {
                   <p>{this.props.errorMessage}</p>
                 </Alert>
               }
-              <FormGroup>
+              <FormGroup validationState={(this.state.hasClickedSignup && !firstNameValid) ? 'error' : null}>
                 <ControlLabel>First Name</ControlLabel>
                 <FormControl type="text" value={this.state.firstName} placeholder="John" onChange={(e) => {this.onChange(e, 'firstName')}}/>
               </FormGroup>
-              <FormGroup>
+              <FormGroup validationState={(this.state.hasClickedSignup && !lastNameValid) ? 'error' : null}>
                 <ControlLabel>Last Name</ControlLabel>
                 <FormControl type="text" value={this.state.lastName} placeholder="Doe" onChange={(e) => {this.onChange(e, 'lastName')}}/>
               </FormGroup>
-              <FormGroup>
+              <FormGroup validationState={(this.state.hasClickedSignup && !emailValid) ? 'error' : null}>
                 <ControlLabel>Email</ControlLabel>
                 <FormControl type="email" value={this.state.emailText} placeholder="Email" onChange={(e) => {this.onChange(e, 'emailText')}}/>
               </FormGroup>
@@ -114,13 +126,13 @@ class Signup extends React.Component {
                 <ControlLabel>Password</ControlLabel>
                 <FormControl type="password" value={this.state.password} placeholder="Password" onChange={(e) => {this.onChange(e, 'password')}}/>
               </FormGroup>
-              <FormGroup>
+              <FormGroup validationState={(this.state.hasClickedSignup && !passwordsValid) ? 'error' : null}>
                 <ControlLabel>Confirm Password</ControlLabel>
                 <FormControl type="password" value={this.state.confirmPassword} placeholder="Password" onChange={(e) => {this.onChange(e, 'confirmPassword')}}/>
               </FormGroup>
               <FormGroup>
                 <div className='form-offset'>
-                  <Button className='login-button' bsStyle='primary'>Signup</Button>
+                  <Button className='login-button' bsStyle='primary' onClick={onSignupClicked}>Signup</Button>
                 </div>
               </FormGroup>
               <FormGroup>
@@ -161,7 +173,7 @@ class Login extends Signup {
           </FormGroup>
           <FormGroup>
             <div className='form-offset'>
-              <Button className='login-button' bsStyle='primary'>Login</Button>
+              <Button className='login-button' bsStyle='primary' onClick={() => this.props.onLogin(this.state)}>Login</Button>
               <Link className='forgot-link' to='/forgot'>Forgot password?</Link>
             </div>
           </FormGroup>
@@ -180,7 +192,7 @@ class Login extends Signup {
 
 // These props come from the application's
 // state when it is started
-function mapStateToProps(state, ownProps) {
+function mapStateToProps (state, ownProps) {
   return {
     isAuthenticated: state.auth.isAuthenticated,
     errorMessage: state.auth.errorMessage,
@@ -194,6 +206,28 @@ function mapDispatchToProps (dispatch) {
     },
     authenticatedRedirect: (nextLocation) => {
       dispatch(push(nextLocation));
+    },
+    onLogin: (state) => {
+      dispatch(loginUser({
+          endpoint: '/api/login',
+          data: {
+              email: state.emailText,
+              password: state.password,
+          }
+      }))
+    },
+
+    onSignup: (state) => {
+      dispatch(loginUser({
+          endpoint: '/api/signup',
+          data: {
+              firstName: state.firstName,
+              lastName: state.lastName,
+              email: state.emailText,
+              password: state.password,
+              confirmPassword: state.confirmPassword,
+          }
+      }))
     }
   }
 }

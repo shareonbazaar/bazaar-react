@@ -1,4 +1,5 @@
 const async = require('async');
+const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const JwtStrategy = require('passport-jwt').Strategy;
@@ -6,7 +7,6 @@ const ExtractJwt = require('passport-jwt').ExtractJwt;
 const LocalStrategy = require('passport-local').Strategy;
 const GoogleAuth = require('google-auth-library');
 const requestify = require('requestify');
-
 
 const User = require('../models/User');
 
@@ -20,25 +20,7 @@ passport.deserializeUser((id, done) => {
   });
 });
 
-const provideToken = (req, res, user, err) => {
-    if (err || !user) {
-      return res.status(401).json({
-          error: 'Unauthorized access',
-          error_details: err,
-          token: null,
-          status: 401,
-      });
-    }
-
-    //user has authenticated correctly thus we create a JWT token
-    var token = jwt.sign({ email: user.email }, process.env.SESSION_SECRET);
-    res.json({
-        token: token,
-        user: user,
-        error: null,
-        status: 200,
-    });
-}
+const CONFLICT = 409;
 
 exports.apiLogin = (req, res, next) => {
   passport.authenticate('local', {session: false}, (err, user, info) => {
@@ -51,33 +33,80 @@ exports.apiLogin = (req, res, next) => {
       });
     }
     //user has authenticated correctly thus we create a JWT token
-    var token = jwt.sign({ email: user.email }, process.env.SESSION_SECRET);
     res.json({
-        token: token,
-        id: user.id,
+        token: jwt.sign({ email: user.email }, process.env.SESSION_SECRET),
+        user: user,
         error: null,
         status: 200,
     });
   })(req, res, next);
 };
 
-
-function saveNewUser (req, res, user) {
-    async.waterfall([
-      function (callback) {
-        user.save(function (err) {
-          callback(err, user);
-        });
+function sendWelcomeEmail (recipient) {
+    var transporter = nodemailer.createTransport({
+      service: 'Mailgun',
+      auth: {
+        user: process.env.MAILGUN_USER,
+        pass: process.env.MAILGUN_PASSWORD,
       },
-      function (user, callback) {
-        // FIXME: add this
-        // userController.sendWelcomeEmail(user, req, callback);
-        callback(null)
-      }
-    ], function (err) {
-        provideToken(req, res, user, err)
+    });
+
+    return transporter.sendMail({
+        to: recipient.email,
+        from: 'Bazaar Team <team@shareonbazaar.eu>',
+        subject: 'Welcome to the Bazaar, ' + recipient.profile.name,
+        text: 'Hi ' + recipient.profile.name + ',\n\n' +
+          'Thanks for signing up to Bazaar!.\n',
     });
 }
+
+exports.apiSignup = (req, res, next) => {
+  req.assert('firstName', 'You need to provide a first name').notEmpty();
+  req.assert('lastName', 'You need to provide a last name').notEmpty();
+  req.assert('email', 'Email is not valid').isEmail();
+  req.assert('password', 'Password must be at least 4 characters long').notEmpty().len(4);
+  req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
+  req.sanitize('email').normalizeEmail({ remove_dots: false });
+
+  const errors = req.validationErrors();
+  if (errors) {
+      return res.status(400).json({
+          error: errors.map(e => e.msg),
+          token: null,
+          status: 400,
+      });
+  }
+
+  var protocol = req.secure ? 'https://' : 'http://';
+  var base_url = protocol + req.headers.host;
+  User.findOne({ email: req.body.email }).exec()
+  .then(existingUser => {
+      if (existingUser) {
+          res.status(CONFLICT).json({
+              error: "There is already an account with this email address",
+              status: CONFLICT,
+          });
+      } else {
+          const user = new User({
+              profile: {
+                name: req.body.firstName + ' ' + req.body.lastName,
+                picture: base_url + '/images/person_placeholder.gif',
+              },
+              email: req.body.email,
+              password: req.body.password,
+          });
+          user.save()
+          .then(user => sendWelcomeEmail(user))
+          .then(data => res.json({
+              token: jwt.sign({ email: user.email }, process.env.SESSION_SECRET),
+              user: user,
+              error: null,
+              status: 200,
+          }))
+      }
+  })
+  .catch(err => res.status(500).json({error: err}));
+};
 
 
 exports.authenticate_google = (req, res, done) => {
@@ -85,7 +114,7 @@ exports.authenticate_google = (req, res, done) => {
   var client = new auth.OAuth2(process.env.GOOGLE_ID, '', '');
   client.verifyIdToken(req.body.id_token, process.env.GOOGLE_ID, (e, login) => {
       var payload = login.getPayload();
-      User.findOne({ google: payload.sub }).exec()
+      User.findOne({ google: payload.sub }).populate('_skills _interests').exec()
       .then(existingUser => {
         if (existingUser) {
             res.json({
@@ -121,14 +150,12 @@ exports.authenticate_google = (req, res, done) => {
             });
           }
       })
-      .catch(err => res.status(500).json(err));
+      .catch(err => res.status(500).json({error: err}));
   });
 }
 
-const CONFLICT = 409;
 const FB_ENDPOINT = 'https://graph.facebook.com/me';
 exports.authenticate_facebook = (req, res, done) => {
-    console.log(req.body)
     requestify.get(`${FB_ENDPOINT}`, {
         params: {
             fields: 'id,email,gender,location,hometown,name,picture',
@@ -137,7 +164,7 @@ exports.authenticate_facebook = (req, res, done) => {
     })
     .then((response) => {
         var payload = response.getBody();
-        User.findOne({ facebook: payload.id }).exec()
+        User.findOne({ facebook: payload.id }).populate('_skills _interests').exec()
         .then(existingUser => {
             if (existingUser) {
                 //user has authenticated correctly thus we create a JWT token
@@ -178,7 +205,7 @@ exports.authenticate_facebook = (req, res, done) => {
             }
         })
     })
-    .catch(err => res.status(500).json(err));
+    .catch(err => res.status(500).json({error: err}));
 }
 
 
@@ -203,7 +230,7 @@ passport.use(new JwtStrategy({secretOrKey: process.env.SESSION_SECRET, jwtFromRe
  * Sign in using Email and Password.
  */
 passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
-  User.findOne({ email: email.toLowerCase() }, (err, user) => {
+  User.findOne({ email: email.toLowerCase() }).populate('_skills _interests').exec((err, user) => {
     if (!user) {
       return done(null, false, { msg: `Email ${email} not found.` });
     }
