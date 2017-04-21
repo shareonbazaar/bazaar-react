@@ -61,13 +61,13 @@ class Profile extends React.Component {
                             <div className='skills-box'>
                                 <div className='box'>
                                     <h4>I can offer</h4>
-                                    {this.props.profiledUser.skills.map((skill, i) => <div className='skill-label' key={i}>{skill.label}</div>)}
+                                    {this.props.profiledUser.skills.map((skill, i) => <div className='skill-label' key={i}>{skill.label.en}</div>)}
                                 </div>
                             </div>
                             <div className='skills-box'>
                                 <div className='box'>
                                     <h4>I can offer</h4>
-                                    {this.props.profiledUser.interests.map((skill, i) => <div className='skill-label' key={i}>{skill.label}</div>)}
+                                    {this.props.profiledUser.interests.map((skill, i) => <div className='skill-label' key={i}>{skill.label.en}</div>)}
                                 </div>
                             </div>
                         </Col>

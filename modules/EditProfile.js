@@ -59,7 +59,6 @@ class EditProfile extends React.Component {
     onImageChange (e) {
         if (e.target.files && e.target.files[0]) {
             e.preventDefault();
-            console.log("here2")
 
             let reader = new FileReader();
             let file = e.target.files[0];

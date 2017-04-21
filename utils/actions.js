@@ -28,8 +28,6 @@ function callApi (endpoint, method='GET', data={}) {
         config.headers['Content-Type'] = 'application/json';
         config.body = JSON.stringify(data);
     }
-    console.log(endpoint)
-    console.log(config)
     return fetch(endpoint, config)
     .then(response => response.json())
 }
@@ -42,39 +40,22 @@ export const setVisibilityFilter = (filter) => {
 }
 
 
-function confirmLogout () {
-    return {
-        type: LOGOUT_CONFIRM,
-    }
-}
-
 // FIXME: Is this correct?? I'm using an async action
 // but not actually doing anything async like a network request
 // I'm just using it so I can do a side-effect: removing from localStorage
 export function requestLogout () {
     return dispatch => {
         localStorage.removeItem('token');
-        dispatch(confirmLogout())
+        dispatch({type: LOGOUT_CONFIRM})
     }
 }
 
-function submitRequest () {
-    return {
-        type: SUBMIT_REQUEST,
-    }
-}
-
-function confirmRequestSubmission (conf) {
-    return {
-        type: CONFIRM_REQUEST_SUBMISSION,
-    }
-}
 
 export function skillRequest (data) {
     return dispatch => {
-        dispatch(submitRequest());
+        dispatch({type: SUBMIT_REQUEST});
         return callApi('/api/transactions', 'POST', data)
-        .then (confirmation => dispatch(confirmRequestSubmission(confirmation)))
+        .then (confirmation => dispatch({type: CONFIRM_REQUEST_SUBMISSION}))
     }
 }
 
@@ -89,46 +70,23 @@ export function submitReview (data) {
     }
 }
 
-function requestProfile (id) {
-    return {
-        type: PROFILE_REQUEST,
-        id,
-    }
-}
-
-function receiveProfile (user) {
-    return {
-        type: PROFILE_RECEIVED,
-        user,
-    }
-}
 
 export function loadProfile (id) {
     return dispatch => {
-        dispatch(requestProfile(id));
-        return callApi('/api/users/' + id)
-        .then(user => dispatch(receiveProfile(user)));
-    }
-}
-
-function requestUsers () {
-    return {
-        type: USERS_REQUEST,
-    }
-}
-
-function receiveUsers (users) {
-    return {
-        type: USERS_RECEIVED,
-        users,
+        dispatch({type: PROFILE_REQUEST, id});
+        return callApi(`/api/users/${id}`)
+        .then(user => dispatch({type: PROFILE_RECEIVED, user}));
     }
 }
 
 export function loadUsers () {
     return dispatch => {
-        dispatch(requestUsers());
+        dispatch({type: USERS_REQUEST});
         return callApi('/api/users')
-        .then(users => dispatch(receiveUsers(users)));
+        .then(users => dispatch({
+            type: USERS_RECEIVED,
+            users,
+        }));
     }
 }
 
@@ -145,16 +103,14 @@ export function setTransactionStatus (t_id, status) {
     }
 }
 
-function requestTransactions () {
-    return {
-        type: TRANSACTIONS_REQUEST,
-    }
-}
-
-function receiveTransactions (transactions) {
-    return {
-        type: TRANSACTIONS_RECEIVED,
-        transactions,
+export function loadTransactions () {
+    return dispatch => {
+        dispatch({type: TRANSACTIONS_REQUEST});
+        return callApi('/api/transactions')
+        .then(transactions => dispatch({
+            type: TRANSACTIONS_RECEIVED,
+            transactions,
+        }));
     }
 }
 

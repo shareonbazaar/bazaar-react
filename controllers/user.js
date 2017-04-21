@@ -88,7 +88,7 @@ function performQuery (req, query) {
   return User.find(db_query).populate('_skills _interests').exec();
 }
 
-exports.apiSearchUsers = function (req, res) {
+exports.apiSearchUsers = (req, res) => {
   if (Object.keys(req.query).length === 0) {
       User.find({_id: {'$ne': req.user.id}})
       .populate('_skills _interests')

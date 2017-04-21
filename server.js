@@ -77,7 +77,7 @@ app.post('/api/reviews', passport.authenticate('jwt', { session: false }), trans
 
 
 // ...
-app.get('*', function (req, res) {
+app.get('*', (req, res) => {
   // and drop 'public' in the middle of here
   res.sendFile(path.join(__dirname, 'public', 'index.html'))
 })
