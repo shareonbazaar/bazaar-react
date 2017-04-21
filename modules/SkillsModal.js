@@ -1,14 +1,19 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Button, Modal } from 'react-bootstrap';
+import { loadCategories } from '../utils/actions'
 
 
-export default class SkillsModal extends React.Component {
+class SkillsModal extends React.Component {
     constructor (props) {
         super(props);
         this.state = {
             showModal: false,
         };
+    }
+
+    componentDidMount () {
+        this.props.loadCategories();
     }
 
     render () {
@@ -54,3 +59,21 @@ export default class SkillsModal extends React.Component {
         )
     }
 }
+
+function mapDispatchToProps (dispatch) {
+    return {
+        loadCategories: () => {
+            dispatch(loadCategories());
+        },
+    }
+}
+
+// These props come from the application's
+// state when it is started
+function mapStateToProps(state, ownProps) {
+    return {
+        categories: state.categories.items,
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SkillsModal);

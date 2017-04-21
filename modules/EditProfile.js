@@ -181,7 +181,6 @@ class EditProfile extends React.Component {
                     <SkillsModal
                         title="Skills"
                         skills={this.state.skills.map(s => s._id)}
-                        categories={[{label: {en: 'Sports' }, _id: 2, _skills: [{label: {en: 'Football'}, _id: 1}]}]}
                         onSkillClick={(skill) => {this.onArrayChange('skills', skill)}} />
                 </div>
               </FormGroup>
@@ -203,7 +202,6 @@ class EditProfile extends React.Component {
                     <SkillsModal
                         title="Interests"
                         skills={this.state.interests.map(s => s._id)}
-                        categories={[{label: {en: 'Sports' }, _id: 2, _skills: [{label: {en: 'Football'}, _id: 1}]}]}
                         onSkillClick={(skill) => {this.onArrayChange('interests', skill)}} />
                 </div>
               </FormGroup>

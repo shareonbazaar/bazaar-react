@@ -8,6 +8,8 @@ export const PROFILE_REQUEST = 'PROFILE_REQUEST'
 export const PROFILE_RECEIVED = 'PROFILE_RECEIVED'
 export const TRANSACTIONS_REQUEST = 'TRANSACTIONS_REQUEST'
 export const TRANSACTIONS_RECEIVED = 'TRANSACTIONS_RECEIVED'
+export const CATEGORIES_REQUEST = 'CATEGORIES_REQUEST'
+export const CATEGORIES_RECEIVED = 'CATEGORIES_RECEIVED'
 export const SET_TRANSACTION_STATUS = 'SET_TRANSACTION_STATUS'
 export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER'
 export const SUBMIT_REQUEST = 'SUBMIT_REQUEST'
@@ -114,11 +116,14 @@ export function loadTransactions () {
     }
 }
 
-export function loadTransactions () {
+export function loadCategories () {
     return dispatch => {
-        dispatch(requestTransactions());
-        return callApi('/api/transactions')
-        .then(transactions => dispatch(receiveTransactions(transactions)));
+        dispatch({type: CATEGORIES_REQUEST});
+        return callApi('/api/categories')
+        .then(categories => dispatch({
+            type: CATEGORIES_RECEIVED,
+            categories
+        }));
     }
 }
 

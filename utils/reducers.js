@@ -5,6 +5,7 @@ import {
   LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT_SUCCESS, LOGOUT_CONFIRM,
   PROFILE_REQUESTED, PROFILE_RECEIVED,
   TRANSACTIONS_REQUEST, TRANSACTIONS_RECEIVED,
+  CATEGORIES_REQUEST, CATEGORIES_RECEIVED,
   SUBMIT_REQUEST, CONFIRM_REQUEST_SUBMISSION,
   USERS_REQUEST, USERS_RECEIVED,
   SET_TRANSACTION_STATUS, SET_VISIBILITY_FILTER,
@@ -156,6 +157,25 @@ function users (state = {
     }
 }
 
+function categories (state = {
+    isFetching: false,
+    items: []
+    }, action) {
+    switch (action.type) {
+        case CATEGORIES_REQUEST:
+            return Object.assign({}, state, {
+                isFetching: true,
+            })
+        case CATEGORIES_RECEIVED:
+            return Object.assign({}, state, {
+                isFetching: false,
+                items: action.categories,
+            })
+        default:
+            return state;
+    }
+}
+
 
 export default combineReducers({
     routing: routerReducer,
@@ -163,5 +183,6 @@ export default combineReducers({
     userProfile,
     transactions,
     requests,
-    users
+    users,
+    categories,
 })
