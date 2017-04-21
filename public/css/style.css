@@ -289,6 +289,17 @@ body {
   }
 }
 
+.user-list {
+  margin: 10px auto;
+
+  .grid-item {
+    width: 300px;
+    margin-bottom: 10px;
+    border-radius: 1%;
+    background-color: white;
+  }
+}
+
 .user-card {
   padding: 0px 6px 6px 6px;
   border: 1px solid lightgray;

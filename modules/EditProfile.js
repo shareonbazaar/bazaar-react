@@ -218,24 +218,37 @@ class EditProfile extends React.Component {
 }
 
 function mapDispatchToProps (dispatch) {
-  return {
-    submitChanges: (state) => {
-        let form = new FormData();
-        form.append('profile.name', state.name)
-        form.append('profile.gender', state.gender)
-        form.append('profile.hometown', state.hometown)
-        form.append('profile.location', state.location)
-        form.append('profile.status', state.status)
-        form.append('aboutMe', state.aboutMe)
-        form.append('_skills', JSON.stringify(state.skills.map(s => s._id)))
-        form.append('_interests', JSON.stringify(state.interests.map(s => s._id)))
-        if (state.file) {
-            console.log("adding pic")
-            form.append('profilepic', state.file)
-        }
-        dispatch(updateProfile(form));
-    },
-  }
+    return {
+        submitChanges: (state) => {
+            let form = new FormData();
+            form.append('profile.name', state.name)
+            form.append('profile.gender', state.gender)
+            form.append('profile.hometown', state.hometown)
+            form.append('profile.location', state.location)
+            form.append('profile.status', state.status)
+            form.append('aboutMe', state.aboutMe)
+
+            // FormData won't let you send an empty array so we have to
+            // fake it by sending an empty string and then checking for
+            // that on client side
+            if (state.skills.length === 0) {
+                form.append('_skills', '')
+            } else {
+                state.skills.forEach(s => form.append('_skills', s._id))
+            }
+
+            if (state.interests.length === 0) {
+                form.append('_interests', '')
+            } else {
+                state.interests.forEach(s => form.append('_interests', s._id))
+            }
+
+            if (state.file) {
+                form.append('profilepic', state.file)
+            }
+            dispatch(updateProfile(form));
+        },
+    }
 }
 
 // These props come from the application's

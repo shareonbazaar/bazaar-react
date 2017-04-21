@@ -123,7 +123,9 @@ function uploadPicture (filename, fileBuffer, mimetype, callback) {
 
 exports.patchUser = (req, res) => {
     var prevPromise = new Promise((resolve) => resolve({}));
-
+    if (req.body.bookmarks === '') req.body.bookmarks = [];
+    if (req.body._skills === '') req.body._skills = [];
+    if (req.body._interests === '') req.body._interests = [];
     if (req.file) {
         var mimetype = req.file.mimetype;
         var filename = req.user._id + '.' + mimetype.split('/').pop();
@@ -136,12 +138,11 @@ exports.patchUser = (req, res) => {
     .then((pic) => {
         return User.findOneAndUpdate(
           {_id: req.user.id},
-          Object.assign({}, req.body, {
-            _skills: JSON.parse(req.body._skills),
-            _interests: JSON.parse(req.body._interests),
-          }, pic),
-          {new: true}).exec();
+          Object.assign({}, req.body, pic),
+          {new: true})
+          .populate('_skills _interests')
+          .exec();
     })
     .then((data) => res.json({error: null, data}))
-    .catch((err) => res.status(500).json({error: err}));
+    .catch((err) => {console.log(err);res.status(500).json({error: err})});
 };

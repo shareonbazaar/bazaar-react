@@ -8,7 +8,10 @@ export default class UserCard extends React.Component {
         }
         return (
             <div className='user-card grid-item'>
-                <img className='bookmark' src='/images/bookmark_inactive.svg' />
+                <img 
+                    onClick={this.props.onBookmarkClicked}
+                    className='bookmark'
+                    src={`/images/bookmark_${this.props.bookmarked ? 'active.svg' : 'inactive.svg'}`} />
                 <div className='profile-info'>
                     <div className='profile-pic' style={imageStyle} >
                     </div>
