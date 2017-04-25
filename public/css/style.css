@@ -50,6 +50,13 @@ body {
     color: black;
     text-transform: lowercase;
     font-size: 19px;
+    &:hover {
+      text-decoration: none;
+      color: #999;
+    }
+    img {
+      margin-right: 5px;
+    }
   }
 }
 
@@ -62,6 +69,9 @@ body {
   background-image: none;
   text-shadow: none;
   box-shadow: none;
+  &:hover {
+    background-color: #73cb9a;
+  }
 }
 
 .responsive-margins {
@@ -360,28 +370,11 @@ body {
       color: #18bc9c;
       margin-top: 5px;
     }
-
-    .popover {
-      width: 50%;
-    }
   }
-
-  .about-me{
-    text-align: center;
-    font-weight:bold;
-  }
-
-  .about-me-note{
-    padding: 0px 6px 15px 6px;
-    text-align: center;
-  }
-
-  .action-calls {
-    text-align: center;
-    width: 100%;
-    padding: 10px 0px;
+  .btn-primary {
     text-transform: uppercase;
-    box-shadow: 1px 1px 2px gray;
+    border-radius: 0px;
+    font-size: 15px;
   }
 }
 
