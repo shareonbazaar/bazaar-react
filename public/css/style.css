@@ -1,6 +1,8 @@
-@import "bootstrap";
-@import "bootstrap-theme";
-@import "react-datetime";
+@import "_bootstrap";
+@import "_bootstrap-theme";
+@import "_bootstrap-slider.min.css";
+@import "_react-datetime";
+@import 'react-select/dist/react-select.css';
 
 $screen-xs:                  480px !default;
 $screen-sm:                  768px !default;
@@ -49,6 +51,7 @@ body {
   height: 60px;
 
   a {
+    float: left;
     color: black;
     text-transform: lowercase;
     font-size: 19px;
@@ -72,6 +75,52 @@ body {
     }
     &:hover, &:focus {
       background-color: white;
+    }
+  }
+
+  .Select {
+    margin-top: 13px;
+  }
+}
+
+
+.query-box {
+  display: inline-block;
+  width: 60%;
+  left: 50%;
+  transform: translateX(-50%);
+  position: fixed;
+  .filter-options {
+    background-color: lightgray;
+    width: 100%;
+    z-index: 1;
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    top: -350px;
+    -webkit-transition-duration: 0.5s;
+    -moz-transition-duration: 0.5s;
+    -o-transition-duration: 0.5s;
+    transition-duration: 0.5s;
+
+    &.toggled {
+      top: 60px;
+    }
+
+    .service-type {
+      width: 33.33%;
+      display: inline-block;
+    }
+
+    .slider-wrapper {
+      padding: 10px 5px;
+    }
+  }
+  .button-wrapper {
+    button {
+      display: inline-block;
+      width: 30%;
+      margin: 0 1.5%;
     }
   }
 }

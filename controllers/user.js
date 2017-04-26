@@ -72,14 +72,13 @@ function performQuery (req, query) {
 
   if (distance && longitude && latitude) {
       if (isNaN(distance) || distance <= 0) {
-          error = {error: 'Distance must be a positive number'};
+          error = 'Distance must be a positive number';
       }
       if (isNaN(longitude) || isNaN(latitude)) {
-          error = {error: 'Latitude and longitude must be numbers'};
+          error = 'Latitude and longitude must be numbers';
       }
       if (error) {
-          callback(error);
-          return;
+          return Promise.reject(new Error(error));
       }
       db_query.loc = {
           '$geoWithin': {'$centerSphere': [ [Number(longitude), Number(latitude)], Number(distance) / EARTH_RADIUS_KM ] },
@@ -89,21 +88,59 @@ function performQuery (req, query) {
 }
 
 exports.apiSearchUsers = (req, res) => {
+  var queryPromise;
   if (Object.keys(req.query).length === 0) {
-      User.find({_id: {'$ne': req.user.id}})
+      queryPromise = User.find({_id: {'$ne': req.user.id}})
       .populate('_skills _interests')
       .exec()
-      .then(results => res.json(results.map(getPublicUserData)))
-      .catch(err => res.status(500).json(err));
   } else {
       // FIXME: Use IP address to get long/lat?
-      performQuery(req, req.query)
-      .then(results => res.json(results.map(getPublicUserData)))
-      .catch(err => res.status(500).json(err));
+      queryPromise = performQuery(req, req.query)
   }
+  queryPromise
+  .then(results => res.json({users: results.map(getPublicUserData), error: null}))
+  .catch(err => res.status(500).json({error: err.message}));
 };
 
-function uploadPicture (filename, fileBuffer, mimetype, callback) {
+exports.surprise = (req, res) => {
+    User.aggregate([
+      {
+          '$match': {
+              '$or': [
+                  {
+                      skills: {'$in': req.user._interests}
+                  },
+                  {
+                      interests: {'$in': req.user._skills}
+                  }
+              ],
+              '_id': {'$ne': req.user._id}
+          }
+      },
+      {
+          '$sample': { size: 1 }
+      }
+    ])
+    .exec()
+    .then(ideal_match => {
+        if (ideal_match.length > 0) {
+            return res.json({error: null, user: ideal_match[0]})
+        }
+        User.aggregate([
+            {
+                '$match': {_id: {'$ne': req.user._id}}
+            },
+            {
+                '$sample': {size: 1}
+            }
+        ])
+        .exec()
+        .then(rando => res.json({error: null, user: rando.length > 0 ? rando[0] : null}))
+    })
+    .catch(err => res.json({error: err}))
+}
+
+function uploadPicture (filename, fileBuffer, mimetype) {
     //aws credentials
     aws.config = new aws.Config();
     aws.config.accessKeyId = process.env.AWS_ACCESS_KEY_ID;

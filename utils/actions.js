@@ -1,4 +1,6 @@
 import React from 'react'
+import queryString from 'query-string'
+import { push } from 'react-router-redux'
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
@@ -81,14 +83,35 @@ export function loadProfile (id) {
     }
 }
 
-export function loadUsers () {
+export function loadUsers (query) {
     return dispatch => {
         dispatch({type: USERS_REQUEST});
-        return callApi('/api/users')
-        .then(users => dispatch({
-            type: USERS_RECEIVED,
-            users,
-        }));
+        return callApi(`/api/users?${queryString.stringify(query, {arrayFormat: 'bracket'})}`)
+        .then(({users, error}) => {
+            if (error) {
+                console.log(error)
+            } else {
+                return dispatch({
+                    type: USERS_RECEIVED,
+                    users,
+                });
+            }
+        });
+    }
+}
+
+export function getSurprise () {
+    return dispatch => {
+        return callApi('/api/surprise')
+        .then(({user, error}) => {
+            if (error) {
+                console.log(error)
+            } else {
+                if (user) {
+                    return dispatch(push(`/profile/${user._id}`))
+                }
+            }
+        });
     }
 }
 

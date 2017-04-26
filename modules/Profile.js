@@ -17,7 +17,6 @@ class Profile extends React.Component {
     }
 
     componentWillReceiveProps (newProps) {
-        console.log("WILL RECEIVE " + newProps.params.id)
         if (newProps.params.id !== this.props.params.id) {
             this.props.loadProfile(newProps.params.id);
         }
@@ -27,7 +26,6 @@ class Profile extends React.Component {
         if (Object.keys(this.props.profiledUser).length === 0) {
             return <div>Loading...</div>
         }
-        console.log(this.props.profiledUser)
         return (
             <div className='user-profile content-page'>
                 <Grid fluid={true}>
@@ -66,7 +64,7 @@ class Profile extends React.Component {
                             </div>
                             <div className='skills-box'>
                                 <div className='box'>
-                                    <h4>I can offer</h4>
+                                    <h4>I am interested in</h4>
                                     {this.props.profiledUser.interests.map((skill, i) => <div className='skill-label' key={i}>{skill.label.en}</div>)}
                                 </div>
                             </div>

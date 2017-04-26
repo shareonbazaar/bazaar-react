@@ -71,11 +71,12 @@ messageController.initSockets(server);
 app.get('/api/users/:id', passport.authenticate('jwt', { session: false }), userController.apiGetUser);
 app.get('/api/users', passport.authenticate('jwt', { session: false }), userController.apiSearchUsers);
 app.post('/api/users', passport.authenticate('jwt', { session: false }), userController.patchUser);
+app.get('/api/surprise', passport.authenticate('jwt', { session: false }), userController.surprise);
 app.get('/api/transactions', passport.authenticate('jwt', { session: false }), transactionController.apiGetTransactions);
 app.post('/api/transactions', passport.authenticate('jwt', { session: false }), transactionController.postTransaction);
 app.patch('/api/transactions/:id', passport.authenticate('jwt', { session: false }), transactionController.patchTransaction);
 app.post('/api/reviews', passport.authenticate('jwt', { session: false }), transactionController.postReview);
-app.get('/api/categories', passport.authenticate('jwt', { session: false }), skillController.apiGetCategories);
+app.get('/api/categories', skillController.apiGetCategories);
 
 
 // ...

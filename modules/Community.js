@@ -4,77 +4,6 @@ import Masonry from 'react-masonry-component'
 import { connect } from 'react-redux'
 import { loadUsers, updateProfile } from '../utils/actions'
 
-const Users = [
-    {
-        _id: 242,
-        name: 'Rory MacQueen',
-        location: 'Rio de Janeiro, Brazil',
-        picture: '/images/person_placeholder.gif',
-        skills: [
-            {
-                label: 'Arabic',
-                _id: 'arabic'
-            },
-            {
-                label: 'Chess',
-                _id: 'chess'
-            },
-            {
-                label: 'Billard',
-                _id: 'billard'
-            },
-            {
-                label: 'Gardening',
-                _id: 'gardening'
-            },
-        ]
-    },
-    {
-        _id: 243,
-        name: 'Nick Isaacs',
-        location: 'Berlin, Germany',
-        picture: '/images/person_placeholder.gif',
-        skills: [
-            {
-                label: 'Arabic',
-                _id: 'arabic'
-            },
-            {
-                label: 'Chess',
-                _id: 'chess'
-            },
-            {
-                label: 'Billard',
-                _id: 'billard'
-            },
-            {
-                label: 'Gardening',
-                _id: 'gardening'
-            },
-        ]
-    },
-    {
-        _id: 244,
-        name: 'Thorben Stieler',
-        location: 'New York, NY',
-        picture: '/images/person_placeholder.gif',
-        skills: [
-            {
-                label: 'Arabic',
-            },
-            {
-                label: 'Chess',
-            },
-            {
-                label: 'Billard',
-            },
-            {
-                label: 'Gardening',
-            },
-        ]
-    }
-
-]
 
 var masonryOptions = {
     gutter: 20,
@@ -89,7 +18,7 @@ class Community extends React.Component {
     }
 
     render () {
-        if (this.props.users.length === 0 || this.props.isFetching) {
+        if (!this.props.users || this.props.isFetching) {
             return <div>Loading...</div>
         }
         return (
