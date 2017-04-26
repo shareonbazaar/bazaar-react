@@ -8,14 +8,14 @@ import { requestLogout } from '../utils/actions'
 class SideBar extends React.Component {
   render() {
     return (
-    	<div className='sidebar-wrapper'>
-    		<ul className='sidebar-nav'>
-    			<SideBarLink toLink='/transactions' imageSrc='/images/chat.png' />
-    			<SideBarLink toLink='/bookmarks' imageSrc='/images/bookmark_icon.png' />
-                <SideBarLink toLink={'/profile/' + this.props.userId} imageSrc='/images/profile.png' />
-                <SideBarLink onClick={() => { this.props.onLogout()}} toLink='#' imageSrc='/images/logout.png' />
-    		</ul>
-    	</div>
+        <div className={`sidebar-wrapper ${this.props.toggled ? 'toggled' : ''}`}>
+            <ul className='sidebar-nav'>
+                <SideBarLink toLink='/transactions' imageSrc='/images/chat.png' text={'Wallet'} />
+                <SideBarLink toLink='/bookmarks' imageSrc='/images/bookmark_icon.png' text={'Bookmarks'} />
+                <SideBarLink toLink={'/profile/' + this.props.userId} imageSrc='/images/profile.png' text={'Profile'} />
+                <SideBarLink onClick={() => { this.props.onLogout()}} toLink='#' imageSrc='/images/logout.png' text={'Logout'} />
+            </ul>
+        </div>
     )
   }
 }

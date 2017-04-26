@@ -93,15 +93,17 @@ class Community extends React.Component {
             return <div>Loading...</div>
         }
         return (
-            <Masonry className={'user-list'} options={masonryOptions}>
-                {this.props.users.map(user => <UserCard
-                                                onBookmarkClicked={() => this.props.bookmarkCard(user._id, this.props.loggedInUser)}
-                                                key={user._id}
-                                                user={user}
-                                                bookmarked={this.props.loggedInUser.bookmarks.indexOf(user._id) >= 0}
-                                             />)
-                }
-            </Masonry>
+            <div className='community-page'>
+                <Masonry className='user-list' options={masonryOptions}>
+                    {this.props.users.map(user => <UserCard
+                                                    onBookmarkClicked={() => this.props.bookmarkCard(user._id, this.props.loggedInUser)}
+                                                    key={user._id}
+                                                    user={user}
+                                                    bookmarked={this.props.loggedInUser.bookmarks.indexOf(user._id) >= 0}
+                                                 />)
+                    }
+                </Masonry>
+            </div>
         )
   }
 }

@@ -45,17 +45,33 @@ body {
   background-color: white;
   box-shadow: none;
   border: none;
+  min-height: 60px;
+  height: 60px;
 
   a {
     color: black;
     text-transform: lowercase;
     font-size: 19px;
+    display: inline-block;
+    padding: 6px 0;
     &:hover {
       text-decoration: none;
       color: #999;
     }
     img {
       margin-right: 5px;
+    }
+  }
+
+  .navbar-toggle {
+    display: inline-block;
+    margin-right: 0px;
+    border: none;
+    .icon-bar {
+      background-color: #000;
+    }
+    &:hover, &:focus {
+      background-color: white;
     }
   }
 }
@@ -299,14 +315,17 @@ body {
   }
 }
 
-.user-list {
-  margin: 10px auto;
+.community-page {
+  padding-top: 10px;
 
-  .grid-item {
-    width: 300px;
-    margin-bottom: 10px;
-    border-radius: 1%;
-    background-color: white;
+  .user-list {
+    margin: 0 auto;
+    .grid-item {
+      width: 300px;
+      margin-bottom: 10px;
+      border-radius: 1%;
+      background-color: white;
+    }
   }
 }
 
