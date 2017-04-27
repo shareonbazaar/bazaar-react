@@ -9,7 +9,8 @@ import {
   SUBMIT_REQUEST, CONFIRM_REQUEST_SUBMISSION,
   USERS_REQUEST, USERS_RECEIVED,
   SET_TRANSACTION_STATUS, SET_VISIBILITY_FILTER,
-  UPDATE_PROFILE_REQUEST, UPDATED_PROFILE_RECEIVED
+  UPDATE_PROFILE_REQUEST, UPDATED_PROFILE_RECEIVED,
+  CONTACT_SUBMIT_CONFIRMED, CLEAR_CONTACT_ALERT,
 } from './actions'
 
 
@@ -176,6 +177,23 @@ function categories (state = {
     }
 }
 
+function contact (state = {
+    response: null
+    }, action) {
+    switch (action.type) {
+        case CONTACT_SUBMIT_CONFIRMED:
+            return Object.assign({}, state, {
+                response: action.response,
+            })
+        case CLEAR_CONTACT_ALERT:
+            return Object.assign({}, state, {
+                response: null,
+            })
+        default:
+            return state;
+    }
+}
+
 
 export default combineReducers({
     routing: routerReducer,
@@ -185,4 +203,5 @@ export default combineReducers({
     requests,
     users,
     categories,
+    contact,
 })

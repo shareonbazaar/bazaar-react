@@ -21,8 +21,12 @@ body {
 
 .content-page {
   margin: 0 auto;
+  overflow: auto;
   @media (min-width: 1200px) {
     width: 50%;
+  }
+  h3 {
+    font-size: 26px;
   }
 }
 
@@ -519,8 +523,15 @@ body {
   }
 }
 
-.edit-profile-page, .login-page, .signup-page {
-  .label-top {
+.form-control, .form-control:active, .form-control:focus {
+  border: 1px solid #efefef;
+  border-radius: 3px;
+  outline: none;
+  box-shadow: none;
+}
+
+.edit-profile-page, .login-page, .signup-page, .contact-page {
+  .control-label.label-top {
     vertical-align: top;
     padding-top: 5px;
   }

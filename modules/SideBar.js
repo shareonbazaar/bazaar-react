@@ -13,6 +13,7 @@ class SideBar extends React.Component {
                 <SideBarLink toLink='/transactions' imageSrc='/images/chat.png' text={'Wallet'} />
                 <SideBarLink toLink='/bookmarks' imageSrc='/images/bookmark_icon.png' text={'Bookmarks'} />
                 <SideBarLink toLink={'/profile/' + this.props.userId} imageSrc='/images/profile.png' text={'Profile'} />
+                <SideBarLink toLink='/contact' imageSrc='/images/help.png' text={'Contact'} />
                 <SideBarLink onClick={() => { this.props.onLogout()}} toLink='#' imageSrc='/images/logout.png' text={'Logout'} />
             </ul>
         </div>

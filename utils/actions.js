@@ -20,6 +20,9 @@ export const USERS_REQUEST = 'USERS_REQUEST'
 export const USERS_RECEIVED = 'USERS_RECEIVED'
 export const UPDATE_PROFILE_REQUEST = 'UPDATE_PROFILE_REQUEST'
 export const UPDATED_PROFILE_RECEIVED = 'UPDATED_PROFILE_RECEIVED'
+export const CONTACT_SUBMIT_REQUEST = 'CONTACT_SUBMIT_REQUEST'
+export const CONTACT_SUBMIT_CONFIRMED = 'CONTACT_SUBMIT_CONFIRMED'
+export const CLEAR_CONTACT_ALERT = 'CLEAR_CONTACT_ALERT'
 
 function callApi (endpoint, method='GET', data={}) {
     var config = {
@@ -171,6 +174,38 @@ export function updateProfile (data) {
                 dispatch({
                     type: UPDATED_PROFILE_RECEIVED,
                     user: data,
+                })
+            }
+        })
+    }
+}
+
+export function clearContactAlert () {
+    return {
+        type: CLEAR_CONTACT_ALERT,
+    }
+}
+
+export function submitContact (data) {
+    return dispatch => {
+        dispatch({
+            type: CONTACT_SUBMIT_REQUEST,
+        });
+        return callApi('/api/contact', 'POST', data)
+        .then(({error, data}) => {
+            if (error) {
+                console.log(error)
+                dispatch({
+                    type: CONTACT_SUBMIT_CONFIRMED,
+                    response: {type: 'error', message: error}
+                })
+            } else {
+                dispatch({
+                    type: CONTACT_SUBMIT_CONFIRMED,
+                    response: {
+                        type: 'success',
+                        message: "Thanks for submitting! We'll get back to you shortly"
+                    }
                 })
             }
         })

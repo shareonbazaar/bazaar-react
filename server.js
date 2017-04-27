@@ -35,6 +35,7 @@ const userController = require('./controllers/user');
 const transactionController = require('./controllers/transaction');
 const messageController = require('./controllers/message');
 const skillController = require('./controllers/skill');
+const contactController = require('./controllers/contact');
 
 
 /**
@@ -77,6 +78,8 @@ app.post('/api/transactions', passport.authenticate('jwt', { session: false }), 
 app.patch('/api/transactions/:id', passport.authenticate('jwt', { session: false }), transactionController.patchTransaction);
 app.post('/api/reviews', passport.authenticate('jwt', { session: false }), transactionController.postReview);
 app.get('/api/categories', skillController.apiGetCategories);
+
+app.post('/api/contact', contactController.postContact);
 
 
 // ...
