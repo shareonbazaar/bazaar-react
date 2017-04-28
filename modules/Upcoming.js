@@ -138,7 +138,16 @@ class Upcoming extends React.Component {
                 <Row className='responses'>
                     <Col sm={7} ><Button onClick={this.onEditClick}>{this.state.inViewMode ? 'Edit' : 'Update'}</Button></Col>
                     <Col sm={7} ><Button onClick={this.props.onChatClick}>Chat</Button></Col>
-                    <Col sm={7} ><ConfirmationModal onConfirmation={this.onConfirmation} /></Col>
+                    <Col sm={7} >
+                        <ConfirmationModal
+                            onConfirmation={this.onConfirmation}
+                            title='Did this exchange take place?'
+                            buttonText='Mark Complete'
+                            cancelStyle='danger'
+                            confirmStyle='primary'
+                            buttonStyle='primary'
+                        />
+                    </Col>
                 </Row>
             </Grid>
         )

@@ -13,15 +13,15 @@ export default class ConfirmationModal extends React.Component {
     render () {
         return (
             <div>
-                <Button onClick={() => this.setState({showModal: true})}>Mark Complete</Button>
+                <Button bsStyle={this.props.buttonStyle} onClick={() => this.setState({showModal: true})}>{this.props.buttonText}</Button>
                 <Modal show={this.state.showModal} onHide={() => this.setState({showModal: false})}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Did this exchange take place</Modal.Title>
+                        <Modal.Title>{this.props.title}</Modal.Title>
                     </Modal.Header>
 
                     <Modal.Footer>
-                        <Button onClick={() => this.setState({showModal: false})} bsStyle='danger'>Cancel</Button>
-                        <Button onClick={() => {this.setState({showModal: false}); this.props.onConfirmation()}} bsStyle='primary'>Yes</Button>
+                        <Button onClick={() => this.setState({showModal: false})} bsStyle={this.props.cancelStyle}>Cancel</Button>
+                        <Button onClick={() => {this.setState({showModal: false}); this.props.onConfirmation()}} bsStyle={this.props.confirmStyle}>Yes</Button>
                     </Modal.Footer>
                 </Modal>
             </div>
