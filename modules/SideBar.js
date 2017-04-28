@@ -10,9 +10,9 @@ class SideBar extends React.Component {
     return (
         <div className={`sidebar-wrapper ${this.props.toggled ? 'toggled' : ''}`}>
             <ul className='sidebar-nav'>
-                <SideBarLink toLink='/transactions' imageSrc='/images/chat.png' text={'Wallet'} />
-                <SideBarLink toLink='/bookmarks' imageSrc='/images/bookmark_icon.png' text={'Bookmarks'} />
-                <SideBarLink toLink={'/profile/' + this.props.userId} imageSrc='/images/profile.png' text={'Profile'} />
+                {this.props.isAuthenticated && <SideBarLink toLink='/transactions' imageSrc='/images/chat.png' text={'Wallet'} />}
+                {this.props.isAuthenticated && <SideBarLink toLink='/bookmarks' imageSrc='/images/bookmark_icon.png' text={'Bookmarks'} />}
+                {this.props.isAuthenticated && <SideBarLink toLink={'/profile/' + this.props.userId} imageSrc='/images/profile.png' text={'Profile'} />}
                 <SideBarLink toLink='/contact' imageSrc='/images/help.png' text={'Contact'} />
                 <SideBarLink onClick={() => { this.props.onLogout()}} toLink='#' imageSrc='/images/logout.png' text={'Logout'} />
             </ul>
@@ -31,7 +31,8 @@ function mapDispatchToProps (dispatch) {
 
 function mapStateToProps (state) {
     return {
-        userId: state.auth.user._id
+        userId: state.auth.user._id,
+        isAuthenticated: state.auth.isAuthenticated,
     }
 }
 
