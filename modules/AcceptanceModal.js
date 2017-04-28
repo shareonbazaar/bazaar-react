@@ -15,7 +15,7 @@ export default class AcceptanceModal extends React.Component {
     render () {
         return (
             <div>
-                <Button onClick={() => this.setState({showModal: true})}>Accept</Button>
+                <Button bsStyle='primary' onClick={() => this.setState({showModal: true})}>Accept</Button>
                 <Modal className='acceptModal' show={this.state.showModal} onHide={() => this.setState({showModal: false})}>
                     <Modal.Header closeButton>
                         <Modal.Title>Confirm Acceptance</Modal.Title>

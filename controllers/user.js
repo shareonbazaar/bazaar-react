@@ -160,6 +160,7 @@ function uploadPicture (filename, fileBuffer, mimetype) {
 
 exports.patchUser = (req, res) => {
     var prevPromise = new Promise((resolve) => resolve({}));
+    // No way to send an empty array via FormData, so need to replace empty str with empty array
     if (req.body.bookmarks === '') req.body.bookmarks = [];
     if (req.body._skills === '') req.body._skills = [];
     if (req.body._interests === '') req.body._interests = [];
@@ -181,5 +182,5 @@ exports.patchUser = (req, res) => {
           .exec();
     })
     .then((data) => res.json({error: null, data}))
-    .catch((err) => {console.log(err);res.status(500).json({error: err})});
+    .catch((err) => res.status(500).json({error: err}));
 };
