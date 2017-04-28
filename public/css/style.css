@@ -129,18 +129,32 @@ body {
   }
 }
 
-.btn-primary {
+.btn {
   margin: 0 auto;
-  display: block;
   color: #fff;
-  background-color: #98D9B5;
   border: none;
   background-image: none;
   text-shadow: none;
   box-shadow: none;
+}
+
+.btn-primary {
+  background-color: #98D9B5;
   &:hover {
     background-color: #73cb9a;
   }
+}
+
+.btn-danger {
+  background-color: #E74C3C;
+}
+
+.btn-default {
+  background-color: #C0C0C0;
+}
+
+.modal-footer {
+  text-align: initial;
 }
 
 .responsive-margins {
@@ -235,11 +249,7 @@ body {
       width: 100%;
     }
 
-    .btn-default {
-      border: none;
-      background: #98D9B5;
-      color: white;
-      text-shadow: none;
+    .btn-primary {
       margin: 5px 0;
     }
   }
@@ -530,7 +540,7 @@ body {
   box-shadow: none;
 }
 
-.edit-profile-page, .login-page, .signup-page, .contact-page {
+.edit-profile-page, .login-page, .signup-page, .contact-page, .settings-page {
   .control-label.label-top {
     vertical-align: top;
     padding-top: 5px;

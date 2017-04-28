@@ -72,6 +72,7 @@ messageController.initSockets(server);
 app.get('/api/users/:id', passport.authenticate('jwt', { session: false }), userController.apiGetUser);
 app.get('/api/users', passport.authenticate('jwt', { session: false }), userController.apiSearchUsers);
 app.post('/api/users', passport.authenticate('jwt', { session: false }), userController.patchUser);
+app.delete('/api/users', passport.authenticate('jwt', { session: false }), passportConfig.deleteUser);
 app.get('/api/surprise', passport.authenticate('jwt', { session: false }), userController.surprise);
 app.get('/api/transactions', passport.authenticate('jwt', { session: false }), transactionController.apiGetTransactions);
 app.post('/api/transactions', passport.authenticate('jwt', { session: false }), transactionController.postTransaction);

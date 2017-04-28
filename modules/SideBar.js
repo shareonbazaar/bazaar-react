@@ -13,20 +13,13 @@ class SideBar extends React.Component {
                 {this.props.isAuthenticated && <SideBarLink toLink='/transactions' imageSrc='/images/chat.png' text={'Wallet'} />}
                 {this.props.isAuthenticated && <SideBarLink toLink='/bookmarks' imageSrc='/images/bookmark_icon.png' text={'Bookmarks'} />}
                 {this.props.isAuthenticated && <SideBarLink toLink={'/profile/' + this.props.userId} imageSrc='/images/profile.png' text={'Profile'} />}
+                {this.props.isAuthenticated && <SideBarLink toLink='/settings/' imageSrc='/images/settings.png' text={'Settings'} />}
                 <SideBarLink toLink='/contact' imageSrc='/images/help.png' text={'Contact'} />
-                <SideBarLink onClick={() => { this.props.onLogout()}} toLink='#' imageSrc='/images/logout.png' text={'Logout'} />
+                <SideBarLink onClick={this.props.requestLogout} toLink='#' imageSrc='/images/logout.png' text={'Logout'} />
             </ul>
         </div>
     )
   }
-}
-
-function mapDispatchToProps (dispatch) {
-    return {
-        onLogout: () => {
-            dispatch(requestLogout())
-        }
-    }
 }
 
 function mapStateToProps (state) {
@@ -36,4 +29,4 @@ function mapStateToProps (state) {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SideBar);
+export default connect(mapStateToProps, {requestLogout})(SideBar);

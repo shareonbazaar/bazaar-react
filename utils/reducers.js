@@ -11,6 +11,7 @@ import {
   SET_TRANSACTION_STATUS, SET_VISIBILITY_FILTER,
   UPDATE_PROFILE_REQUEST, UPDATED_PROFILE_RECEIVED,
   CONTACT_SUBMIT_CONFIRMED, CLEAR_CONTACT_ALERT,
+  DELETE_ACCOUNT_REQUEST, DELETE_ACCOUNT_CONFIRMED,
 } from './actions'
 
 
@@ -47,6 +48,7 @@ function auth(state = {
                 errorMessage: action.message,
             })
         case LOGOUT_CONFIRM:
+        case DELETE_ACCOUNT_CONFIRMED:
             return Object.assign({}, state, {
                 isFetching: false,
                 isAuthenticated: false,

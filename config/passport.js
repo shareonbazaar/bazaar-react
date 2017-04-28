@@ -108,6 +108,25 @@ exports.apiSignup = (req, res, next) => {
   .catch(err => res.status(500).json({error: err}));
 };
 
+/**
+ * DELETE /api/users
+ * Delete user account.
+ */
+exports.deleteUser = (req, res, next) => {
+  User.findOneAndUpdate({ _id: req.user._id },
+    {
+      isDeleted: true,
+      // make sure email is still unique but free up the real email in case user wants to sign up again
+      email: req.user.id,
+      'profile.name': 'Deleted User',
+      'profile.picture': '/images/person_placeholder.gif',
+      facebook: '',
+      google: '',
+    }
+  )
+  .then((data) => res.json({error: null, data}))
+  .catch((err) => res.status(500).json({error: err}));
+};
 
 exports.authenticate_google = (req, res, done) => {
   var auth = new GoogleAuth;

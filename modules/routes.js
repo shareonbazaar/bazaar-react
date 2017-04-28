@@ -6,6 +6,7 @@ import VisibleTransactionList from './VisibleTransactionList'
 import Profile from './Profile'
 import EditProfile from './EditProfile'
 import Contact from './Contact'
+import Settings from './Settings'
 import { Login, Signup } from './Authentication'
 
 import { Route, IndexRoute } from 'react-router'
@@ -40,6 +41,7 @@ export default (store) => {
           <Route path="profile/:id" component={Profile} onEnter={requireAuth} />
           <Route path="editprofile" component={EditProfile} onEnter={requireAuth} />
           <Route path="contact" component={Contact} />
+          <Route path="settings" component={Settings} onEnter={requireAuth} />
       </Route>
     )
 }

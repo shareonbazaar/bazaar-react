@@ -23,6 +23,8 @@ export const UPDATED_PROFILE_RECEIVED = 'UPDATED_PROFILE_RECEIVED'
 export const CONTACT_SUBMIT_REQUEST = 'CONTACT_SUBMIT_REQUEST'
 export const CONTACT_SUBMIT_CONFIRMED = 'CONTACT_SUBMIT_CONFIRMED'
 export const CLEAR_CONTACT_ALERT = 'CLEAR_CONTACT_ALERT'
+export const DELETE_ACCOUNT_REQUEST = 'DELETE_ACCOUNT_REQUEST'
+export const DELETE_ACCOUNT_CONFIRMED = 'DELETE_ACCOUNT_CONFIRMED'
 
 function callApi (endpoint, method='GET', data={}) {
     var config = {
@@ -175,6 +177,26 @@ export function updateProfile (data) {
                     type: UPDATED_PROFILE_RECEIVED,
                     user: data,
                 })
+            }
+        })
+    }
+}
+
+export function deleteAccount () {
+    return dispatch => {
+        dispatch({
+            type: DELETE_ACCOUNT_REQUEST,
+        });
+        return callApi('/api/users', 'DELETE', )
+        .then(({error, data}) => {
+            if (error) {
+                console.log(error)
+            } else {
+                localStorage.removeItem('token');
+                dispatch({
+                    type: DELETE_ACCOUNT_CONFIRMED,
+                })
+                return dispatch(push('/'))
             }
         })
     }
