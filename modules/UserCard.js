@@ -16,7 +16,7 @@ export default class UserCard extends React.Component {
                     <div className='profile-pic' style={imageStyle} >
                     </div>
                     <div className='name-location'>
-                        <h3>{this.props.user.name}</h3>
+                        <h3>{this.props.user.name.split(' ')[0]}</h3>
                         <h4>{this.props.user.location}</h4>
                     </div>
                     <hr className='separator' />
