@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router'
 import SideBarLink from './SideBarLink'
 import { connect } from 'react-redux'
 import { requestLogout } from '../utils/actions'
@@ -15,7 +14,8 @@ class SideBar extends React.Component {
                 {this.props.isAuthenticated && <SideBarLink toLink={'/profile/' + this.props.userId} imageSrc='/images/profile.png' text={'Profile'} />}
                 {this.props.isAuthenticated && <SideBarLink toLink='/settings/' imageSrc='/images/settings.png' text={'Settings'} />}
                 <SideBarLink toLink='/contact' imageSrc='/images/help.png' text={'Contact'} />
-                <SideBarLink onClick={this.props.requestLogout} toLink='#' imageSrc='/images/logout.png' text={'Logout'} />
+                {!this.props.isAuthenticated && <SideBarLink toLink='/login' imageSrc='/images/logout.png' text={'Login'} />}
+                {this.props.isAuthenticated && <SideBarLink onClick={this.props.requestLogout} toLink='/' imageSrc='/images/logout.png' text={'Logout'} />}
             </ul>
         </div>
     )

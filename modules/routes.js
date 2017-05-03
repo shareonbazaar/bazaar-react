@@ -25,16 +25,16 @@ export default (store) => {
       }
     }
 
-    function Home () {
-      if (store.getState().auth.isAuthenticated) {
-        return <Community />
+    function AppContainer (props) {
+      if (!(store.getState().auth.isAuthenticated) && props.location.pathname == '/') {
+        return <Splash />
       }
-      return <Splash />
+      return <App children={props.children} location={props.location} />
     }
 
     return (
-      <Route path="/" component={App}>
-          <IndexRoute component={Home} />
+      <Route path="/" component={AppContainer}>
+          <IndexRoute component={Community} />
           <Route path="login" component={Login} onEnter={bypassAuth} />
           <Route path="signup" component={Signup} onEnter={bypassAuth} />
           <Route path="transactions" component={VisibleTransactionList} onEnter={requireAuth} />

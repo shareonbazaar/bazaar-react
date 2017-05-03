@@ -17,7 +17,7 @@ class App extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className='app'>
                 <Navbar fixedTop={true} fluid={true}>
                     <IndexLink to='/'>
                         <img width='20' src='/images/logo.png' />
