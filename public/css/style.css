@@ -158,7 +158,6 @@ body {
 }
 
 .responsive-margins {
-  background-color: red;
   margin: 0 auto;
   @media (min-width: $screen-lg) {
     width: 50%;
