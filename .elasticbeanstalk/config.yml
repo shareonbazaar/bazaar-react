@@ -1,0 +1,13 @@
+branch-defaults:
+  master:
+    environment: bazaar-prod
+    profile: bazaar-prod
+  dev:
+    environment: bazaar-dev
+    profile: bazaar-dev
+global:
+  application_name: bazaar
+  default_ec2_keyname: aws-eb
+  default_platform: 64bit Amazon Linux 2015.09 v2.0.8 running Node.js
+  default_region: eu-central-1
+  sc: git
