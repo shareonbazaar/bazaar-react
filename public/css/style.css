@@ -2,7 +2,7 @@
 @import "_bootstrap-theme";
 @import "_bootstrap-slider.min.css";
 @import "_react-datetime";
-@import 'react-select/dist/react-select.css';
+@import 'react-select-plus/dist/react-select-plus.css';
 
 $screen-xs:                  480px !default;
 $screen-sm:                  768px !default;
