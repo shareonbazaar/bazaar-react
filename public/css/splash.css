@@ -1791,13 +1791,10 @@
 		}
 
 	.menu {
-		-moz-transform: translateX(20em);
-		-webkit-transform: translateX(20em);
-		-ms-transform: translateX(20em);
+		&.toggled {
+			transform: initial;
+		}
 		transform: translateX(20em);
-		-moz-transition: -moz-transform 0.5s ease;
-		-webkit-transition: -webkit-transform 0.5s ease;
-		-ms-transition: -ms-transform 0.5s ease;
 		transition: transform 0.5s ease;
 		-webkit-overflow-scrolling: touch;
 		background: #21b2a6;
@@ -1849,7 +1846,7 @@
 
 					}
 
-		.menu .close {
+		.menu .menu-close {
 			background-image: url("images/close.svg");
 			background-position: 4.85em 1em;
 			background-repeat: no-repeat;
@@ -1872,20 +1869,12 @@
 
 		}
 
-	body.is-menu-visible .page-wrapper {
+	.page-wrapper.menu-visible {
 		opacity: 0.35;
 	}
 
-		body.is-menu-visible .page-wrapper:before {
-			display: block;
-		}
 
-	body.is-menu-visible .menu {
-		-moz-transform: translateX(0);
-		-webkit-transform: translateX(0);
-		-ms-transform: translateX(0);
-		transform: translateX(0);
-	}
+
 
 /* Header */
 
@@ -1965,6 +1954,7 @@
 						.header nav > ul > li > a.menuToggle {
 							outline: 0;
 							position: relative;
+							cursor: pointer;
 						}
 
 							.header nav > ul > li > a.menuToggle:after {
@@ -2121,6 +2111,7 @@
 			text-transform: uppercase;
 			width: 16em;
 			z-index: 1;
+			cursor: pointer;
 		}
 
 			.banner .more:after {

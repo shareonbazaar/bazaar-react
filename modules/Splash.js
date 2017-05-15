@@ -1,25 +1,50 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import { Link } from 'react-router'
+import { Element } from 'react-scroll'
+import {Link as ScrollLink } from 'react-scroll'
 import styles from '../public/css/splash.css'
 
 export default class Splash extends React.Component {
 
+    constructor (props) {
+        super(props);
+        this.state = {
+            openSideBar: false,
+            showHeader: false,
+        }
+        this.handleScroll = this.handleScroll.bind(this);
+    }
+
+    componentDidMount () {
+        window.addEventListener('scroll', this.handleScroll);
+    }
+
+    componentWillUnmount(){
+         window.removeEventListener('scroll', this.handleScroll);
+    }
+
+    handleScroll (e) {
+        let {showHeader} = this.state;
+        ReactDOM.findDOMNode(this.firstSection).getBoundingClientRect().top > 0 ?
+        showHeader && this.setState({showHeader: false})
+        :
+        !showHeader && this.setState({showHeader: true})
+    }
+
     render () {
         return (
             <div className='landing'>
-                <div className="page-wrapper">
-                  <header className="alt header">
+                <div className={`page-wrapper ${this.state.openSideBar ? 'menu-visible' : ''}`}>
+                  <header className={`header ${this.state.showHeader ? '' : 'alt'}`}>
                     <h1><Link to="/">Bazaar</Link></h1>
                     <nav className="nav">
                       <ul>
-                        <li className="special"><a href="#menu" className="menuToggle"><span>Menu</span></a>
-                          <div className="menu">
-                            <ul>
-                              <li><Link to="/">Home</Link></li>
-                              <li><Link to="/signup">Sign Up</Link></li>
-                              <li><Link to="/login">Log In</Link></li>
-                            </ul>
-                          </div>
+                        <li className="special">
+                          <a onClick={() => this.setState({openSideBar: true})} className="menuToggle">
+                            <span>Menu</span>
+                          </a>
+
                         </li>
                       </ul>
                     </nav>
@@ -31,20 +56,20 @@ export default class Splash extends React.Component {
                       <ul className="actions">
                         <li><Link to="/login" className="button special">SIGN IN</Link></li>
                       </ul>
-                    </div><a href="#zero" className="more scrolly">Learn More</a>
-                  </section>
-                  <section className="zero wrapper style0 special">
-                    <a href="https://www.startnext.com/shareonbazaar?utm_source=startnext&amp;utm_medium=extwidget&amp;utm_campaign=projectbutton&amp;utm_term=projectpromo" title="Share on Bazaar, unterstützen auf Startnext!" target="_blank" className="start-next">
-                        <span>Support project</span>
-                    </a>
-                    <div className="inner">
-                      <header className="major">
-                        <h2>Bazaar is a place for empowerment<br />                </h2>
-                        <p>We believe, locals and newcomers should share their skills and learn from each other.</p>
-                      </header>
-                      <iframe width="853" height="480" src="https://www.youtube.com/embed/uoVlosNJjZY?rel=0?ecver=1" frameBorder="0" allowFullScreen=""></iframe>
                     </div>
+                    <ScrollLink className='more' to='zero' smooth={true} duration={500}>Learn More</ScrollLink>
                   </section>
+                  <Element name='zero' ref={(e) => { this.firstSection = e }}>
+                      <section className="zero wrapper style0 special">
+                        <div className="inner">
+                          <header className="major">
+                            <h2>Bazaar is a place for empowerment<br />                </h2>
+                            <p>We believe, locals and newcomers should share their skills and learn from each other.</p>
+                          </header>
+                          <iframe width="853" height="480" src="https://www.youtube.com/embed/uoVlosNJjZY?rel=0?ecver=1" frameBorder="0" allowFullScreen=""></iframe>
+                        </div>
+                      </section>
+                  </Element>
                   <section className="one wrapper style1 special">
                     <div className="inner">
                       <header className="major">
@@ -113,6 +138,14 @@ export default class Splash extends React.Component {
                       <li>© Bazaar</li>
                     </ul>
                   </footer>
+                </div>
+                <div className={`menu ${this.state.openSideBar ? 'toggled' : ''}`}>
+                    <ul>
+                      <li><Link to="/">Home</Link></li>
+                      <li><Link to="/signup">Sign Up</Link></li>
+                      <li><Link to="/login">Log In</Link></li>
+                    </ul>
+                    <a onClick={() => this.setState({openSideBar: false})} className='menu-close'></a>
                 </div>
             </div>
         )
