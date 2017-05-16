@@ -67,7 +67,7 @@ class Chat extends React.Component {
                     rows='4'
                     className='messageInput'>
                 </textarea>
-                <Button onClick={this.props.onBack} bsStyle='info'>Back</Button>
+                <Button onClick={this.props.onBack}>Back</Button>
                 <Button bsStyle='primary' className='sendButton' onClick={this.onSendMessage}>Send Message</Button>
             </div>
         )

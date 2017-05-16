@@ -8,7 +8,7 @@ import {
   CATEGORIES_REQUEST, CATEGORIES_RECEIVED,
   SUBMIT_REQUEST, CONFIRM_REQUEST_SUBMISSION,
   USERS_REQUEST, USERS_RECEIVED,
-  SET_TRANSACTION_STATUS, SET_VISIBILITY_FILTER,
+  UPDATE_TRANSACTION, SET_VISIBILITY_FILTER,
   UPDATE_PROFILE_REQUEST, UPDATED_PROFILE_RECEIVED,
   CONTACT_SUBMIT_CONFIRMED, CLEAR_CONTACT_ALERT,
   DELETE_ACCOUNT_REQUEST, DELETE_ACCOUNT_CONFIRMED,
@@ -112,7 +112,7 @@ function transactions (state = {
                 useAnimation: true,
                 items: action.transactions,
             })
-        case SET_TRANSACTION_STATUS:
+        case UPDATE_TRANSACTION:
             return Object.assign({}, state, {
                 useAnimation: true,
                 isEditing: true,

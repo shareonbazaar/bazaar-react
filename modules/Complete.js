@@ -1,9 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import {RequestType, StatusType} from '../models/Enums'
-import { submitReview, setTransactionStatus } from '../utils/actions'
+import { submitReview, updateTransaction } from '../utils/actions'
 import ConfirmationModal from './ConfirmationModal'
 import ReviewModal from './ReviewModal'
+import Review from './Review'
 
 class Complete extends React.Component {
 
@@ -25,7 +26,11 @@ class Complete extends React.Component {
                     <div className='notice'>Thank you for submitting a review. As soon as your partner submits one, you'll be able to see it.</div>
                 )
             } else {
-                <Review review={partnerReview} />
+                return (
+                    <div className='notice'>
+                        <Review review={partnerReview} />
+                    </div>
+                )
             }
         } else if ((this.props.userIsOwner && this.props.transaction.status == StatusType.RECIPIENT_ACK)
             || (!this.props.userIsOwner && this.props.transaction.status == StatusType.SENDER_ACK)) {
@@ -33,7 +38,12 @@ class Complete extends React.Component {
                     <div className='notice'>
                         Your partner has marked this exchange as complete. Please confirm completion
                         <ConfirmationModal
-                            onConfirmation={() => this.props.setTransactionStatus(this.props.transaction._id, StatusType.COMPLETE)}
+                            onConfirmation={() => this.props.updateTransaction(this.props.transaction._id, {status: StatusType.COMPLETE})}
+                            title='Did this exchange take place?'
+                            buttonText='Confirm Exchange'
+                            cancelStyle='danger'
+                            confirmStyle='primary'
+                            buttonStyle='primary'
                             />
                     </div>
                 )
@@ -43,14 +53,5 @@ class Complete extends React.Component {
     }
 }
 
-export default connect(null, (dispatch) => {
-    return {
-        setTransactionStatus: (t_id, status) => {
-            dispatch(setTransactionStatus(t_id, status));   
-        },
-        submitReview: (data) => {
-            dispatch(submitReview(data));
-        },
-    }
-})(Complete)
+export default connect(null, { updateTransaction, submitReview } )(Complete)
 

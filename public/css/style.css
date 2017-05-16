@@ -17,7 +17,7 @@ $screen-lg:                  1200px !default;
   padding-top: 60px;
   background-color: #f4f4f4;
   font-size: 15px;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .content-page {
@@ -137,6 +137,7 @@ $screen-lg:                  1200px !default;
   background-image: none;
   text-shadow: none;
   box-shadow: none;
+  padding: 10px 15px;
 }
 
 .btn-primary {
@@ -147,11 +148,16 @@ $screen-lg:                  1200px !default;
 }
 
 .btn-danger {
-  background-color: #E74C3C;
+  background-color: #f21010;
 }
 
 .btn-default {
+  &:hover {
+    color: white;
+    background-color: #C0C0C0;
+  }
   background-color: #C0C0C0;
+  color: black;
 }
 
 .modal-footer {
@@ -245,6 +251,7 @@ $screen-lg:                  1200px !default;
 
   .responses, .intro {
     text-align: center;
+    margin-bottom: 8px;
     button {
       width: 100%;
     }
@@ -256,9 +263,11 @@ $screen-lg:                  1200px !default;
 
   .action-area {
     background-color: #e6e6e6;
+    overflow-y: auto;
   }
 
   .messaging {
+    padding: 15px;
     .conversation {
       height: 300px;
       overflow-y: auto;
@@ -283,11 +292,17 @@ $screen-lg:                  1200px !default;
         float: right;
         clear: both;
         margin-right: 5px;
+        .author {
+          text-align: right;
+        }
       }
       &.other-person {
         float: left;
         clear: both;
         margin-left: 5px;
+        .author {
+          text-align: left;
+        }
       }
     }
     .author {
@@ -296,10 +311,12 @@ $screen-lg:                  1200px !default;
   }
   .notice {
     text-align: center;
+    padding: 10px;
     button {
+
       display: block;
       width: 30%;
-      margin: 0 auto;
+      margin: 5px auto 0 auto;
     }
   }
 }
@@ -494,6 +511,18 @@ $screen-lg:                  1200px !default;
     text-align: center;
     margin-bottom: 10px;
     padding-top: 25px;
+  }
+}
+
+.review {
+  text-align: left;
+  .rating span {
+    color: gold;
+  }
+  .review-timestamp {
+    display: block;
+    font-size: 10px;
+    margin: 8px 0;
   }
 }
 

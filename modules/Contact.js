@@ -76,7 +76,6 @@ class Contact extends React.Component {
 }
 
 const mapStateToProps = ({contact}) => {
-    console.log(contact)
     return {response: contact.response}
 }
 

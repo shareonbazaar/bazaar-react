@@ -12,7 +12,7 @@ export const TRANSACTIONS_REQUEST = 'TRANSACTIONS_REQUEST'
 export const TRANSACTIONS_RECEIVED = 'TRANSACTIONS_RECEIVED'
 export const CATEGORIES_REQUEST = 'CATEGORIES_REQUEST'
 export const CATEGORIES_RECEIVED = 'CATEGORIES_RECEIVED'
-export const SET_TRANSACTION_STATUS = 'SET_TRANSACTION_STATUS'
+export const UPDATE_TRANSACTION = 'UPDATE_TRANSACTION'
 export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER'
 export const SUBMIT_REQUEST = 'SUBMIT_REQUEST'
 export const CONFIRM_REQUEST_SUBMISSION = 'CONFIRM_REQUEST_SUBMISSION'
@@ -120,16 +120,14 @@ export function getSurprise () {
     }
 }
 
-export function setTransactionStatus (t_id, status) {
+export function updateTransaction (t_id, body) {
     return dispatch => {
         dispatch({
-            type: SET_TRANSACTION_STATUS,
+            type: UPDATE_TRANSACTION,
             t_id,
-            status,
         });
-        return callApi('/api/transactions/' + t_id, 'PATCH', {
-            status,
-        }).then(response => dispatch(loadTransactions()))
+        return callApi('/api/transactions/' + t_id, 'PATCH', body)
+        .then(response => dispatch(loadTransactions()))
     }
 }
 

@@ -178,7 +178,6 @@ exports.postTransaction = (req, res) => {
         _creator: req.body.sender,
         status: Enums.StatusType.PROPOSED,
     });
-    console.log(trans)
     trans.save()
     .then((data) => res.json({error: null, data}))
     .catch((err) => res.status(500).json({error: err}));

@@ -9,7 +9,7 @@ import ConfirmationModal from './ConfirmationModal'
 import WriteReviewButton from './WriteReviewButton'
 import Chat from './Chat';
 import Complete from './Complete';
-import { setTransactionStatus } from '../utils/actions'
+import { updateTransaction } from '../utils/actions'
 import AcceptanceModal from './AcceptanceModal';
 
 
@@ -19,31 +19,31 @@ const verbs = {
         [StatusType.PROPOSED]: 'will receive',
         [StatusType.ACCEPTED]: 'will receive',
         [StatusType.COMPLETE]: 'received',
+        [StatusType.SENDER_ACK]: 'received',
+        [StatusType.RECIPIENT_ACK]: 'received',
     },
     [RequestType.SHARE]: {
         [StatusType.PROPOSED]: 'will give',
         [StatusType.ACCEPTED]: 'will give',
         [StatusType.COMPLETE]: 'gave',
+        [StatusType.SENDER_ACK]: 'gave',
+        [StatusType.RECIPIENT_ACK]: 'gave',
     },
     [RequestType.EXCHANGE]: {
         [StatusType.PROPOSED]: 'will exchange',
         [StatusType.ACCEPTED]: 'will exchange',
         [StatusType.COMPLETE]: 'exchanged',
+        [StatusType.SENDER_ACK]: 'exchanged',
+        [StatusType.RECIPIENT_ACK]: 'exchanged',
     }
 }
 
-const ProposedButtons = connect(null, (dispatch) => {
-    return {
-        setTransactionStatus: (t_id, status) => {
-            dispatch(setTransactionStatus(t_id, status));
-        }
-    }
-}) (props => {
+const ProposedButtons = connect(null, { updateTransaction }) (props => {
     if (props.userIsOwner) {
         return (
             <Row className='responses'>
                 <Col mdOffset={3} md={6}>
-                    <Button onClick={()=> props.setTransactionStatus(props.content._id, StatusType.CANCELLED)}
+                    <Button onClick={()=> props.updateTransaction(props.content._id, {status: StatusType.CANCELLED})}
                             bsStyle="danger">Cancel
                     </Button>
                 </Col>
@@ -52,9 +52,13 @@ const ProposedButtons = connect(null, (dispatch) => {
     } else {
         return (
             <Row className='responses'>
-                <Col xs={4}><AcceptanceModal skill={props.content.service.label.en} onConfirmation={() => props.setTransactionStatus(props.content._id, StatusType.ACCEPTED)}/></Col>
+                <Col xs={4}><AcceptanceModal
+                                skill={props.content.service.label.en}
+                                onConfirmation={() => props.updateTransaction(props.content._id, {status: StatusType.ACCEPTED})}
+                            />
+                </Col>
                 <Col xs={4}><Button onClick={props.onChatClick} bsStyle='primary'>Chat</Button></Col>
-                <Col xs={4}><Button onClick={() => props.setTransactionStatus(props.content._id, StatusType.REJECTED)} bsStyle='danger'>Reject</Button></Col>
+                <Col xs={4}><Button onClick={() => props.updateTransaction(props.content._id, {status: StatusType.REJECTED})} bsStyle='danger'>Reject</Button></Col>
             </Row>
         )
     }
@@ -64,11 +68,15 @@ const ProposedButtons = connect(null, (dispatch) => {
 function Proposed (props) {
     return (
         <Grid fluid={true}>
-            <Row>
-                <Col mdOffset={3} md={6}>
-                    <div className='intro'>Message</div>
-                </Col>
-            </Row>
+            {
+                props.content._messages.length > 0
+                &&
+                <Row>
+                    <Col mdOffset={3} md={6}>
+                        <div className='intro'>{props.content._messages[0].message}</div>
+                    </Col>
+                </Row>
+            }
             <ProposedButtons content={props.content} onChatClick={props.onChatClick} userIsOwner={props.userIsOwner} />
         </Grid>
     )

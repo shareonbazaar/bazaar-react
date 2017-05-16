@@ -38,7 +38,7 @@ export default class ReviewModal extends React.Component {
     render () {
         return (
             <div>
-                <Button onClick={() => this.setState({showModal: true})}>Write Review</Button>
+                <Button bsStyle='primary' onClick={() => this.setState({showModal: true})}>Write Review</Button>
                 <Modal show={this.state.showModal} onHide={() => this.setState({showModal: false})}>
                     <Modal.Header closeButton>
                         <Modal.Title>Please leave a review for this exchange</Modal.Title>
