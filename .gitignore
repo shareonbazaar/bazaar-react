@@ -9,4 +9,6 @@ node_modules
 # OS metadata
 .DS_Store
 
+.ebextensions/*
+
 public/bundle.js
