@@ -16,6 +16,8 @@ export const UPDATE_TRANSACTION = 'UPDATE_TRANSACTION'
 export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER'
 export const SUBMIT_REQUEST = 'SUBMIT_REQUEST'
 export const CONFIRM_REQUEST_SUBMISSION = 'CONFIRM_REQUEST_SUBMISSION'
+export const SUBMIT_REVIEW = 'SUBMIT_REVIEW'
+export const CONFIRM_REVIEW_SUBMISSION = 'CONFIRM_REVIEW_SUBMISSION'
 export const USERS_REQUEST = 'USERS_REQUEST'
 export const USERS_RECEIVED = 'USERS_RECEIVED'
 export const UPDATE_PROFILE_REQUEST = 'UPDATE_PROFILE_REQUEST'
@@ -70,10 +72,10 @@ export function skillRequest (data) {
 
 export function submitReview (data) {
     return dispatch => {
-        dispatch(submitRequest());
+        dispatch({type: SUBMIT_REVIEW});
         return callApi('/api/reviews', 'POST', data)
         .then (confirmation => {
-            dispatch(confirmRequestSubmission(confirmation));
+            dispatch({type: CONFIRM_REVIEW_SUBMISSION});
             dispatch(loadTransactions());
         })
     }
