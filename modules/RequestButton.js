@@ -78,26 +78,24 @@ class RequestButton extends React.Component {
                                 }
                             </Row>
                         </Grid>
-                        <form>
-                            <FormGroup>
-                                <ControlLabel>Request one skill:</ControlLabel>
-                                <div className="skill-select">
-                                    {this.props.user.skills.map((skill, i) => {
-                                        var extraClass = this.state.selectedSkill._id == skill._id ? 'selected' : '';
-                                        return <div onClick={() => this.setState({selectedSkill: {_id: skill._id, label: skill.label.en}})} key={i} className={'skill-label ' + extraClass}>{skill.label.en}</div>
-                                    })}
-                                </div>
-                            </FormGroup>
-                            <FormGroup>
-                                <ControlLabel>Message: </ControlLabel>
-                                <FormControl
-                                    componentClass="textarea"
-                                    value={this.state.value}
-                                    placeholder="Enter text"
-                                    onChange={this.handleChange}
-                                />
-                            </FormGroup>
-                        </form>
+                        <FormGroup>
+                            <ControlLabel>Request one skill:</ControlLabel>
+                            <div className="skill-select">
+                                {this.props.user.skills.map((skill, i) => {
+                                    var extraClass = this.state.selectedSkill._id == skill._id ? 'selected' : '';
+                                    return <div onClick={() => this.setState({selectedSkill: {_id: skill._id, label: skill.label.en}})} key={i} className={'skill-label ' + extraClass}>{skill.label.en}</div>
+                                })}
+                            </div>
+                        </FormGroup>
+                        <FormGroup>
+                            <ControlLabel>Message: </ControlLabel>
+                            <FormControl
+                                componentClass="textarea"
+                                value={this.state.message}
+                                placeholder="Enter text"
+                                onChange={e => this.setState({message: e.target.value})}
+                            />
+                        </FormGroup>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button bsStyle='primary' onClick={this.onSubmit}>Request</Button>
