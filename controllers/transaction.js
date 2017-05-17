@@ -183,7 +183,6 @@ exports.postTransaction = (req, res) => {
     trans.save()
     .then(t => {
         if (req.body.message) {
-            console.log("here " + req.body.message)
             return messageController.addMessageToTransaction(req.user, req.body.message, t._id)
             .then(x => t)
         }
