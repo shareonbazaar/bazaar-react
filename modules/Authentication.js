@@ -65,12 +65,12 @@ class Signup extends React.Component {
   componentWillReceiveProps (nextProps) {
     if (nextProps.isAuthenticated) {
       let newLocation = this.props.location.state ? this.props.location.state.redirect : '/'
-      this.props.authenticatedRedirect(newLocation);
+      this.props.push(newLocation);
     }
   }
 
   responseGoogle (response) {
-    this.props.onSocialLogin({
+    this.props.loginUser({
       endpoint: '/auth/google',
       data: {
         id_token: response.getAuthResponse().id_token,
@@ -79,7 +79,7 @@ class Signup extends React.Component {
   }
 
   responseFacebook (response) {
-    this.props.onSocialLogin({
+    this.props.loginUser({
       endpoint: '/auth/facebook',
       data: {
         access_token: response.accessToken,
@@ -95,7 +95,16 @@ class Signup extends React.Component {
     const onSignupClicked = () => {
       this.setState({hasClickedSignup: true})
       if (firstNameValid && lastNameValid && emailValid && passwordsValid) {
-          this.props.onSignup(this.state);
+          this.props.loginUser({
+              endpoint: '/api/signup',
+              data: {
+                  firstName: this.state.firstName,
+                  lastName: this.state.lastName,
+                  email: this.state.emailText,
+                  password: this.state.password,
+                  confirmPassword: this.state.confirmPassword,
+              }
+          })
       }
     }
     return (
@@ -173,7 +182,18 @@ class Login extends Signup {
           </FormGroup>
           <FormGroup>
             <div className='form-offset'>
-              <Button className='login-button' bsStyle='primary' onClick={() => this.props.onLogin(this.state)}>Login</Button>
+              <Button
+                className='login-button'
+                bsStyle='primary'
+                onClick={() => this.props.loginUser({
+                    endpoint: '/api/login',
+                    data: {
+                        email: this.state.emailText,
+                        password: this.state.password,
+                    }
+                })}>
+                Login
+              </Button>
               <Link className='forgot-link' to='/forgot'>Forgot password?</Link>
             </div>
           </FormGroup>
@@ -199,38 +219,5 @@ function mapStateToProps (state, ownProps) {
   }
 }
 
-function mapDispatchToProps (dispatch) {
-  return {
-    onSocialLogin: (data) => {
-      dispatch(loginUser(data));
-    },
-    authenticatedRedirect: (nextLocation) => {
-      dispatch(push(nextLocation));
-    },
-    onLogin: (state) => {
-      dispatch(loginUser({
-          endpoint: '/api/login',
-          data: {
-              email: state.emailText,
-              password: state.password,
-          }
-      }))
-    },
-
-    onSignup: (state) => {
-      dispatch(loginUser({
-          endpoint: '/api/signup',
-          data: {
-              firstName: state.firstName,
-              lastName: state.lastName,
-              email: state.emailText,
-              password: state.password,
-              confirmPassword: state.confirmPassword,
-          }
-      }))
-    }
-  }
-}
-
-exports.Signup = connect(mapStateToProps, mapDispatchToProps)(Signup);
-exports.Login = connect(mapStateToProps, mapDispatchToProps)(Login);
+exports.Signup = connect(mapStateToProps, {loginUser, push })(Signup);
+exports.Login = connect(mapStateToProps, {loginUser, push })(Login);

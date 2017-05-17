@@ -60,14 +60,6 @@ class SkillsModal extends React.Component {
     }
 }
 
-function mapDispatchToProps (dispatch) {
-    return {
-        loadCategories: () => {
-            dispatch(loadCategories());
-        },
-    }
-}
-
 // These props come from the application's
 // state when it is started
 function mapStateToProps(state, ownProps) {
@@ -76,4 +68,4 @@ function mapStateToProps(state, ownProps) {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SkillsModal);
+export default connect(mapStateToProps, { loadCategories })(SkillsModal);

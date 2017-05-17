@@ -104,14 +104,6 @@ class RequestButton extends React.Component {
     }
 }
 
-function mapDispatchToProps (dispatch) {
-  return {
-    submitSkillRequest: (data) => {
-      dispatch(skillRequest(data));
-    },
-  }
-}
-
 // These props come from the application's
 // state when it is started
 function mapStateToProps(state, ownProps) {
@@ -120,4 +112,4 @@ function mapStateToProps(state, ownProps) {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(RequestButton);
+export default connect(mapStateToProps, { skillRequest })(RequestButton);

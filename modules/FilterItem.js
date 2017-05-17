@@ -6,7 +6,11 @@ class FilterItem extends React.Component {
 
     render () {
         return (
-          <div onClick={() => this.props.onClick()} className={'exchange-type ' + (this.props.active ? 'selected' : '')}>{this.props.children}</div>
+          <div
+            onClick={() => this.props.setVisibilityFilter(this.props.filter)}
+            className={'exchange-type ' + (this.props.active ? 'selected' : '')}>
+            {this.props.children}
+          </div>
         )
     }
 }
@@ -17,12 +21,4 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-    onClick: () => {
-      dispatch(setVisibilityFilter(ownProps.filter))
-    }
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(FilterItem);
+export default connect(mapStateToProps, {setVisibilityFilter})(FilterItem);

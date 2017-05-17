@@ -47,7 +47,7 @@ class Profile extends React.Component {
                             </div>
                             {
                                 this.props.profiledUser._id === this.props.loggedInUser._id ? (
-                                    <Button onClick={() => this.props.onEditProfile()} bsStyle="primary" bsSize="large" block>Edit Profile</Button>
+                                    <Button onClick={() => this.props.push('/editprofile')} bsStyle="primary" bsSize="large" block>Edit Profile</Button>
                                 ) : (
                                     <RequestButton user={this.props.profiledUser} />
                                 )
@@ -85,16 +85,6 @@ class Profile extends React.Component {
     }
 }
 
-function mapDispatchToProps (dispatch) {
-  return {
-    loadProfile: (user_id) => {
-      dispatch(loadProfile(user_id));
-    },
-    onEditProfile: () => {
-        dispatch(push('/editprofile'))
-    }
-  }
-}
 
 // These props come from the application's
 // state when it is started
@@ -105,4 +95,4 @@ function mapStateToProps(state, ownProps) {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Profile);
+export default connect(mapStateToProps, { loadProfile, push })(Profile);

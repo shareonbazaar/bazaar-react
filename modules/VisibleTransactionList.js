@@ -180,17 +180,9 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    loadTransactions: () => {
-      dispatch(loadTransactions())
-    }
-  }
-}
-
 const VisibleTransactionsList = connect(
   mapStateToProps,
-  mapDispatchToProps
+  { loadTransactions }
 )(TransactionList)
 
 export default VisibleTransactionsList

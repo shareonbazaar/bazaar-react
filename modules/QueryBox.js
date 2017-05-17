@@ -85,8 +85,20 @@ class QueryBox extends React.Component {
                         </div>
                         <div className='button-wrapper'>
                             <Button onClick={() => this.setState({queryBoxOpen: false})} bsStyle="primary">Cancel</Button>
-                            <Button onClick={() => this.props.onSearch(this.state)} bsStyle="primary">Apply Filter</Button>
-                            <Button onClick={() => this.props.onSurprise(this.props.loggedInUser)} bsStyle="primary" >Surprise me!</Button>
+                            <Button
+                                onClick={() => {
+                                    if (this.state.selectValue.length === 0)
+                                        return;
+                                    this.props.loadUsers({
+                                        // distance: state.sliderValue, // NEED long, lat
+                                        request_type: this.state.request_type,
+                                        skills: this.state.selectValue.map(s => s.value)
+                                    })
+                                }}
+                                bsStyle="primary">
+                                Apply Filter
+                            </Button>
+                            <Button onClick={() => this.props.getSurprise()} bsStyle="primary" >Surprise me!</Button>
                         </div>
                 </div>
                 <Select.Async
@@ -110,24 +122,7 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onSearch: (state) => {
-        if (state.selectValue.length === 0)
-            return
-        dispatch(loadUsers({
-            // distance: state.sliderValue, // NEED long, lat
-            request_type: state.request_type,
-            skills: state.selectValue.map(s => s.value)
-        }))
-    },
-    onSurprise: (loggedInUser) => {
-        dispatch(getSurprise())
-    }
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(QueryBox);
+export default connect(mapStateToProps, { getSurprise, loadUsers })(QueryBox);
 
 
 
