@@ -264,6 +264,7 @@ $screen-lg:                  1200px !default;
   .action-area {
     background-color: #e6e6e6;
     overflow-y: auto;
+    padding: 8px 0px;
   }
 
   .messaging {

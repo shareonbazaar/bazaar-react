@@ -3,6 +3,8 @@ const Review = require('../models/Review');
 const Enums = require('../models/Enums');
 const helpers = require('../utils/helpers');
 
+const messageController = require('../controllers/message');
+
 /**
  * GET /transactions
  * Show transactions for current user
@@ -179,8 +181,16 @@ exports.postTransaction = (req, res) => {
         status: Enums.StatusType.PROPOSED,
     });
     trans.save()
-    .then((data) => res.json({error: null, data}))
-    .catch((err) => res.status(500).json({error: err}));
+    .then(t => {
+        if (req.body.message) {
+            console.log("here " + req.body.message)
+            return messageController.addMessageToTransaction(req.user, req.body.message, t._id)
+            .then(x => t)
+        }
+        return t;
+    })
+    .then(data => res.json({error: null, data}))
+    .catch(err => res.status(500).json({error: err}));
 };
 
 /**

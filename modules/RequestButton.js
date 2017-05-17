@@ -15,6 +15,7 @@ class RequestButton extends React.Component {
                 label: '',
             },
             exchange_type: RequestType.LEARN,
+            message: '',
         };
         this.onClose = this.onClose.bind(this);
         this.onOpen = this.onOpen.bind(this);
@@ -34,12 +35,16 @@ class RequestButton extends React.Component {
     }
 
     onSubmit (event) {
-        this.props.submitSkillRequest({
+        this.props.skillRequest({
             sender: this.props.loggedInUser._id,
             recipient: this.props.user._id,
             service: this.state.selectedSkill._id,
             request_type: this.state.exchange_type,
+            message: this.state.message,
         });
+        this.setState({
+            showModal: false,
+        })
     }
 
     render () {

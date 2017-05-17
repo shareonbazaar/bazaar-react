@@ -45,7 +45,7 @@ function addMessageToTransaction (sender, messageText, transactionId) {
         _transaction: transactionId,
         _sender: sender._id,
     });
-    newMsg.save()
+    return newMsg.save()
     .then((message) => {
       return Transaction.findOne({_id: message._transaction})
       .populate('_participants')
@@ -82,6 +82,8 @@ function addMessageToTransaction (sender, messageText, transactionId) {
     })
     .catch(err => console.log(err))
 };
+
+exports.addMessageToTransaction = addMessageToTransaction;
 
 function sendMessageEmail (sender, recipient, message) {
     var transporter = nodemailer.createTransport({
