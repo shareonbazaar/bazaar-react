@@ -43,8 +43,12 @@ const ProposedButtons = connect(null, { updateTransaction }) (props => {
         return (
             <Row className='responses'>
                 <Col mdOffset={3} md={6}>
-                    <Button onClick={()=> props.updateTransaction(props.content._id, {status: StatusType.CANCELLED})}
-                            bsStyle="danger">Cancel
+                    <Button bsStyle='danger'
+                            onClick={()=> props.updateTransaction({
+                                t_id: props.content._id,
+                                transaction: {status: StatusType.CANCELLED},
+                            })}
+                            >Cancel
                     </Button>
                 </Col>
             </Row>
@@ -54,11 +58,23 @@ const ProposedButtons = connect(null, { updateTransaction }) (props => {
             <Row className='responses'>
                 <Col xs={4}><AcceptanceModal
                                 skill={props.content.service.label.en}
-                                onConfirmation={() => props.updateTransaction(props.content._id, {status: StatusType.ACCEPTED})}
+                                onConfirmation={(msg) => props.updateTransaction({
+                                    t_id: props.content._id,
+                                    transaction: {status: StatusType.ACCEPTED},
+                                    message: msg,
+                                })}
                             />
                 </Col>
                 <Col xs={4}><Button onClick={props.onChatClick} bsStyle='primary'>Chat</Button></Col>
-                <Col xs={4}><Button onClick={() => props.updateTransaction(props.content._id, {status: StatusType.REJECTED})} bsStyle='danger'>Reject</Button></Col>
+                <Col xs={4}>
+                    <Button bsStyle='danger'
+                            onClick={() => props.updateTransaction({
+                                t_id: props.content._id,
+                                transaction: {status: StatusType.REJECTED},
+                            })}
+                            >Reject
+                    </Button>
+                </Col>
             </Row>
         )
     }

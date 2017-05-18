@@ -122,13 +122,13 @@ export function getSurprise () {
     }
 }
 
-export function updateTransaction (t_id, body) {
+export function updateTransaction (body) {
     return dispatch => {
         dispatch({
             type: UPDATE_TRANSACTION,
-            t_id,
+            t_id: body.t_id,
         });
-        return callApi('/api/transactions/' + t_id, 'PATCH', body)
+        return callApi('/api/transactions', 'POST', body)
         .then(response => dispatch(loadTransactions()))
     }
 }

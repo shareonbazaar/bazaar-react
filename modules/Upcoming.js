@@ -99,13 +99,16 @@ class Upcoming extends React.Component {
     onEditClick () {
         let { markerLocation } = this.state;
         if (!this.state.inViewMode) {
-            this.props.updateTransaction(this.props.content._id, {
-                loc: {
-                    type: 'Point',
-                    coordinates: [markerLocation.coords.lng, markerLocation.coords.lat]
-                },
-                placeName: markerLocation.name,
-                happenedAt: this.state.happenedAt,
+            this.props.updateTransaction({
+                t_id: this.props.content._id,
+                transaction: {
+                    loc: {
+                        type: 'Point',
+                        coordinates: [markerLocation.coords.lng, markerLocation.coords.lat]
+                    },
+                    placeName: markerLocation.name,
+                    happenedAt: this.state.happenedAt,
+                }
             })
         }
         this.setState({
@@ -133,7 +136,12 @@ class Upcoming extends React.Component {
     }
 
     onConfirmation () {
-        this.props.updateTransaction(this.props.content._id, { status: StatusType.COMPLETE });
+        this.props.updateTransaction({
+            t_id: this.props.content._id,
+            transaction: {
+                status: StatusType.COMPLETE,
+            },
+        });
     }
 
     render () {

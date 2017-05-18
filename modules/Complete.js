@@ -38,7 +38,12 @@ class Complete extends React.Component {
                     <div className='notice'>
                         Your partner has marked this exchange as complete. Please confirm completion
                         <ConfirmationModal
-                            onConfirmation={() => this.props.updateTransaction(this.props.transaction._id, {status: StatusType.COMPLETE})}
+                            onConfirmation={() => this.props.updateTransaction({
+                                t_id: this.props.transaction._id,
+                                transaction: {
+                                    status: StatusType.COMPLETE
+                                }
+                            })}
                             title='Did this exchange take place?'
                             buttonText='Confirm Exchange'
                             cancelStyle='danger'

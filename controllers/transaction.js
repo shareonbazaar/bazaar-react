@@ -153,44 +153,33 @@ exports.apiGetTransactions = (req, res) => {
  * Add a transaction for current user. This is the initial
  * request so status is PROPOSED.
  */
-exports.patchTransaction = (req, res) => {
-    // FIXME: May need more authentication checks here
-    Transaction.findOneAndUpdate(
-      {
-        _id: req.params.id,
-        _participants: req.user.id
-      },
-      req.body)
-    .then((data) => res.json({error: null, data}))
-    .catch((err) => res.status(500).json({error: err}));
-};
-
-
-/**
- * POST /transactions
- * Add a transaction for current user. This is the initial
- * request so status is PROPOSED.
- */
 exports.postTransaction = (req, res) => {
-    var trans = new Transaction({
-        service: req.body.service,
-        request_type: req.body.request_type,
-        _participants: [req.body.recipient, req.body.sender],
-        amount: 1,
-        _creator: req.body.sender,
-        status: Enums.StatusType.PROPOSED,
-    });
-    trans.save()
-    .then(t => {
+    // FIXME: May need more authentication checks here
+    var promise;
+    // If there is a transaction ID, we are updating an existing
+    // transaction. Otherwise, create a new one.
+    if (req.body.t_id) {
+        promise = Transaction.findOneAndUpdate({
+                      _id: req.body.t_id,
+                      _participants: req.user.id
+                  }, req.body.transaction, {new: true})
+    } else {
+        var trans = new Transaction(req.body.transaction);
+        promise = trans.save()
+    }
+
+    // If there is a message along with the transaction, add it to database
+    promise.then(t => {
         if (req.body.message) {
             return messageController.addMessageToTransaction(req.user, req.body.message, t._id)
             .then(x => t)
         }
         return t;
     })
-    .then(data => res.json({error: null, data}))
-    .catch(err => res.status(500).json({error: err}));
+    .then((data) => res.json({error: null, data}))
+    .catch((err) => res.status(500).json({error: err}));
 };
+
 
 /**
  * POST /reviews

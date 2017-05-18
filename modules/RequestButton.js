@@ -40,10 +40,14 @@ class RequestButton extends React.Component {
             return;
         }
         this.props.skillRequest({
-            sender: this.props.loggedInUser._id,
-            recipient: this.props.user._id,
-            service: this.state.selectedSkill,
-            request_type: this.state.exchange_type,
+            transaction: {
+                _participants: [this.props.loggedInUser._id, this.props.user._id],
+                amount: 1,
+                _creator: this.props.loggedInUser._id,
+                service: this.state.selectedSkill,
+                request_type: this.state.exchange_type,
+                status: StatusType.PROPOSED,
+            },
             message: this.state.message,
         });
         this.setState({
