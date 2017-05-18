@@ -1,7 +1,9 @@
 import React from 'react'
 import RequestButton from './RequestButton'
+import { push } from 'react-router-redux'
+import { connect } from 'react-redux';
 
-export default class UserCard extends React.Component {
+class UserCard extends React.Component {
     render () {
         const imageStyle = {
             backgroundImage: 'url(' + this.props.user.picture +  ')',
@@ -13,7 +15,10 @@ export default class UserCard extends React.Component {
                     className='bookmark'
                     src={`/images/bookmark_${this.props.bookmarked ? 'active.svg' : 'inactive.svg'}`} />
                 <div className='profile-info'>
-                    <div className='profile-pic' style={imageStyle} >
+                    <div
+                        onClick={() => this.props.push(`/profile/${this.props.user._id}`)}
+                        className='profile-pic'
+                        style={imageStyle} >
                     </div>
                     <div className='name-location'>
                         <h3>{this.props.user.name.split(' ')[0]}</h3>
@@ -33,3 +38,5 @@ export default class UserCard extends React.Component {
         )
   }
 }
+
+export default connect(null, { push })(UserCard);
