@@ -4,6 +4,7 @@ import { IndexLink } from 'react-router'
 import { Navbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import SideBar from './SideBar'
+import { loadUsers } from '../utils/actions'
 
 import QueryBox from './QueryBox'
 
@@ -19,7 +20,7 @@ class App extends React.Component {
         return (
             <div className='app'>
                 <Navbar fixedTop={true} fluid={true}>
-                    <IndexLink to='/'>
+                    <IndexLink onClick={() => this.props.loadUsers()} to='/'>
                         <img width='20' src='/images/logo.png' />
                         <span className='brand-title'>Bazaar</span>
                     </IndexLink>
@@ -48,6 +49,6 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps, null)(App);
+export default connect(mapStateToProps, { loadUsers })(App);
 
 
