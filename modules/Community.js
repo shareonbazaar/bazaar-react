@@ -17,34 +17,9 @@ class Community extends React.Component {
         this.props.loadUsers()
     }
 
-    render () {
-        if (!this.props.users || this.props.isFetching) {
-            return <div>Loading...</div>
-        }
-        return (
-            <div className='community-page'>
-                <Masonry className='user-list' options={masonryOptions}>
-                    {this.props.users.map(user => <UserCard
-                                                    onBookmarkClicked={() => this.props.bookmarkCard(user._id, this.props.loggedInUser)}
-                                                    key={user._id}
-                                                    user={user}
-                                                    bookmarked={this.props.loggedInUser.bookmarks.indexOf(user._id) >= 0}
-                                                 />)
-                    }
-                </Masonry>
-            </div>
-        )
-  }
-}
-
-function mapDispatchToProps (dispatch) {
-  return {
-    loadUsers: (data) => {
-        dispatch(loadUsers(data));
-    },
-    bookmarkCard: (id, loggedInUser) => {
+    toggleBookmark (id) {
         let form = new FormData();
-        var bookmarks = loggedInUser.bookmarks.slice();
+        var bookmarks = this.props.loggedInUser.bookmarks.slice();
         var index = bookmarks.indexOf(id);
         if (index < 0) {
             bookmarks.push(id);
@@ -57,10 +32,29 @@ function mapDispatchToProps (dispatch) {
             bookmarks.forEach(b => form.append('bookmarks', b))
         }
 
-        dispatch(updateProfile(form));
+        this.props.updateProfile(form);
     }
+
+    render () {
+        if (!this.props.users || this.props.isFetching) {
+            return <div>Loading...</div>
+        }
+        return (
+            <div className='community-page'>
+                <Masonry className='user-list' options={masonryOptions}>
+                    {this.props.users.map(user => <UserCard
+                                                    onBookmarkClicked={() => this.props.toggleBookmark(user._id)}
+                                                    key={user._id}
+                                                    user={user}
+                                                    bookmarked={this.props.loggedInUser.bookmarks.indexOf(user._id) >= 0}
+                                                 />)
+                    }
+                </Masonry>
+            </div>
+        )
   }
 }
+
 
 // These props come from the application's
 // state when it is started
@@ -72,4 +66,4 @@ function mapStateToProps(state, ownProps) {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Community);
+export default connect(mapStateToProps, { loadUsers, updateProfile })(Community);
