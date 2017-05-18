@@ -2,7 +2,7 @@ import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
 
 import {
-  LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT_SUCCESS, LOGOUT_CONFIRM,
+  LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT_CONFIRM,
   PROFILE_REQUESTED, PROFILE_RECEIVED,
   TRANSACTIONS_REQUEST, TRANSACTIONS_RECEIVED,
   CATEGORIES_REQUEST, CATEGORIES_RECEIVED,
@@ -196,8 +196,7 @@ function contact (state = {
     }
 }
 
-
-export default combineReducers({
+const appReducer = combineReducers({
     routing: routerReducer,
     auth,
     userProfile,
@@ -207,3 +206,12 @@ export default combineReducers({
     categories,
     contact,
 })
+
+export default (state, action) => {
+    if (action.type === LOGOUT_CONFIRM) {
+        state = Object.assign({}, appReducer({}, {}), {
+            routing: state.routing,
+        });
+    }
+    return appReducer(state, action)
+}
