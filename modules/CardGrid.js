@@ -1,9 +1,6 @@
 import React from 'react'
 import UserCard from './UserCard'
 import Masonry from 'react-masonry-component'
-import { connect } from 'react-redux'
-import { loadUsers, updateProfile } from '../utils/actions'
-
 
 var masonryOptions = {
     gutter: 20,
@@ -11,7 +8,7 @@ var masonryOptions = {
     fitWidth: true,
 }
 
-class Community extends React.Component {
+export default class CardGrid extends React.Component {
 
     componentWillMount () {
         this.props.loadUsers()
@@ -43,7 +40,7 @@ class Community extends React.Component {
             <div className='community-page'>
                 <Masonry className='user-list' options={masonryOptions}>
                     {this.props.users.map(user => <UserCard
-                                                    onBookmarkClicked={() => this.props.toggleBookmark(user._id)}
+                                                    onBookmarkClicked={() => this.toggleBookmark(user._id)}
                                                     key={user._id}
                                                     user={user}
                                                     bookmarked={this.props.loggedInUser.bookmarks.indexOf(user._id) >= 0}
@@ -54,16 +51,3 @@ class Community extends React.Component {
         )
   }
 }
-
-
-// These props come from the application's
-// state when it is started
-function mapStateToProps(state, ownProps) {
-    return {
-        users: state.users.items,
-        isFetching: state.isFetching,
-        loggedInUser: state.auth.user,
-    }
-}
-
-export default connect(mapStateToProps, { loadUsers, updateProfile })(Community);

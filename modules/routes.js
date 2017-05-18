@@ -1,6 +1,6 @@
 import React from 'react'
 import App from './App'
-import Community from './Community'
+import { Community, Bookmarks } from './CommunityContainer'
 import Splash from './Splash'
 import VisibleTransactionList from './VisibleTransactionList'
 import Profile from './Profile'
@@ -41,6 +41,7 @@ export default (store) => {
           <Route path="profile/:id" component={Profile} onEnter={requireAuth} />
           <Route path="editprofile" component={EditProfile} onEnter={requireAuth} />
           <Route path="contact" component={Contact} />
+          <Route path="bookmarks" component={Bookmarks} />
           <Route path="settings" component={Settings} onEnter={requireAuth} />
       </Route>
     )
