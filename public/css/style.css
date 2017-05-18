@@ -484,6 +484,7 @@ $screen-lg:                  1200px !default;
   padding: 10px 0px;
   border: 1px solid #c9c9c9;
   background: none;
+  margin-bottom: 8px;
   &.selected {
     background: #e6e6e6;
     font-style: italic;

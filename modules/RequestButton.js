@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { skillRequest } from '../utils/actions'
 import {RequestType, StatusType} from '../models/Enums'
-import { Button, Modal, Grid, Row, Col, ControlLabel, FormGroup, FormControl } from 'react-bootstrap';
+import { Button, Modal, Grid, Row, Col, ControlLabel, FormGroup, FormControl, Alert } from 'react-bootstrap';
 
 
 class RequestButton extends React.Component {
@@ -10,12 +10,10 @@ class RequestButton extends React.Component {
         super(props);
         this.state = {
             showModal: false,
-            selectedSkill: {
-                _id: '',
-                label: '',
-            },
+            selectedSkill: '',
             exchange_type: RequestType.LEARN,
             message: '',
+            errorMessage: '',
         };
         this.onClose = this.onClose.bind(this);
         this.onOpen = this.onOpen.bind(this);
@@ -35,24 +33,45 @@ class RequestButton extends React.Component {
     }
 
     onSubmit (event) {
+        if (!this.state.selectedSkill) {
+            this.setState({
+                errorMessage: 'Please select a skill',
+            });
+            return;
+        }
         this.props.skillRequest({
             sender: this.props.loggedInUser._id,
             recipient: this.props.user._id,
-            service: this.state.selectedSkill._id,
+            service: this.state.selectedSkill,
             request_type: this.state.exchange_type,
             message: this.state.message,
         });
         this.setState({
             showModal: false,
+            errorMessage: '',
         })
     }
 
     render () {
+        let {user, loggedInUser} = this.props;
+        let activities = [];
+        switch (this.state.exchange_type) {
+            case RequestType.LEARN:
+                activities = user.skills;
+                break;
+            case RequestType.SHARE:
+                activities = user.interests;
+                break;
+            case RequestType.EXCHANGE:
+                activities = user.skills
+                            .filter(s => loggedInUser._skills.map(a => a._id).indexOf(s._id) >= 0)
+                break;
+        }
         return (
             <div>
                 <Modal show={this.state.showModal} onHide={this.onClose}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Request from {this.props.user.name}</Modal.Title>
+                        <Modal.Title>Request from {user.name}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <Grid fluid={true}>
@@ -80,10 +99,15 @@ class RequestButton extends React.Component {
                         </Grid>
                         <FormGroup>
                             <ControlLabel>Request one skill:</ControlLabel>
+                            {this.state.errorMessage &&
+                                <Alert bsStyle='danger'>
+                                  <p>{this.state.errorMessage}</p>
+                                </Alert>
+                            }
                             <div className="skill-select">
-                                {this.props.user.skills.map((skill, i) => {
-                                    var extraClass = this.state.selectedSkill._id == skill._id ? 'selected' : '';
-                                    return <div onClick={() => this.setState({selectedSkill: {_id: skill._id, label: skill.label.en}})} key={i} className={'skill-label ' + extraClass}>{skill.label.en}</div>
+                                {activities.map((skill, i) => {
+                                    var extraClass = this.state.selectedSkill == skill._id ? 'selected' : '';
+                                    return <div onClick={() => this.setState({selectedSkill: skill._id})} key={i} className={'skill-label ' + extraClass}>{skill.label.en}</div>
                                 })}
                             </div>
                         </FormGroup>
