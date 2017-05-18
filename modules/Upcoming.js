@@ -82,7 +82,7 @@ class Upcoming extends React.Component {
                 name: content.placeName || '',
             },
             zoom: DEFAULT_ZOOM,
-            happenedAt: content.happenedAt,
+            happenedAt: content.happenedAt || Date.now(),
             showReviewForm: false,
         }
         this.defaultProps = {
@@ -183,7 +183,7 @@ class Upcoming extends React.Component {
                             <h4 className='title'>Date</h4>
                             <TimePicker
                                 time={this.state.happenedAt}
-                                onTimeSelected={this.state.onTimeSelected}
+                                onTimeSelected={this.onTimeSelected}
                                 editMode={!this.state.inViewMode}/>
                         </div>
                     </Col>
