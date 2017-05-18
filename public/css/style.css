@@ -119,9 +119,13 @@ $screen-lg:                  1200px !default;
 
     .slider-wrapper {
       padding: 10px 5px;
+      &>span {
+        margin-right: 8px;
+      }
     }
   }
   .button-wrapper {
+    padding: 8px 0;
     button {
       display: inline-block;
       width: 30%;
