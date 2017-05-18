@@ -9,6 +9,7 @@ export default class AcceptanceModal extends React.Component {
         super(props);
         this.state = {
             showModal: false,
+            message: '',
         }
     }
 
@@ -35,9 +36,9 @@ export default class AcceptanceModal extends React.Component {
                                 <ControlLabel>Message: </ControlLabel>
                                 <FormControl
                                     componentClass="textarea"
-                                    value={this.state.value}
+                                    value={this.state.message}
                                     placeholder="Enter text"
-                                    onChange={this.handleChange}
+                                    onChange={e => this.setState({message: e.target.value})}
                                 />
                             </FormGroup>
                         </form>
@@ -45,7 +46,11 @@ export default class AcceptanceModal extends React.Component {
 
                     <Modal.Footer>
                         <Button onClick={() => this.setState({showModal: false})} bsStyle='danger'>Close</Button>
-                        <Button onClick={() => {this.setState({showModal: false}); this.props.onConfirmation()}} bsStyle='primary'>Confirm Acceptance</Button>
+                        <Button
+                            onClick={() => {this.setState({showModal: false}); this.props.onConfirmation(this.state.message)}}
+                            bsStyle='primary'>
+                            Confirm Acceptance
+                        </Button>
                     </Modal.Footer>
                 </Modal>
             </div>
