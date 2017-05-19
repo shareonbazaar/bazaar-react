@@ -238,17 +238,6 @@ $screen-lg:                  1200px !default;
     }
   }
 
-  .identity {
-    min-width: 60px;
-    margin: 0 8px;
-    text-align: center;
-    .circular-img {
-      width: 30px;
-      height: 30px;
-      margin: 0 auto;
-    }
-  }
-
   .timestamp {
     float: right;
   }
@@ -323,6 +312,17 @@ $screen-lg:                  1200px !default;
       width: 30%;
       margin: 5px auto 0 auto;
     }
+  }
+}
+
+.identity {
+  min-width: 60px;
+  margin: 0 8px;
+  text-align: center;
+  .circular-img {
+    width: 30px;
+    height: 30px;
+    margin: 0 auto;
   }
 }
 
@@ -521,15 +521,34 @@ $screen-lg:                  1200px !default;
   }
 }
 
+
+
 .review {
   text-align: left;
-  .rating span {
-    color: gold;
+  .identity {
+    display: inline-block;
+    vertical-align: top;
+    .circular-img {
+      width: 50px;
+      height: 50px;
+    }
   }
-  .review-timestamp {
-    display: block;
-    font-size: 10px;
-    margin: 8px 0;
+  .review-body {
+    display: inline-block;
+    .rating {
+      display: inline-block;
+      span {
+        color: gold;
+      }
+    }
+    .quote {
+      margin: 10px 0;
+    }
+    .review-timestamp {
+      display: block;
+      font-size: 10px;
+      margin: 8px 0;
+    }
   }
 }
 
@@ -740,5 +759,9 @@ $screen-lg:                  1200px !default;
     display: inline-block;
   }
 
+  .review {
+    padding: 10px 0;
+    border-bottom: 1px dashed lightgray;
+  }
 }
 

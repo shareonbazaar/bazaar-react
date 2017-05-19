@@ -1,6 +1,8 @@
 const aws = require('aws-sdk');
 
 const User = require('../models/User');
+const Transaction = require('../models/Transaction');
+const Review = require('../models/Review');
 const Skill = require('../models/Skill');
 const Enums = require('../models/Enums');
 const helpers = require('../utils/helpers');
@@ -32,11 +34,30 @@ exports.apiGetUser = function (req, res) {
         if (!user) {
             res.status(404).json(err);
         } else {
-            res.json(getPublicUserData(user));
+            return Transaction.find({'_participants': user._id})
+            .then(transactions => {
+                return Review.find({
+                    '$and': [
+                          {'_transaction': {'$in': transactions.map(t => t._id)}},
+                          { '_creator': {'$ne': req.user.id} }
+                      ]
+                })
+                .populate('_creator')
+                .populate({
+                  path: '_transaction',
+                  populate: {
+                    path: 'service',
+                  }
+                })
+                .exec()
+                .then(reviews => res.json({
+                    user: Object.assign({}, getPublicUserData(user), {reviews}),
+                    error: null,
+                }))
+            });
         }
-    }).catch((err) => {
-        res.status(500).json(err);
-    });
+    })
+    .catch(err => res.status(500).json({error: err.message}));
 }
 
 const EARTH_RADIUS_KM = 6378.1;

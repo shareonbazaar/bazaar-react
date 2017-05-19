@@ -86,6 +86,51 @@ exports.apiGetTransactions = (req, res) => {
             }
         },
         {
+            '$unwind': {path: '$_reviews', preserveNullAndEmptyArrays: true}
+        },
+        {
+            '$lookup': {
+                'from': 'users',
+                'localField': '_reviews._creator',
+                'foreignField': '_id',
+                'as': '_reviews._creator',
+            }
+        },
+        {
+            '$unwind': {path: '$_reviews._creator', preserveNullAndEmptyArrays: true}
+        },
+        {
+            '$group': {
+                '_id': '$_id',
+                'service': {'$first': '$service'},
+                '_creator': {'$first': '$_creator'},
+                '_messages': {'$first': '$_messages'},
+                'loc': {'$first': { '$ifNull': [ "$loc", {'$literal': {type: 'Point', coordinates: [null, null]}}] }},
+                'status': {'$first': '$status'},
+                'happenedAt': {'$first': '$happenedAt'},
+                'placeName': {'$first': '$placeName'},
+                'request_type': {'$first': '$request_type'},
+                '_participants': {'$first': '$_participants'},
+                'createdAt': {'$first': '$createdAt'},
+                '_reviews': {'$push': '$_reviews'},
+            }
+        },
+        {
+            '$project': {
+                '_reviews': { '$setDifference': [ '$_reviews', [{}] ] },
+                'service': 1,
+                '_creator': 1,
+                'loc': 1,
+                'status': 1,
+                'happenedAt': 1,
+                'placeName': 1,
+                'request_type': 1,
+                '_participants': 1,
+                '_messages': 1,
+                'createdAt': 1,
+            }
+        },
+        {
             '$lookup': {
                 'from': 'users',
                 'localField': '_creator',

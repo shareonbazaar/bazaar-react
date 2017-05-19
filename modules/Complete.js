@@ -10,8 +10,8 @@ class Complete extends React.Component {
 
     render () {
         if (this.props.transaction.status === StatusType.COMPLETE) {
-            var userReview = this.props.transaction._reviews.find(review => review._creator == this.props.user._id);
-            var partnerReview = this.props.transaction._reviews.find(review => review._creator == this.props.partner._id);
+            var userReview = this.props.transaction._reviews.find(review => review._creator._id == this.props.user._id);
+            var partnerReview = this.props.transaction._reviews.find(review => review._creator._id == this.props.partner._id);
             if (!userReview) {
                 return (
                     <div className='notice'>
@@ -28,7 +28,14 @@ class Complete extends React.Component {
             } else {
                 return (
                     <div className='notice'>
-                        <Review review={partnerReview} />
+                        <Review
+                            imageUrl={this.props.partner.profile.picture}
+                            name={this.props.partner.profile.name.split(' ')[0]}
+                            service={this.props.transaction.service.label.en}
+                            text={partnerReview.text}
+                            createdAt={partnerReview.createdAt}
+                            rating={partnerReview.rating}
+                        />
                     </div>
                 )
             }

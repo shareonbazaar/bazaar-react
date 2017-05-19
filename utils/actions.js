@@ -86,7 +86,16 @@ export function loadProfile (id) {
     return dispatch => {
         dispatch({type: PROFILE_REQUEST, id});
         return callApi(`/api/users/${id}`)
-        .then(user => dispatch({type: PROFILE_RECEIVED, user}));
+        .then(({user, error}) => {
+            if (error) {
+                console.log(error)
+            } else {
+                return dispatch({
+                    type: PROFILE_RECEIVED,
+                    user
+                });
+            }
+        })
     }
 }
 

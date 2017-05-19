@@ -74,7 +74,18 @@ class Profile extends React.Component {
                         <Col md={12}>
                             <div className='box'>
                                 <h3>Reviews</h3>
-                                {this.props.profiledUser.reviews.map((review) => <Review content={review} />)}
+                                {
+                                    this.props.profiledUser.reviews.map((review, i) =>
+                                    <Review
+                                        key={i}
+                                        imageUrl={review._creator.profile.picture}
+                                        name={review._creator.profile.name.split(' ')[0]}
+                                        service={review._transaction.service.label.en}
+                                        text={review.text}
+                                        createdAt={review.createdAt}
+                                        rating={review.rating}
+                                    />)
+                                }
                             </div>
                         </Col>
                     </Row>
