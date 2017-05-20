@@ -51,7 +51,7 @@ exports.apiLogin = (req, res, next) => {
     if (err) { return next(err); }
     if (!user) {
       return res.status(401).json({
-          error: 'Unauthorized access',
+          error: 'Either email or password is incorrect',
           token: null,
           status: 401,
       });
