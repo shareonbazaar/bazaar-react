@@ -58,7 +58,7 @@ function TimePicker (props) {
             <DateTime
                 dateFormat={'MMMM Do YYYY'}
                 onChange={props.onTimeSelected}
-                defaultValue={new Date(props.time)} />
+                defaultValue={props.time ? new Date(props.time) : Date.now()} />
         )
     }
 }
@@ -82,7 +82,7 @@ class Upcoming extends React.Component {
                 name: content.placeName || '',
             },
             zoom: DEFAULT_ZOOM,
-            happenedAt: content.happenedAt || Date.now(),
+            happenedAt: content.happenedAt,
             showReviewForm: false,
         }
         this.defaultProps = {
