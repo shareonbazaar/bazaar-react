@@ -90,6 +90,8 @@ app.get('*', (req, res) => {
 
 app.post('/api/login', passportConfig.apiLogin);
 app.post('/api/signup', passportConfig.apiSignup);
+app.post('/api/forgot', passportConfig.forgotPassword);
+app.post('/api/resetPassword', passportConfig.resetTokenLogin);
 
 /**
  * OAuth authentication routes. (Sign in)

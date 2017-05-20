@@ -202,6 +202,6 @@ exports.patchUser = (req, res) => {
           .populate('_skills _interests')
           .exec();
     })
-    .then((data) => res.json({error: null, data}))
-    .catch((err) => res.status(500).json({error: err}));
+    .then(data => res.json({error: null, data}))
+    .catch(err => res.status(500).json({error: err.message}));
 };

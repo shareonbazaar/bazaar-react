@@ -1,4 +1,4 @@
-const async = require('async');
+const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
@@ -21,6 +21,30 @@ passport.deserializeUser((id, done) => {
 });
 
 const CONFLICT = 409;
+
+exports.resetTokenLogin = (req, res, next) => {
+    User.findOne({
+        passwordResetToken: req.body.resetToken,
+        passwordResetExpires: { '$gte': Date.now() }
+    })
+    .then(user => {
+        if (!user) {
+            return res.status(401).json({
+                error: 'Password reset token is invalid or has expired.',
+                token: null,
+                status: 401,
+            })
+        }
+
+        //user has authenticated correctly thus we create a JWT token
+        res.json({
+            token: jwt.sign({ email: user.email }, process.env.SESSION_SECRET),
+            user: user,
+            error: null,
+            status: 200,
+        });
+    })
+};
 
 exports.apiLogin = (req, res, next) => {
   passport.authenticate('local', {session: false}, (err, user, info) => {
@@ -126,6 +150,38 @@ exports.deleteUser = (req, res, next) => {
   )
   .then((data) => res.json({error: null, data}))
   .catch((err) => res.status(500).json({error: err}));
+};
+
+/**
+ * POST /api/forgot
+ * Send email to user account to reset password.
+ */
+exports.forgotPassword = (req, res, next) => {
+  User.findOneAndUpdate({ email: req.body.forgotEmail.toLowerCase() },
+  {
+      passwordResetToken: crypto.randomBytes(16).toString('hex'),
+      passwordResetExpires: Date.now() + 3600000 // 1 hour
+  }, {new: true})
+  .then(user => {
+      const transporter = nodemailer.createTransport({
+          service: 'Mailgun',
+          auth: {
+              user : process.env.MAILGUN_USER,
+              pass : process.env.MAILGUN_PASSWORD,
+          }
+      });
+      return transporter.sendMail({
+          to: user.email,
+          from: 'Bazaar Team <team@shareonbazaar.eu>',
+          subject: 'Reset your password on Bazaar',
+          text: `You are receiving this email because you (or someone else) have requested the reset of the password for your account.\n\n
+            Please click on the following link, or paste this into your browser to complete the process:\n\n
+            http://${req.headers.host}/reset/${user.passwordResetToken}\n\n
+            If you did not request this, please ignore this email and your password will remain unchanged.\n`
+      });
+  })
+  .then(user => res.json({error: null}))
+  .catch(err => res.status(500).json({error: err}));
 };
 
 exports.authenticate_google = (req, res, done) => {
@@ -249,15 +305,20 @@ passport.use(new JwtStrategy({secretOrKey: process.env.SESSION_SECRET, jwtFromRe
  * Sign in using Email and Password.
  */
 passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
-  User.findOne({ email: email.toLowerCase() }).populate('_skills _interests').exec((err, user) => {
-    if (!user) {
-      return done(null, false, { msg: `Email ${email} not found.` });
-    }
-    user.comparePassword(password, (err, isMatch) => {
-      if (isMatch) {
-        return done(null, user);
-      }
-      return done(null, false, { msg: 'Invalid email or password.' });
+    User.findOne({ email: email.toLowerCase() })
+    .populate('_skills _interests')
+    .exec()
+    .then(user => {
+        if (!user) {
+            return done(null, false, { msg: `Email ${email} not found.` });
+        }
+        user.comparePassword(password)
+        .then(isMatch => {
+            if (isMatch) {
+                return done(null, user);
+            } else {
+                return done(null, false, {msg: 'Invalid email or password'})
+            }
+        });
     });
-  });
 }));

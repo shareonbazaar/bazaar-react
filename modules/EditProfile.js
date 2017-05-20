@@ -1,9 +1,9 @@
 import React from 'react'
-import { Button, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
+import { Button, FormGroup, FormControl, ControlLabel, Alert } from 'react-bootstrap';
 import { connect } from 'react-redux'
 import CircularImage from './CircularImage'
 import SkillsModal from './SkillsModal'
-import { updateProfile } from '../utils/actions'
+import { updateProfile, clearProfileAlert } from '../utils/actions'
 
 
 function Radio (props) {
@@ -48,6 +48,7 @@ class EditProfile extends React.Component {
         }
         this.onChange = this.onChange.bind(this);
         this.onImageChange = this.onImageChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
     }
 
     onChange (e, field) {
@@ -92,11 +93,50 @@ class EditProfile extends React.Component {
         }
     }
 
+    onSubmit () {
+        let {state} = this;
+        let form = new FormData();
+        form.append('profile.name', state.name)
+        form.append('profile.gender', state.gender)
+        form.append('profile.hometown', state.hometown)
+        form.append('profile.location', state.location)
+        form.append('profile.status', state.status)
+        form.append('aboutMe', state.aboutMe)
+
+        // FormData won't let you send an empty array so we have to
+        // fake it by sending an empty string and then checking for
+        // that on client side
+        if (state.skills.length === 0) {
+            form.append('_skills', '')
+        } else {
+            state.skills.forEach(s => form.append('_skills', s._id))
+        }
+
+        if (state.interests.length === 0) {
+            form.append('_interests', '')
+        } else {
+            state.interests.forEach(s => form.append('_interests', s._id))
+        }
+
+        if (state.file) {
+            form.append('profilepic', state.file)
+        }
+        this.props.updateProfile(form);
+    }
+
     render () {
         return (
           <div className='content-page edit-profile-page'>
             <div className='page-header'><h3>Edit your profile</h3></div>
             <div>
+              {this.props.response &&
+                <Alert
+                  bsStyle={`${this.props.response.type === 'error' ? 'danger' : 'success'}`}
+                  onDismiss={this.props.clearProfileAlert}
+                >
+                  <p>{this.props.response.message}</p>
+                </Alert>
+              }
               <FormGroup>
                 <ControlLabel className='label-top'>Profile picture</ControlLabel>
                 <UploadPhoto className='user-activities' imageUrl={this.state.picture} onImageChange={this.onImageChange} />
@@ -208,7 +248,7 @@ class EditProfile extends React.Component {
               <hr />
               <FormGroup>
                 <div className='save-button'>
-                    <Button onClick={() => this.props.submitChanges(this.state)} bsStyle='primary'>Save changes</Button>
+                    <Button onClick={this.onSubmit} bsStyle='primary'>Save changes</Button>
                 </div>
               </FormGroup>
             </div>
@@ -217,46 +257,11 @@ class EditProfile extends React.Component {
     }
 }
 
-function mapDispatchToProps (dispatch) {
+function mapStateToProps({auth}) {
     return {
-        submitChanges: (state) => {
-            let form = new FormData();
-            form.append('profile.name', state.name)
-            form.append('profile.gender', state.gender)
-            form.append('profile.hometown', state.hometown)
-            form.append('profile.location', state.location)
-            form.append('profile.status', state.status)
-            form.append('aboutMe', state.aboutMe)
-
-            // FormData won't let you send an empty array so we have to
-            // fake it by sending an empty string and then checking for
-            // that on client side
-            if (state.skills.length === 0) {
-                form.append('_skills', '')
-            } else {
-                state.skills.forEach(s => form.append('_skills', s._id))
-            }
-
-            if (state.interests.length === 0) {
-                form.append('_interests', '')
-            } else {
-                state.interests.forEach(s => form.append('_interests', s._id))
-            }
-
-            if (state.file) {
-                form.append('profilepic', state.file)
-            }
-            dispatch(updateProfile(form));
-        },
+        loggedInUser: auth.user,
+        response: auth.profileUpdateResponse
     }
 }
 
-// These props come from the application's
-// state when it is started
-function mapStateToProps(state, ownProps) {
-    return {
-        loggedInUser: state.auth.user,
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(EditProfile);
+export default connect(mapStateToProps, {updateProfile, clearProfileAlert})(EditProfile);

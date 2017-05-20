@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, FormGroup, FormControl, ControlLabel, Alert } from 'react-bootstrap';
-import { updateProfile, deleteAccount } from '../utils/actions'
+import { updateProfile, deleteAccount, clearProfileAlert } from '../utils/actions'
 import { connect } from 'react-redux'
 import validator from 'email-validator';
 import ConfirmationModal from './ConfirmationModal';
@@ -30,7 +30,9 @@ class Settings extends React.Component {
         const onSubmitClicked = () => {
           this.setState({hasClickedSubmit: true})
           if (passwordValid) {
-              this.props.updateProfile(this.state);
+              let form = new FormData();
+              form.append('password', this.state.password)
+              this.props.updateProfile(form);
           }
         }
         return (
@@ -40,7 +42,7 @@ class Settings extends React.Component {
               {this.props.response &&
                 <Alert
                   bsStyle={`${this.props.response.type === 'error' ? 'danger' : 'success'}`}
-                  onDismiss={this.props.clearContactAlert}
+                  onDismiss={this.props.clearProfileAlert}
                 >
                   <p>{this.props.response.message}</p>
                 </Alert>
@@ -76,8 +78,11 @@ class Settings extends React.Component {
 }
 
 const mapStateToProps = ({auth}) => {
-    return {loggedInUser: auth.user}
+    return {
+        loggedInUser: auth.user,
+        response: auth.profileUpdateResponse
+    }
 }
 
-export default connect(mapStateToProps, {updateProfile, deleteAccount})(Settings);
+export default connect(mapStateToProps, {updateProfile, deleteAccount, clearProfileAlert})(Settings);
 

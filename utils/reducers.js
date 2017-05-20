@@ -9,22 +9,22 @@ import {
   SUBMIT_REQUEST, CONFIRM_REQUEST_SUBMISSION,
   USERS_REQUEST, USERS_RECEIVED,
   UPDATE_TRANSACTION, SET_VISIBILITY_FILTER,
-  UPDATE_PROFILE_REQUEST, UPDATED_PROFILE_RECEIVED,
+  UPDATE_PROFILE_REQUEST, UPDATE_PROFILE_RECEIVED, UPDATE_PROFILE_FAILURE,
+  CLEAR_PROFILE_ALERT,
   CONTACT_SUBMIT_CONFIRMED, CLEAR_CONTACT_ALERT,
   DELETE_ACCOUNT_REQUEST, DELETE_ACCOUNT_CONFIRMED,
+  FORGOT_REQUEST, CLEAR_FORGOT_EMAIL
 } from './actions'
 
-
-function loginFilter (state) {
-	return state
-}
 
 function auth(state = {
     isFetching: false,
     isAuthenticated: false, //localStorage.getItem('token') ? true : false,
-    errorMessage: '',
+    loginResponse: null,
+    profileUpdateResponse: null,
     user: {},
     creds: {},
+    forgotEmail: '',
   }, action) {
     switch (action.type) {
         case LOGIN_REQUEST:
@@ -39,13 +39,13 @@ function auth(state = {
                 isFetching: false,
                 isAuthenticated: true,
                 user: action.user,
-                errorMessage: '',
+                loginResponse: null,
             })
         case LOGIN_FAILURE:
             return Object.assign({}, state, {
                 isFetching: false,
                 isAuthenticated: false,
-                errorMessage: action.message,
+                loginResponse: {type: 'error', message: action.message},
             })
         case LOGOUT_CONFIRM:
         case DELETE_ACCOUNT_CONFIRMED:
@@ -58,10 +58,34 @@ function auth(state = {
             return Object.assign({}, state, {
                 isFetching: true,
             })
-        case UPDATED_PROFILE_RECEIVED:
+        case UPDATE_PROFILE_RECEIVED:
             return Object.assign({}, state, {
                 isFetching: false,
                 user: action.user,
+                profileUpdateResponse: {
+                    type: 'success',
+                    message: 'Profile successfully updated',
+                },
+            })
+        case UPDATE_PROFILE_FAILURE:
+            return Object.assign({}, state, {
+                isFetching: false,
+                profileUpdateResponse: {
+                    type: 'error',
+                    message: 'Error updating profile',
+                },
+            })
+        case CLEAR_PROFILE_ALERT:
+            return Object.assign({}, state, {
+                profileUpdateResponse: null,
+            })
+        case FORGOT_REQUEST:
+            return Object.assign({}, state, {
+                forgotEmail: action.forgotEmail,
+            })
+        case CLEAR_FORGOT_EMAIL:
+            return Object.assign({}, state, {
+                forgotEmail: '',
             })
         default:
           return state

@@ -21,12 +21,16 @@ export const CONFIRM_REVIEW_SUBMISSION = 'CONFIRM_REVIEW_SUBMISSION'
 export const USERS_REQUEST = 'USERS_REQUEST'
 export const USERS_RECEIVED = 'USERS_RECEIVED'
 export const UPDATE_PROFILE_REQUEST = 'UPDATE_PROFILE_REQUEST'
-export const UPDATED_PROFILE_RECEIVED = 'UPDATED_PROFILE_RECEIVED'
+export const UPDATE_PROFILE_RECEIVED = 'UPDATE_PROFILE_RECEIVED'
+export const UPDATE_PROFILE_FAILURE = 'UPDATE_PROFILE_FAILURE'
+export const CLEAR_PROFILE_ALERT = 'CLEAR_PROFILE_ALERT'
 export const CONTACT_SUBMIT_REQUEST = 'CONTACT_SUBMIT_REQUEST'
 export const CONTACT_SUBMIT_CONFIRMED = 'CONTACT_SUBMIT_CONFIRMED'
 export const CLEAR_CONTACT_ALERT = 'CLEAR_CONTACT_ALERT'
 export const DELETE_ACCOUNT_REQUEST = 'DELETE_ACCOUNT_REQUEST'
 export const DELETE_ACCOUNT_CONFIRMED = 'DELETE_ACCOUNT_CONFIRMED'
+export const FORGOT_REQUEST = 'FORGOT_REQUEST'
+export const CLEAR_FORGOT_EMAIL = 'CLEAR_FORGOT_EMAIL'
 
 function callApi (endpoint, method='GET', data={}) {
     var config = {
@@ -164,6 +168,12 @@ export function loadCategories () {
     }
 }
 
+export function clearProfileAlert () {
+    return {
+        type: CLEAR_PROFILE_ALERT,
+    }
+}
+
 export function updateProfile (data) {
     var config = {
         headers: {
@@ -181,13 +191,18 @@ export function updateProfile (data) {
         .then(({error, data}) => {
             if (error) {
                 console.log(error)
+                dispatch({
+                    type: UPDATE_PROFILE_FAILURE,
+                    message: error,
+                })
             } else {
                 dispatch({
-                    type: UPDATED_PROFILE_RECEIVED,
+                    type: UPDATE_PROFILE_RECEIVED,
                     user: data,
                 })
             }
         })
+        .catch(err => console.log(err))
     }
 }
 
@@ -243,43 +258,43 @@ export function submitContact (data) {
     }
 }
 
-function requestLogin (creds) {
-  return {
-    type: LOGIN_REQUEST,
-    creds
-  }
+export function clearForgotEmail () {
+    return {
+        type: CLEAR_FORGOT_EMAIL,
+    }
 }
 
-
-function receiveLogin (user) {
-  return {
-    type: LOGIN_SUCCESS,
-    user,
-  }
-}
-
-function loginError (message) {
-  return {
-    type: LOGIN_FAILURE,
-    message
-  }
+export function forgotPasswordRequest (forgotEmail) {
+    return dispatch => {
+        dispatch({type: FORGOT_REQUEST, forgotEmail})
+        return callApi('/api/forgot', 'POST', {forgotEmail})
+    }
 }
 
 export function loginUser (creds) {
     return dispatch => {
-        dispatch(requestLogin());
+        dispatch({
+            type: LOGIN_REQUEST,
+            creds,
+        });
         return callApi(creds.endpoint, 'POST', creds.data)
         .then (({user, error, token}) => {
             if (error) {
                 // If there was a problem, we want to
                 // dispatch the error condition
-                dispatch(loginError(error))
+                dispatch({
+                    type: LOGIN_FAILURE,
+                    message: error,
+                })
                 return Promise.reject(user)
             } else {
                 // If login was successful, set the token in local storage
                 localStorage.setItem('token', token)
                 // Dispatch the success action
-                dispatch(receiveLogin(user))
+                dispatch({
+                    type: LOGIN_SUCCESS,
+                    user,
+                })
             }
         }).catch(err => console.log("Error: ", err))
     }

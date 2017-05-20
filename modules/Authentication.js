@@ -1,7 +1,7 @@
 import React, { PropTypes as T } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
-import { loginUser } from '../utils/actions'
+import { loginUser, forgotPasswordRequest, clearForgotEmail } from '../utils/actions'
 
 import { Button, Grid, Col, Row, ControlLabel, FormGroup, FormControl, Alert } from 'react-bootstrap';
 import GoogleLogin from 'react-google-login';
@@ -114,9 +114,9 @@ class Signup extends React.Component {
         <Grid fluid={true}>
           <Row>
             <Col md={7}>
-              {this.props.errorMessage &&
+              {this.props.response &&
                 <Alert bsStyle='danger'>
-                  <p>{this.props.errorMessage}</p>
+                  <p>{this.props.response.message}</p>
                 </Alert>
               }
               <FormGroup validationState={(this.state.hasClickedSignup && !firstNameValid) ? 'error' : null}>
@@ -167,9 +167,9 @@ class Login extends Signup {
       <div className='content-page login-page'>
         <div className='page-header'><h3>Sign In</h3></div>
         <div>
-          {this.props.errorMessage &&
+          {this.props.response &&
             <Alert bsStyle='danger'>
-              <p>{this.props.errorMessage}</p>
+              <p>{this.props.response.message}</p>
             </Alert>
           }
           <FormGroup>
@@ -210,14 +210,82 @@ class Login extends Signup {
   }
 }
 
-// These props come from the application's
-// state when it is started
-function mapStateToProps (state, ownProps) {
+class Forgot extends Signup {
+    componentDidMount () {
+        if (this.props.params.id) {
+            this.props.loginUser({
+                endpoint: '/api/resetPassword',
+                data: {
+                    resetToken: this.props.params.id,
+                }
+            })
+        }
+    }
+
+    componentWillReceiveProps (newProps) {
+        if (newProps.isAuthenticated) {
+            this.props.push('/settings');
+        }
+    }
+
+    render () {
+      if (this.props.params.id) {
+          return (
+              <div className='content-page forgot-page'>
+                {this.props.response ?
+                  <Alert bsStyle='danger'>
+                    <p>{this.props.response.message}</p>
+                  </Alert>
+                  :
+                  <div>Validating token...</div>
+                }
+              </div>
+          )
+      }
+      return (
+        <div className='content-page forgot-page'>
+          <div className='page-header'><h3>Forgot Password</h3></div>
+          {
+            this.props.forgotEmail ?
+
+            <div>
+              <p>If there is an account associated with {this.props.forgotEmail}, an email will be sent to that account with instructions on how to reset password</p>
+              <a onClick={this.props.clearForgotEmail}>Reset a different account</a>
+            </div>
+
+            :
+            (
+              <div>
+                <FormGroup>
+                  <ControlLabel>Email</ControlLabel>
+                  <FormControl type="email" value={this.state.emailText} placeholder="Email" onChange={(e) => {this.onChange(e, 'emailText')}}/>
+                </FormGroup>
+                <FormGroup>
+                  <div className='form-offset'>
+                    <Button
+                      className='login-button'
+                      bsStyle='primary'
+                      onClick={() => this.props.forgotPasswordRequest(this.state.emailText)}>
+                      Reset
+                    </Button>
+                  </div>
+                </FormGroup>
+              </div>
+            )
+          }
+        </div>
+      )
+    }
+}
+
+function mapStateToProps ({ auth }) {
   return {
-    isAuthenticated: state.auth.isAuthenticated,
-    errorMessage: state.auth.errorMessage,
+    isAuthenticated: auth.isAuthenticated,
+    response: auth.loginResponse,
+    forgotEmail: auth.forgotEmail,
   }
 }
 
 exports.Signup = connect(mapStateToProps, {loginUser, push })(Signup);
 exports.Login = connect(mapStateToProps, {loginUser, push })(Login);
+exports.Forgot = connect(mapStateToProps, { forgotPasswordRequest, clearForgotEmail, loginUser, push })(Forgot)

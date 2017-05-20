@@ -595,7 +595,16 @@ $screen-lg:                  1200px !default;
   box-shadow: none;
 }
 
-.edit-profile-page, .login-page, .signup-page, .contact-page, .settings-page {
+.edit-profile-page,
+.login-page,
+.signup-page,
+.contact-page,
+.settings-page,
+.forgot-page {
+  a {
+    cursor: pointer;
+  }
+
   .control-label.label-top {
     vertical-align: top;
     padding-top: 5px;

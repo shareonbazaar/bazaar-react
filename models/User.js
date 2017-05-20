@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt-nodejs');
+const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const mongoose = require('mongoose');
 const helpers = require('../utils/helpers');
@@ -46,23 +46,30 @@ userSchema.index({loc: '2dsphere'});
 userSchema.pre('save', function (next) {
   const user = this;
   if (!user.isModified('password')) { return next(); }
-  bcrypt.genSalt(10, (err, salt) => {
-    if (err) { return next(err); }
-    bcrypt.hash(user.password, salt, null, (err, hash) => {
-      if (err) { return next(err); }
+
+  bcrypt.hash(user.password, 10)
+  .then(hash => {
       user.password = hash;
       next();
-    });
-  });
+  })
+  .catch(err => next(err))
+});
+
+userSchema.pre('findOneAndUpdate', function (next) {
+    if (!this._update.password) { return next(); }
+    bcrypt.hash(this._update.password, 10)
+    .then(hash => {
+        this._update.password = hash;
+        next();
+    })
+    .catch(err => next(err))
 });
 
 /**
  * Helper method for validating user's password.
  */
-userSchema.methods.comparePassword = function (candidatePassword, cb) {
-  bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
-    cb(err, isMatch);
-  });
+userSchema.methods.comparePassword = function (candidatePassword) {
+    return bcrypt.compare(candidatePassword, this.password);
 };
 
 /**

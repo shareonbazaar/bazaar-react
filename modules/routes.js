@@ -7,7 +7,7 @@ import Profile from './Profile'
 import EditProfile from './EditProfile'
 import Contact from './Contact'
 import Settings from './Settings'
-import { Login, Signup } from './Authentication'
+import { Login, Signup, Forgot } from './Authentication'
 
 import { Route, IndexRoute } from 'react-router'
 
@@ -36,6 +36,8 @@ export default (store) => {
       <Route path="/" component={AppContainer}>
           <IndexRoute component={Community} />
           <Route path="login" component={Login} onEnter={bypassAuth} />
+          <Route path="forgot" component={Forgot} />
+          <Route path="reset/:id" component={Forgot} />
           <Route path="signup" component={Signup} onEnter={bypassAuth} />
           <Route path="transactions" component={VisibleTransactionList} onEnter={requireAuth} />
           <Route path="profile/:id" component={Profile} onEnter={requireAuth} />
