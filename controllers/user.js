@@ -30,7 +30,7 @@ exports.apiGetUser = function (req, res) {
     User.findById(req.params.id)
     .populate('_skills _interests')
     .exec()
-    .then((user) => {
+    .then(user => {
         if (!user) {
             res.status(404).json(err);
         } else {
@@ -61,7 +61,7 @@ exports.apiGetUser = function (req, res) {
 }
 
 const EARTH_RADIUS_KM = 6378.1;
-function performQuery (req, query) {
+function performQuery (user, query) {
   // Default match is an EXCHANGE match - that is, user is interested
   // in both receiving and providing the service.
   if (!(query.skills instanceof Array)) {
@@ -71,7 +71,7 @@ function performQuery (req, query) {
   var db_query = {
       _skills: {'$in': query.skills.map(helpers.toObjectId)},
       _interests: {'$in': query.skills.map(helpers.toObjectId)},
-      _id: {'$ne': helpers.toObjectId(req.user._id)},
+      _id: {'$ne': helpers.toObjectId(user._id)},
   };
   var error;
 
@@ -108,12 +108,142 @@ function performQuery (req, query) {
   return User.find(db_query).populate('_skills _interests').exec();
 }
 
+function getCommunity (user) {
+  const my_status = user.profile.status || 'native';
+
+  // add a match for not me and not status
+  return User.aggregate([
+    {
+      '$match': {
+        '_id': {'$ne': helpers.toObjectId(user._id)},
+        'profile.status': {'$ne': my_status},
+        'isDeleted': {'$ne': true},
+      },
+    },
+    {
+      '$unwind': {'path': '$_skills', 'preserveNullAndEmptyArrays': true},
+    },
+    {
+      '$lookup': {
+          'from': 'skills',
+          'localField': '_skills',
+          'foreignField': '_id',
+          'as': '_skills',
+      }
+    },
+    {
+      '$unwind': {'path': '$_skills', 'preserveNullAndEmptyArrays': true},
+    },
+    {
+      '$project': {
+        'profile': '$profile',
+        '_interests': '$_interests',
+        'loc': { '$ifNull': [ "$loc", {'$literal': {type: 'Point', coordinates: [null, null]}}] },
+        '_skills': {
+          '_id': '$_skills._id',
+          'label': '$_skills.label',
+
+          'skill_score': {
+            '$cond': {
+              'if': { '$eq': [{'$ifNull': ['$_skills', null]}, null] },
+              'then': -1,
+              'else': {
+                '$cond': {
+                  'if': { '$setIsSubset': [['$_skills._id'], user._interests] },
+                  'then': 1,
+                  'else': 0,
+                }
+              }
+            }
+          },
+        },
+        '_skills_ids': '$_skills._id',
+      }
+    },
+    {
+      '$sort': {
+          '_skills.skill_score': -1,
+      }
+    },
+    {
+      '$redact': {
+        $cond: {
+          if: {
+              '$eq': ['$skill_score', -1]
+          },
+          then: '$$PRUNE',
+          else: '$$DESCEND'
+        }
+      }
+    },
+    {
+      '$group': {
+          '_id': '$_id',
+          '_skills': {'$push': '$_skills'},
+          '_skills_ids': {'$push': '$_skills_ids'},
+          '_interests': {'$first': '$_interests'},
+          'profile': {'$first': '$profile'},
+          'loc': {'$first': '$loc'},
+      }
+    },
+    {
+      '$project': {
+          '_skills': '$_skills',
+          '_interests': '$_interests',
+          'profile': '$profile',
+          'loc': '$loc',
+          'score': {
+              '$sum': [
+                  {
+                      '$size': {
+                          '$setIntersection': ['$_skills_ids', user._interests],
+                      },
+                  },
+                  {
+                      '$size': {
+                          '$setIntersection': ['$_interests', user._skills],
+                      },
+                  },
+              ],
+          }
+      }
+    },
+    {
+      '$unwind': {'path': '$_interests', 'preserveNullAndEmptyArrays': true},
+    },
+    {
+      '$lookup': {
+          'from': 'skills',
+          'localField': '_interests',
+          'foreignField': '_id',
+          'as': '_interests',
+      }
+    },
+    {
+      '$unwind': {'path': '$_interests', 'preserveNullAndEmptyArrays': true},
+    },
+    {
+      '$group': {
+          '_id': '$_id',
+          '_skills': {'$first': '$_skills'},
+          '_interests': {'$push': '$_interests'},
+          'profile': {'$first': '$profile'},
+          'loc': {'$first': '$loc'},
+          'score': {'$first': '$score'},
+      }
+    },
+    {
+      '$sort': {
+          'score': -1,
+      },
+    },
+  ]).exec()
+}
+
 exports.apiSearchUsers = (req, res) => {
   var queryPromise;
   if (Object.keys(req.query).length === 0) {
-      queryPromise = User.find({_id: {'$ne': req.user.id}})
-      .populate('_skills _interests')
-      .exec()
+      queryPromise = getCommunity(req.user);
   } else {
       // FIXME: Use IP address to get long/lat?
       queryPromise = performQuery(req, req.query)
