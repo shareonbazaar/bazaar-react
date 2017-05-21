@@ -182,9 +182,15 @@ function uploadPicture (filename, fileBuffer, mimetype) {
 exports.patchUser = (req, res) => {
     var prevPromise = new Promise((resolve) => resolve({}));
     // No way to send an empty array via FormData, so need to replace empty str with empty array
-    if (req.body.bookmarks === '') req.body.bookmarks = [];
-    if (req.body._skills === '') req.body._skills = [];
-    if (req.body._interests === '') req.body._interests = [];
+    ['bookmarks', '_skills', '_interests'].forEach(field => {
+        if (!req.body[field]) {
+            req.body[field] = [];
+        }
+        if (!Array.isArray(req.body[field])) {
+            req.body[field] = [req.body[field]];
+        }
+    });
+
     if (req.file) {
         var mimetype = req.file.mimetype;
         var filename = req.user._id + '.' + mimetype.split('/').pop();
