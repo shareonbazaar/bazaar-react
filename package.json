@@ -1,7 +1,8 @@
 {
   "name": "bazaar",
   "version": "1.0.0",
-  "description": "",
+  "description": "Code for the share on bazaar website",
+  "repository": "http://github.com/shareonbazaar/bazaar-react",
   "main": "index.js",
   "scripts": {
     "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
