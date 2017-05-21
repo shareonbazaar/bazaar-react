@@ -1,4 +1,4 @@
-import React, { PropTypes as T } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import { loginUser, forgotPasswordRequest, clearForgotEmail } from '../utils/actions'

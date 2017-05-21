@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
 import Transaction from './Transaction'
 import FilterBar from './FilterBar'
 import { Button, Modal, Grid, Row, Col } from 'react-bootstrap';
