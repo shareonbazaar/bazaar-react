@@ -4,6 +4,7 @@ const nodemailer = require('nodemailer');
 const User = require('../models/User');
 const Message = require('../models/Message');
 const Transaction = require('../models/Transaction');
+const contact = require('./contact');
 
 var io;
 var socket_map;
@@ -21,37 +22,42 @@ exports.initSockets = (server) => {
 
     io.sockets.on('connection', function (socket) {
         User.findOne({email: socket.decoded_token.email}).exec()
-        .then((user) => {
+        .then(user => {
             // FIXME: Will this work if we have multiple servers??
             // Cuz I'm keeping this map in memory. Does it need to be in DB?
+            if (!user) {
+                console.log(`Unknown user ${socket.decoded_token.email} is trying to connect`);
+                return;
+            }
+
             socket_map[user._id] = socket.id;
             socket.on('send message', function (data) {
-                addMessageToTransaction(user, data.message, data.t_id);
+                addMessageToTransaction(user, data.message, data.t_id, socket.request.headers.host);
             });
         })
     });
 
     io.sockets.on('disconnect', function (socket) {
       User.find({email: socket.decoded_token.email}).exec()
-        .then((user) => {
+        .then(user => {
             delete socket_map[user._id];
         })
     });
 }
 
-function addMessageToTransaction (sender, messageText, transactionId) {
+function addMessageToTransaction (sender, messageText, transactionId, baseUrl) {
     var newMsg = new Message({
         message: messageText,
         _transaction: transactionId,
         _sender: sender._id,
     });
     return newMsg.save()
-    .then((message) => {
+    .then(message => {
       return Transaction.findOne({_id: message._transaction})
       .populate('_participants')
       .exec();
     })
-    .then((transaction) => {
+    .then(transaction => {
 
           return Promise.all(transaction._participants.map((user) => {
               var isMe = (sender._id.toString() == user._id.toString());
@@ -73,7 +79,7 @@ function addMessageToTransaction (sender, messageText, transactionId) {
               })
               .then(() => {
                   if (!isMe) {
-                      return sendMessageEmail(sender, user, messageText);
+                      return contact.sendMessageEmail(sender, user, messageText, baseUrl);
                   } else {
                       return {}
                   }
@@ -84,23 +90,4 @@ function addMessageToTransaction (sender, messageText, transactionId) {
 };
 
 exports.addMessageToTransaction = addMessageToTransaction;
-
-function sendMessageEmail (sender, recipient, message) {
-    var transporter = nodemailer.createTransport({
-      service: 'Mailgun',
-      auth: {
-        user: process.env.MAILGUN_USER,
-        pass: process.env.MAILGUN_PASSWORD,
-      },
-    });
-
-    return transporter.sendMail({
-        to: recipient.email,
-        from: 'Bazaar Team <team@shareonbazaar.eu>',
-        subject: 'New message from ' + sender.profile.name,
-        html: 'New message html ' + message,
-        text: 'Hi ' + recipient.profile.name + ',\n\n' +
-          'You have a new message from ' + sender.profile.name + '! Please log on to Bazaar to read it.\n',
-    });
-}
 

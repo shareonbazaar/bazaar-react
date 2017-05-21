@@ -9,6 +9,7 @@ const GoogleAuth = require('google-auth-library');
 const requestify = require('requestify');
 
 const User = require('../models/User');
+const contact = require('../controllers/contact');
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -66,23 +67,6 @@ exports.apiLogin = (req, res, next) => {
   })(req, res, next);
 };
 
-function sendWelcomeEmail (recipient) {
-    var transporter = nodemailer.createTransport({
-      service: 'Mailgun',
-      auth: {
-        user: process.env.MAILGUN_USER,
-        pass: process.env.MAILGUN_PASSWORD,
-      },
-    });
-
-    return transporter.sendMail({
-        to: recipient.email,
-        from: 'Bazaar Team <team@shareonbazaar.eu>',
-        subject: 'Welcome to the Bazaar, ' + recipient.profile.name,
-        text: 'Hi ' + recipient.profile.name + ',\n\n' +
-          'Thanks for signing up to Bazaar!.\n',
-    });
-}
 
 exports.apiSignup = (req, res, next) => {
   req.assert('firstName', 'You need to provide a first name').notEmpty();
@@ -120,7 +104,7 @@ exports.apiSignup = (req, res, next) => {
               password: req.body.password,
           });
           user.save()
-          .then(user => sendWelcomeEmail(user))
+          .then(user => contact.sendWelcomeEmail(user, req.headers.host))
           .then(data => res.json({
               token: jwt.sign({ email: user.email }, process.env.SESSION_SECRET),
               user: user,
@@ -162,24 +146,7 @@ exports.forgotPassword = (req, res, next) => {
       passwordResetToken: crypto.randomBytes(16).toString('hex'),
       passwordResetExpires: Date.now() + 3600000 // 1 hour
   }, {new: true})
-  .then(user => {
-      const transporter = nodemailer.createTransport({
-          service: 'Mailgun',
-          auth: {
-              user : process.env.MAILGUN_USER,
-              pass : process.env.MAILGUN_PASSWORD,
-          }
-      });
-      return transporter.sendMail({
-          to: user.email,
-          from: 'Bazaar Team <team@shareonbazaar.eu>',
-          subject: 'Reset your password on Bazaar',
-          text: `You are receiving this email because you (or someone else) have requested the reset of the password for your account.\n\n
-            Please click on the following link, or paste this into your browser to complete the process:\n\n
-            http://${req.headers.host}/reset/${user.passwordResetToken}\n\n
-            If you did not request this, please ignore this email and your password will remain unchanged.\n`
-      });
-  })
+  .then(user => contact.forgotPasswordEmail(user, req.headers.host))
   .then(user => res.json({error: null}))
   .catch(err => res.status(500).json({error: err}));
 };
@@ -214,7 +181,7 @@ exports.authenticate_google = (req, res, done) => {
                         'profile.picture': payload.picture,
                     });
                     user.save()
-                    // FIXME: .then(user => userController.sendWelcomeEmail())
+                    .then(user => contact.sendWelcomeEmail(user, req.headers.host))
                     .then(data => res.json({
                         token: jwt.sign({ email: user.email }, process.env.SESSION_SECRET),
                         user: user,
@@ -268,7 +235,7 @@ exports.authenticate_facebook = (req, res, done) => {
                             'profile.picture': payload.picture.data.url,
                         });
                         user.save()
-                        // FIXME: .then(user => userController.sendWelcomeEmail())
+                        .then(user => contact.sendWelcomeEmail(user, req.headers.host))
                         .then(data => res.json({
                             token: jwt.sign({ email: user.email }, process.env.SESSION_SECRET),
                             user: user,

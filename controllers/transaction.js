@@ -1,9 +1,11 @@
 const Transaction = require('../models/Transaction');
 const Review = require('../models/Review');
+const User = require('../models/User');
 const Enums = require('../models/Enums');
 const helpers = require('../utils/helpers');
 
 const messageController = require('../controllers/message');
+const contact = require('../controllers/contact');
 
 /**
  * GET /transactions
@@ -199,30 +201,54 @@ exports.apiGetTransactions = (req, res) => {
  * request so status is PROPOSED.
  */
 exports.postTransaction = (req, res) => {
+    const emailPartners = (t, func) => {
+        return Promise.all(
+            t._participants.filter(u => u.toString() !== req.user.id.toString())
+            .map(u_id => {
+                return User.findOne({_id: u_id})
+                .then(user => func(req.user, user, t, req.headers.host))
+            })
+        )
+    }
     // FIXME: May need more authentication checks here
     var promise;
     // If there is a transaction ID, we are updating an existing
     // transaction. Otherwise, create a new one.
     if (req.body.t_id) {
-        promise = Transaction.findOneAndUpdate({
-                      _id: req.body.t_id,
-                      _participants: req.user.id
-                  }, req.body.transaction, {new: true})
+        promise = Transaction
+        .findOneAndUpdate({
+            _id: req.body.t_id,
+            _participants: req.user.id
+        }, req.body.transaction, {new: true})
+        .then(t => {
+            // If either location or time changed, send update email to user
+            if (req.body.transaction.happenedAt || req.body.transaction.loc) {
+                return emailPartners(t, contact.sendUpdateEmail)
+                .then(ignore => t)
+            }
+            return t;
+        });
     } else {
         var trans = new Transaction(req.body.transaction);
-        promise = trans.save()
+        promise = trans
+        .save()
+        // Send email to user about new exchange
+        .then(t => {
+            return emailPartners(t, contact.sendNewTransactionEmail)
+            .then(ignore => t)
+        });
     }
 
     // If there is a message along with the transaction, add it to database
     promise.then(t => {
         if (req.body.message) {
             return messageController.addMessageToTransaction(req.user, req.body.message, t._id)
-            .then(x => t)
+            .then(ignore => t)
         }
         return t;
     })
-    .then((data) => res.json({error: null, data}))
-    .catch((err) => res.status(500).json({error: err}));
+    .then(data => res.json({error: null, data}))
+    .catch(err => res.status(500).json({error: err}));
 };
 
 
