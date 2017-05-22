@@ -15,6 +15,7 @@ var transactionSchema = new mongoose.Schema({
     enum: Object.keys(Enums.RequestType).map(function (key) { Enums.RequestType[key] }),
   },
   _participants:  [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  _confirmations: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   _creator: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   loc : {
     type: {type: String},
@@ -25,5 +26,29 @@ var transactionSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 transactionSchema.index({loc: '2dsphere'});
+
+transactionSchema.pre('update', function ( next) {
+    if (this._update['$addToSet'] && this._update['$addToSet']._confirmations) {
+        this.findOne(this._conditions)
+        .then(t => {
+            const userConfirmed = (u) => {
+                let alreadyConfirmed = t._confirmations
+                                      .map(i => i.toString())
+                                      .indexOf(u.toString()) >= 0;
+
+                let confirmingNow = (u.toString() == this._update['$addToSet']._confirmations.toString())
+                return alreadyConfirmed || confirmingNow;
+            }
+
+            if (t._participants.every(userConfirmed)) {
+                this.update({status: Enums.StatusType.COMPLETE});
+            }
+
+            next();
+        })
+    } else {
+        next();
+    }
+});
 
 module.exports = mongoose.model('Transaction', transactionSchema);

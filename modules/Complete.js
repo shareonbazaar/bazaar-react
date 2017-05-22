@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import {RequestType, StatusType} from '../models/Enums'
-import { submitReview, updateTransaction } from '../utils/actions'
+import { submitReview, updateTransaction, confirmTransaction } from '../utils/actions'
 import ConfirmationModal from './ConfirmationModal'
 import ReviewModal from './ReviewModal'
 import Review from './Review'
@@ -39,17 +39,13 @@ class Complete extends React.Component {
                     </div>
                 )
             }
-        } else if ((this.props.userIsOwner && this.props.transaction.status == StatusType.RECIPIENT_ACK)
-            || (!this.props.userIsOwner && this.props.transaction.status == StatusType.SENDER_ACK)) {
+        } else if (this.props.transaction._confirmations.indexOf(this.props.user._id) < 0) {
                 return (
                     <div className='notice'>
                         Your partner has marked this exchange as complete. Please confirm completion
                         <ConfirmationModal
-                            onConfirmation={() => this.props.updateTransaction({
+                            onConfirmation={() => this.props.confirmTransaction({
                                 t_id: this.props.transaction._id,
-                                transaction: {
-                                    status: StatusType.COMPLETE
-                                }
                             })}
                             title='Did this exchange take place?'
                             buttonText='Confirm Exchange'
@@ -65,5 +61,5 @@ class Complete extends React.Component {
     }
 }
 
-export default connect(null, { updateTransaction, submitReview } )(Complete)
+export default connect(null, { updateTransaction, submitReview, confirmTransaction } )(Complete)
 

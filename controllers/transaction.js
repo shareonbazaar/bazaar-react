@@ -20,8 +20,6 @@ exports.apiGetTransactions = (req, res) => {
                 'status': {
                     '$in': [Enums.StatusType.PROPOSED,
                             Enums.StatusType.ACCEPTED,
-                            Enums.StatusType.RECIPIENT_ACK,
-                            Enums.StatusType.SENDER_ACK,
                             Enums.StatusType.COMPLETE]
                     }
             }
@@ -60,6 +58,7 @@ exports.apiGetTransactions = (req, res) => {
                 'placeName': {'$first': '$placeName'},
                 'request_type': {'$first': '$request_type'},
                 '_participants': {'$first': '$_participants'},
+                '_confirmations': {'$first': '$_confirmations'},
                 'createdAt': {'$first': '$createdAt'}
             }
         },
@@ -76,6 +75,7 @@ exports.apiGetTransactions = (req, res) => {
                 'placeName': 1,
                 'request_type': 1,
                 '_participants': 1,
+                '_confirmations': 1,
                 'createdAt': 1,
             }
         },
@@ -112,6 +112,7 @@ exports.apiGetTransactions = (req, res) => {
                 'happenedAt': {'$first': '$happenedAt'},
                 'placeName': {'$first': '$placeName'},
                 'request_type': {'$first': '$request_type'},
+                '_confirmations': {'$first': '$_confirmations'},
                 '_participants': {'$first': '$_participants'},
                 'createdAt': {'$first': '$createdAt'},
                 '_reviews': {'$push': '$_reviews'},
@@ -128,6 +129,7 @@ exports.apiGetTransactions = (req, res) => {
                 'placeName': 1,
                 'request_type': 1,
                 '_participants': 1,
+                '_confirmations': 1,
                 '_messages': 1,
                 'createdAt': 1,
             }
@@ -180,6 +182,7 @@ exports.apiGetTransactions = (req, res) => {
                 'happenedAt': {'$first': '$happenedAt'},
                 'placeName': {'$first': '$placeName'},
                 'request_type': {'$first': '$request_type'},
+                '_confirmations': {'$first': '$_confirmations'},
                 '_participants': {'$push': '$_participants'},
                 'createdAt': {'$first': '$createdAt'}
             }
@@ -194,6 +197,16 @@ exports.apiGetTransactions = (req, res) => {
     .then(transactions => res.json(transactions))
     .catch(err => res.status(500).json(err));
 };
+
+exports.confirmTransaction = (req, res) => {
+    Transaction.update({_id: req.body.t_id},
+        {
+            '$addToSet': {_confirmations: req.user.id},
+        }
+    )
+    .then(data => res.json({error: null}))
+    .catch(err => res.json({error: err}));
+}
 
 /**
  * POST /transactions

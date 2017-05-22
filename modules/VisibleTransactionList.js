@@ -8,9 +8,9 @@ const getVisibleTransactions = (transactions, filter) => {
     case 'PROPOSED':
       return transactions.filter(t => t.status === StatusType.PROPOSED)
     case 'UPCOMING':
-      return transactions.filter(t => t.status === StatusType.ACCEPTED)
+      return transactions.filter(t => t.status === StatusType.ACCEPTED && t._confirmations.length === 0)
     case 'COMPLETE':
-      return transactions.filter(t => t.status !== StatusType.PROPOSED && t.status !== StatusType.ACCEPTED)
+      return transactions.filter(t => t._confirmations.length > 0)
     default:
       return [];
   }

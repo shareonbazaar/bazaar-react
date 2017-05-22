@@ -14,27 +14,19 @@ import AcceptanceModal from './AcceptanceModal';
 
 
 
-const verbs = {
-    [RequestType.LEARN]: {
-        [StatusType.PROPOSED]: 'will receive',
-        [StatusType.ACCEPTED]: 'will receive',
-        [StatusType.COMPLETE]: 'received',
-        [StatusType.SENDER_ACK]: 'received',
-        [StatusType.RECIPIENT_ACK]: 'received',
-    },
-    [RequestType.SHARE]: {
-        [StatusType.PROPOSED]: 'will give',
-        [StatusType.ACCEPTED]: 'will give',
-        [StatusType.COMPLETE]: 'gave',
-        [StatusType.SENDER_ACK]: 'gave',
-        [StatusType.RECIPIENT_ACK]: 'gave',
-    },
-    [RequestType.EXCHANGE]: {
-        [StatusType.PROPOSED]: 'will exchange',
-        [StatusType.ACCEPTED]: 'will exchange',
-        [StatusType.COMPLETE]: 'exchanged',
-        [StatusType.SENDER_ACK]: 'exchanged',
-        [StatusType.RECIPIENT_ACK]: 'exchanged',
+const verbs = (past) => {
+    if (past) {
+        return {
+            [RequestType.LEARN]: 'received',
+            [RequestType.SHARE]: 'gave',
+            [RequestType.EXCHANGE]: 'exchanged',
+        }
+    } else {
+        return {
+            [RequestType.LEARN]: 'will receive',
+            [RequestType.SHARE]: 'will give',
+            [RequestType.EXCHANGE]: 'will exchange',
+        }
     }
 }
 
@@ -120,13 +112,12 @@ class TransactionCollapsable extends React.Component {
             return <Chat t_id={this.props.content._id} onBack={this.onChatClick} messages={this.props.content._messages} />
         } else if (this.props.status === StatusType.PROPOSED) {
             return <Proposed content={this.props.content} userIsOwner={this.props.userIsOwner} onChatClick={this.onChatClick} />
-        } else if (this.props.status === StatusType.ACCEPTED) {
+        } else if (this.props.status === StatusType.ACCEPTED && this.props.content._confirmations.length == 0) {
             return <Upcoming content={this.props.content} collapsed={this.props.collapsed} onChatClick={this.onChatClick} />
         } else {
             return <Complete transaction={this.props.content}
                              user={this.props.user}
-                             partner={this.props.partner}
-                             userIsOwner={this.props.userIsOwner} />
+                             partner={this.props.partner} />
         }
     }
 }
@@ -150,7 +141,7 @@ export default class Transaction extends React.Component {
                         <div><img className='direction' src='/images/arrow_left_down.png' /></div>
                         <Identity imageUrl={partner.profile.picture} name={partner.profile.name.split(' ')[0]}/>
                         <div className='exchange'>
-                            <div className='request-type'>{subject + " " + verbs[this.props.content.request_type][this.props.content.status]}</div>
+                            <div className='request-type'>{subject + " " + verbs(this.props.content._confirmations.length > 0)[this.props.content.request_type]}</div>
                             <div className='service'>{this.props.content.service.label.en}</div>
                         </div>
                     </div>

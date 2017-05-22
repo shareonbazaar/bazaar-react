@@ -146,6 +146,17 @@ export function updateTransaction (body) {
     }
 }
 
+export function confirmTransaction (body) {
+    return dispatch => {
+        dispatch({
+            type: UPDATE_TRANSACTION,
+            t_id: body.t_id,
+        });
+        return callApi('/api/confirmTransaction', 'POST', body)
+        .then(response => dispatch(loadTransactions()))
+    }
+}
+
 export function loadTransactions () {
     return dispatch => {
         dispatch({type: TRANSACTIONS_REQUEST});

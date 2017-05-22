@@ -9,7 +9,7 @@ import ReviewModal from './ReviewModal';
 import ConfirmationModal from './ConfirmationModal';
 import {StatusType} from '../models/Enums'
 import { connect } from 'react-redux'
-import { updateTransaction } from '../utils/actions'
+import { updateTransaction, confirmTransaction } from '../utils/actions'
 
 
 function Marker (props) {
@@ -136,11 +136,8 @@ class Upcoming extends React.Component {
     }
 
     onConfirmation () {
-        this.props.updateTransaction({
+        this.props.confirmTransaction({
             t_id: this.props.content._id,
-            transaction: {
-                status: StatusType.COMPLETE,
-            },
         });
     }
 
@@ -208,4 +205,4 @@ class Upcoming extends React.Component {
   }
 }
 
-export default connect(null, { updateTransaction } )(Upcoming)
+export default connect(null, { updateTransaction, confirmTransaction } )(Upcoming)
