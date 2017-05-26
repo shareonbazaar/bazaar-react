@@ -214,12 +214,17 @@ exports.confirmTransaction = (req, res) => {
  * request so status is PROPOSED.
  */
 exports.postTransaction = (req, res) => {
-    const emailPartners = (t, func) => {
+    const emailPartners = (t, func, acceptsEmailFilter) => {
         return Promise.all(
-            t._participants.filter(u => u.toString() !== req.user.id.toString())
+            t._participants
+            .filter(u_id => u_id.toString() !== req.user.id.toString())
             .map(u_id => {
                 return User.findOne({_id: u_id})
-                .then(user => func(req.user, user, t, req.headers.host))
+                .then(u => {
+                    if (u.acceptsEmails[acceptsEmailFilter]) {
+                        return func(req.user, u, t, req.headers.host)
+                    }
+                })
             })
         )
     }
@@ -236,7 +241,7 @@ exports.postTransaction = (req, res) => {
         .then(t => {
             // If either location or time changed, send update email to user
             if (req.body.transaction.happenedAt || req.body.transaction.loc) {
-                return emailPartners(t, contact.sendUpdateEmail)
+                return emailPartners(t, contact.sendUpdateEmail, 'updateExchanges')
                 .then(ignore => t)
             }
             return t;
@@ -247,7 +252,7 @@ exports.postTransaction = (req, res) => {
         .save()
         // Send email to user about new exchange
         .then(t => {
-            return emailPartners(t, contact.sendNewTransactionEmail)
+            return emailPartners(t, contact.sendNewTransactionEmail, 'newExchanges')
             .then(ignore => t)
         });
     }

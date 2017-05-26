@@ -59,7 +59,7 @@ function addMessageToTransaction (sender, messageText, transactionId, baseUrl) {
     })
     .then(transaction => {
 
-          return Promise.all(transaction._participants.map((user) => {
+          return Promise.all(transaction._participants.map(user => {
               var isMe = (sender._id.toString() == user._id.toString());
               if (user.unreadTransactions.indexOf(transaction.id) < 0) {
                   user.unreadTransactions.push(transaction.id);
@@ -78,7 +78,7 @@ function addMessageToTransaction (sender, messageText, transactionId, baseUrl) {
                   return {};              
               })
               .then(() => {
-                  if (!isMe) {
+                  if (!isMe && user.acceptsEmails.newMessages) {
                       return contact.sendMessageEmail(sender, user, messageText, baseUrl);
                   } else {
                       return {}

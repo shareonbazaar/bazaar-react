@@ -27,6 +27,12 @@ const userSchema = new mongoose.Schema({
   isAdmin: { type: Boolean, default: false },
   isDeleted: { type: Boolean, default: false },
 
+  acceptsEmails: {
+    newExchanges: { type: Boolean, default: true },
+    updateExchanges: { type: Boolean, default: true },
+    newMessages: { type: Boolean, default: true },
+  },
+
   profile: {
     name: { type: String, default: '' },
     gender: { type: String, default: '' },
