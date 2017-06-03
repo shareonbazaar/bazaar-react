@@ -121,8 +121,8 @@ export default class Splash extends React.Component {
                       <div className="person"><img src="/images/thorben.png" />
                         <p>Thorben</p>
                       </div>
-                      <div className="person"><img src="/images/omer.png" />
-                        <p>Ömer</p>
+                      <div className="person"><img src="/images/khaled.png" />
+                        <p>Khaled</p>
                       </div>
                       <div className="person"><img src="/images/rory.png" />
                         <p>Rory</p>
