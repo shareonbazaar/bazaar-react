@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import TransactionList from './TransactionList'
-import { loadTransactions } from '../utils/actions'
+import { loadTransactions, updateProfile } from '../utils/actions'
 import {StatusType} from '../models/Enums'
 
 const getVisibleTransactions = (transactions, filter) => {
@@ -28,7 +28,7 @@ const mapStateToProps = (state) => {
 
 const VisibleTransactionsList = connect(
   mapStateToProps,
-  { loadTransactions }
+  { loadTransactions, updateProfile }
 )(TransactionList)
 
 export default VisibleTransactionsList

@@ -310,12 +310,18 @@ function uploadPicture (filename, fileBuffer, mimetype) {
 }
 
 exports.patchUser = (req, res) => {
-    var prevPromise = new Promise((resolve) => resolve({}));
+    var prevPromise = new Promise(resolve => resolve({}));
     // No way to send an empty array via FormData, so need to replace empty str with empty array
-    ['bookmarks', '_skills', '_interests'].forEach(field => {
-        if (!req.body[field]) {
+    ['bookmarks', '_skills', '_interests', 'unreadTransactions'].forEach(field => {
+        // Prop isn't there, so do nothing
+        if (typeof req.body[field] === 'undefined') return;
+
+        // Prop is empty string, convert to empty array
+        if (req.body[field] === '') {
             req.body[field] = [];
         }
+
+        // Prop is non-array type, make it an array
         if (!Array.isArray(req.body[field])) {
             req.body[field] = [req.body[field]];
         }
@@ -330,7 +336,7 @@ exports.patchUser = (req, res) => {
     }
 
     prevPromise
-    .then((pic) => {
+    .then(pic => {
         return User.findOneAndUpdate(
           {_id: req.user.id},
           Object.assign({}, req.body, pic),

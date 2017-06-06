@@ -13,6 +13,11 @@ class TransactionList extends React.Component {
 
     componentDidMount () {
       this.props.loadTransactions();
+
+      // Clear unreadTransactions array since now user is seeing them
+      let form = new FormData();
+      form.append('unreadTransactions', '');
+      this.props.updateProfile(form);
     }
 
     render () {

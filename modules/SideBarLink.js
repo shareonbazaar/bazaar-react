@@ -5,7 +5,7 @@ export default class SideBarLink extends React.Component {
   render() {
     return (
     	<li>
-            <Link className='sidebar-link' onClick={this.props.onClick} to={this.props.toLink}>
+            <Link data-badge={this.props.badgeNum} className='sidebar-link' onClick={this.props.onClick} to={this.props.toLink}>
                 <img src={this.props.imageSrc}/>
                 {this.props.text}
             </Link>

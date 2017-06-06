@@ -378,7 +378,7 @@ $screen-lg:                  1200px !default;
     text-indent: 20px;
     line-height: 50px;
 
-    a {
+    a.sidebar-link {
       display: block;
       text-decoration: none;
       color: black;
@@ -396,6 +396,23 @@ $screen-lg:                  1200px !default;
       img {
         margin-right: 20px;
       }
+    }
+
+    .sidebar-link[data-badge]:after {
+       content: attr(data-badge);
+       position: absolute;
+       text-indent: initial;
+       top: 7px;
+       left: 25px;
+       font-size: .7em;
+       background: red;
+       color: white;
+       width: 15px;
+       height: 15px;
+       text-align: center;
+       line-height: 18px;
+       border-radius: 50%;
+       box-shadow:0 0 1px #333;
     }
   }
 }

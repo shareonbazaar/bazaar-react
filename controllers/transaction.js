@@ -219,7 +219,9 @@ exports.postTransaction = (req, res) => {
             t._participants
             .filter(u_id => u_id.toString() !== req.user.id.toString())
             .map(u_id => {
-                return User.findOne({_id: u_id})
+                return User.findOneAndUpdate({_id: u_id}, {
+                    '$addToSet': {'unreadTransactions': t._id}
+                }, {new: true})
                 .then(u => {
                     if (u.acceptsEmails[acceptsEmailFilter]) {
                         return func(req.user, u, t, req.headers.host)

@@ -6,16 +6,25 @@ import { requestLogout } from '../utils/actions'
 
 class SideBar extends React.Component {
   render() {
+    const { user, isAuthenticated } = this.props;
     return (
         <div className={`sidebar-wrapper ${this.props.toggled ? 'toggled' : ''}`}>
             <ul className='sidebar-nav'>
-                {this.props.isAuthenticated && <SideBarLink toLink='/transactions' imageSrc='/images/chat.png' text={'Wallet'} />}
-                {this.props.isAuthenticated && <SideBarLink toLink='/bookmarks' imageSrc='/images/bookmark_icon.png' text={'Bookmarks'} />}
-                {this.props.isAuthenticated && <SideBarLink toLink={'/profile/' + this.props.userId} imageSrc='/images/profile.png' text={'Profile'} />}
-                {this.props.isAuthenticated && <SideBarLink toLink='/settings/' imageSrc='/images/settings.png' text={'Settings'} />}
+                {
+                    isAuthenticated &&
+                    <SideBarLink
+                        badgeNum={user.unreadTransactions.length > 0 ? user.unreadTransactions.length : null}
+                        toLink='/transactions'
+                        imageSrc='/images/chat.png'
+                        text={'Wallet'}
+                    />
+                }
+                {isAuthenticated && <SideBarLink toLink='/bookmarks' imageSrc='/images/bookmark_icon.png' text={'Bookmarks'} />}
+                {isAuthenticated && <SideBarLink toLink={`/profile/${user._id}`} imageSrc='/images/profile.png' text={'Profile'} />}
+                {isAuthenticated && <SideBarLink toLink='/settings/' imageSrc='/images/settings.png' text={'Settings'} />}
                 <SideBarLink toLink='/contact' imageSrc='/images/help.png' text={'Contact'} />
-                {!this.props.isAuthenticated && <SideBarLink toLink='/login' imageSrc='/images/logout.png' text={'Login'} />}
-                {this.props.isAuthenticated && <SideBarLink onClick={this.props.requestLogout} toLink='/' imageSrc='/images/logout.png' text={'Logout'} />}
+                {!isAuthenticated && <SideBarLink toLink='/login' imageSrc='/images/logout.png' text={'Login'} />}
+                {isAuthenticated && <SideBarLink onClick={this.props.requestLogout} toLink='/' imageSrc='/images/logout.png' text={'Logout'} />}
             </ul>
         </div>
     )
@@ -24,7 +33,7 @@ class SideBar extends React.Component {
 
 function mapStateToProps (state) {
     return {
-        userId: state.auth.user._id,
+        user: state.auth.user,
         isAuthenticated: state.auth.isAuthenticated,
     }
 }
