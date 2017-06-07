@@ -20,7 +20,12 @@ function UploadPhoto (props) {
         <div className={props.className}>
             <CircularImage imageUrl={props.imageUrl} />
             <label className='upload-message' htmlFor='fileInput'> Update photo</label>
-            <input id="fileInput" style={{display: 'none'}} type='file' onChange={props.onImageChange} />
+            <input
+                id="fileInput"
+                style={{display: 'none'}}
+                type='file'
+                accept="image/*"
+                onChange={props.onImageChange} />
         </div>
     )
 }
