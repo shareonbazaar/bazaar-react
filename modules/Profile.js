@@ -33,7 +33,7 @@ class Profile extends React.Component {
                         <Col md={12} className='info-box'>
                             <div className='box'>
                                 <div className='circular-img profile-pic'>
-                                    <img src={this.props.profiledUser.picture} />
+                                    <img src={`${this.props.profiledUser.picture}?${new Date().getTime()}`} />
                                 </div>
                                 <div className='bio'>
                                     <h3>{this.props.profiledUser.name}</h3>

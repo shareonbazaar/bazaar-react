@@ -48,7 +48,7 @@ class EditProfile extends React.Component {
             status: this.props.loggedInUser.profile.status,
             skills: this.props.loggedInUser._skills,
             interests: this.props.loggedInUser._interests,
-            picture: this.props.loggedInUser.profile.picture,
+            picture: `${this.props.loggedInUser.profile.picture}?${new Date().getTime()}`,
             file: null,
         }
         this.onChange = this.onChange.bind(this);
