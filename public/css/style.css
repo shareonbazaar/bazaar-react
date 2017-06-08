@@ -618,6 +618,9 @@
   border-radius: 3px;
   outline: none;
   box-shadow: none;
+  height: 45px;
+  padding: 10px 15px;
+  line-height: 1.42857;
 }
 
 .edit-profile-page,
@@ -714,14 +717,17 @@
   }
 
   .form-offset {
-    margin-left: 25%;
+    @media (min-width: $screen-md) {
+      margin-left: 25%;
+    }
   }
 }
 
 .login-page {
-
-  .social-media-buttons {
-    width: 60%;
+  @media (min-width: $screen-md) {
+    .social-media-buttons {
+      width: 60%;
+    }
   }
 }
 
@@ -733,7 +739,7 @@
   font-family: 'Avenir';
   display: block;
   text-align: left;
-  margin: 5px 0;
+  margin: 15px 0;
   i {
     padding: 10px 20px;
     margin-right: 10px;
