@@ -70,6 +70,12 @@
     }
   }
 
+  .brand-title {
+    @media (max-width: $screen-sm) {
+      display: none;
+    }
+  }
+
   .navbar-toggle {
     display: inline-block;
     margin-right: 0px;
