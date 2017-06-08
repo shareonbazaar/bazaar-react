@@ -70,7 +70,7 @@ export default class Splash extends React.Component {
                             <h2>Bazaar is a place for empowerment<br />                </h2>
                             <p>We believe, locals and newcomers should share their skills and learn from each other.</p>
                           </header>
-                          <iframe width="853" height="480" src="https://www.youtube.com/embed/uoVlosNJjZY?rel=0?ecver=1" frameBorder="0" allowFullScreen=""></iframe>
+                          <iframe width="100%" height="480" src="https://www.youtube.com/embed/uoVlosNJjZY?rel=0?ecver=1" frameBorder="0" allowFullScreen=""></iframe>
                         </div>
                       </section>
                   </Element>
