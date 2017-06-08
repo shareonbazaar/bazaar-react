@@ -3,11 +3,7 @@
 @import "_bootstrap-slider.min.css";
 @import "_react-datetime";
 @import 'react-select-plus/dist/react-select-plus.css';
-
-$screen-xs:                  480px !default;
-$screen-sm:                  768px !default;
-$screen-md:                  992px !default;
-$screen-lg:                  1200px !default;
+@import "_variables";
 
 @font-face { font-family: 'Avenir';
              src: url('/fonts/Avenir/AvenirLTStd-Medium.otf') format('truetype'); }
@@ -25,6 +21,9 @@ $screen-lg:                  1200px !default;
   overflow: auto;
   @media (min-width: 1200px) {
     width: 50%;
+  }
+  @media (max-width: $screen-sm) {
+    width: 90%;
   }
   h3 {
     font-size: 26px;
