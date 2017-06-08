@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
+import { Helmet } from "react-helmet";
 import { loginUser, forgotPasswordRequest, clearForgotEmail } from '../utils/actions'
 
 import { Button, Grid, Col, Row, ControlLabel, FormGroup, FormControl, Alert } from 'react-bootstrap';
@@ -165,6 +166,9 @@ class Login extends Signup {
   render () {
     return (
       <div className='content-page login-page'>
+        <Helmet>
+              <title>Login</title>
+        </Helmet>
         <div className='page-header'><h3>Sign In</h3></div>
         <div>
           {this.props.response &&

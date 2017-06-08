@@ -1,9 +1,10 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { Link } from 'react-router'
-import { Element } from 'react-scroll'
-import {Link as ScrollLink } from 'react-scroll'
-import styles from '../public/css/splash.css'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Link } from 'react-router';
+import { Element } from 'react-scroll';
+import { Link as ScrollLink } from 'react-scroll';
+import { Helmet } from "react-helmet";
+import styles from '../public/css/splash.css';
 
 export default class Splash extends React.Component {
 
@@ -35,6 +36,9 @@ export default class Splash extends React.Component {
     render () {
         return (
             <div className='landing'>
+                <Helmet>
+                    <meta name="viewport" content="width=device-width, initial-scale=1" />
+                </Helmet>
                 <div className={`page-wrapper ${this.state.openSideBar ? 'menu-visible' : ''}`}>
                   <header className={`header ${this.state.showHeader ? '' : 'alt'}`}>
                     <h1><Link to="/">Bazaar</Link></h1>

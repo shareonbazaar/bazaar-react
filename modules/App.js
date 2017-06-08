@@ -1,12 +1,14 @@
-import React from 'react'
-import { Link } from 'react-router'
-import { IndexLink } from 'react-router'
+import React from 'react';
+import { Link } from 'react-router';
+import { IndexLink } from 'react-router';
 import { Navbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import SideBar from './SideBar'
-import { loadUsers } from '../utils/actions'
+import { Helmet } from "react-helmet";
 
-import QueryBox from './QueryBox'
+import SideBar from './SideBar';
+import { loadUsers } from '../utils/actions';
+import QueryBox from './QueryBox';
+
 
 class App extends React.Component {
     constructor(props) {
@@ -19,6 +21,9 @@ class App extends React.Component {
     render() {
         return (
             <div className='app'>
+                <Helmet>
+                    <meta name="viewport" content="width=device-width, initial-scale=1" />
+                </Helmet>
                 <Navbar fixedTop={true} fluid={true}>
                     <IndexLink onClick={() => this.props.loadUsers()} to='/'>
                         <img width='20' src='/images/logo.png' />
