@@ -330,7 +330,7 @@ exports.patchUser = (req, res) => {
     if (req.file) {
         var mimetype = req.file.mimetype;
         var filename = req.user._id + '.' + mimetype.split('/').pop();
-        var picUrl = `https://s3.${process.env.AWS_REGION}.amazonaws.com/${process.env.AWS_BUCKET_NAME}/${filename}`;
+        var picUrl = `https://s3.${process.env.AWS_REGION}.amazonaws.com/${process.env.AWS_BUCKET_NAME}/${filename}?time=${new Date().getTime()}`;
         prevPromise = uploadPicture(filename, req.file.buffer, mimetype)
                       .then(() => {return {'profile.picture': picUrl}})
     }
