@@ -103,6 +103,9 @@
   .filter-options {
     background-color: lightgray;
     width: 100%;
+    @media (max-width: $screen-sm) {
+      width: 100vw;
+    }
     z-index: 1;
     position: fixed;
     left: 50%;
