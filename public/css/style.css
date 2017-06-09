@@ -19,6 +19,7 @@
 .content-page {
   margin: 0 auto;
   overflow: auto;
+  width: 75%;
   @media (min-width: 1200px) {
     width: 50%;
   }
@@ -621,6 +622,7 @@
   height: 45px;
   padding: 10px 15px;
   line-height: 1.42857;
+  display: inline-block;
 }
 
 .edit-profile-page,
@@ -639,13 +641,13 @@
   }
   .user-activities {
     text-align: center;
+    margin: 0 auto;
     ul {
       text-align: left;
     }
   }
 
   .form-control, .user-activities {
-    display: inline-block;
     @media (min-width: 768px) {
       width: 60%;
     }
@@ -662,6 +664,7 @@
 
   .radio-block {
     display: inline-block;
+    width: 100%;
     @media (min-width: 768px) {
       width: 60%;
     }
