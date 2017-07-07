@@ -21,19 +21,19 @@ function SocialMediaLogin (props) {
               fields="name,email,picture"
               callback={props.responseFacebook}
               icon="fa-facebook"
-              textButton="Sign in with Facebook"
+              textButton="Login with Facebook"
               cssClass='social-media-buttons facebook-login'
             />
             <GoogleLogin
               clientId="402876983916-k3pi2lsqh130r3a95o0rp1s3c2v0ugb2.apps.googleusercontent.com"
-              buttonText="Sign in with Google"
+              buttonText="Login with Google"
               onSuccess={props.responseGoogle}
               onFailure={props.responseGoogle}
               fetchBasicProfile={true}
               className='social-media-buttons google-login'
             >
               <i className='fa fa-google'></i>
-              <span>Sign in with Google</span>
+              <span>Login with Google</span>
             </GoogleLogin>
           </div>
         </FormGroup>
@@ -169,7 +169,7 @@ class Login extends Signup {
         <Helmet>
               <title>Login</title>
         </Helmet>
-        <div className='page-header'><h3>Sign In</h3></div>
+        <div className='page-header'><h3>Login</h3></div>
         <div>
           {this.props.response &&
             <Alert bsStyle='danger'>

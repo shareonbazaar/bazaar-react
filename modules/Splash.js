@@ -58,7 +58,7 @@ export default class Splash extends React.Component {
                       <h2>Bazaar</h2>
                       <p>HALLO, SALAM,<br />              HELLO, BONJOUR,<br />              MARHABA, OLÁ!</p>
                       <ul className="actions">
-                        <li><Link to="/login" className="button special">SIGN IN</Link></li>
+                        <li><Link to="/login" className="button special">LOGIN</Link></li>
                       </ul>
                     </div>
                     <ScrollLink className='more' to='zero' smooth={true} duration={500}>Learn More</ScrollLink>
