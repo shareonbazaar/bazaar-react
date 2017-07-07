@@ -117,21 +117,6 @@ export default class Splash extends React.Component {
                     </div>
                   </section>
                   <footer className="footer">
-                    <h3>Our Team</h3>
-                    <div className="team">
-                      <div className="person"><img src="/images/nina.png" />
-                        <p>Nina</p>
-                      </div>
-                      <div className="person"><img src="/images/thorben.png" />
-                        <p>Thorben</p>
-                      </div>
-                      <div className="person"><img src="/images/khaled.png" />
-                        <p>Khaled</p>
-                      </div>
-                      <div className="person"><img src="/images/rory.png" />
-                        <p>Rory</p>
-                      </div>
-                    </div>
                     <ul className="icons">
                       <li><a href="https://www.twitter.com/shareonbazaar" className="icon fa-twitter"><span className="label">Twitter</span></a></li>
                       <li><a href="https://www.facebook.com/shareonbazaar" className="icon fa-facebook"><span className="label">Facebook</span></a></li>
