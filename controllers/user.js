@@ -137,6 +137,7 @@ function getCommunity (user) {
     {
       '$project': {
         'profile': '$profile',
+        'aboutMe': '$aboutMe',
         '_interests': '$_interests',
         'loc': { '$ifNull': [ "$loc", {'$literal': {type: 'Point', coordinates: [null, null]}}] },
         '_skills': {
@@ -184,6 +185,7 @@ function getCommunity (user) {
           '_interests': {'$first': '$_interests'},
           'profile': {'$first': '$profile'},
           'loc': {'$first': '$loc'},
+          'aboutMe': {'$first': '$aboutMe'},
       }
     },
     {
@@ -192,6 +194,7 @@ function getCommunity (user) {
           '_interests': '$_interests',
           'profile': '$profile',
           'loc': '$loc',
+          'aboutMe': '$aboutMe',
           'score': {
               '$sum': [
                   {
@@ -229,6 +232,7 @@ function getCommunity (user) {
           '_interests': {'$push': '$_interests'},
           'profile': {'$first': '$profile'},
           'loc': {'$first': '$loc'},
+          'aboutMe': {'$first': '$aboutMe'},
           'score': {'$first': '$score'},
       }
     },
