@@ -2048,6 +2048,11 @@
 			position: relative;
 			z-index: 1;
 			color: white;
+
+			img {
+				vertical-align: middle;
+				margin: 0 8px 1px 0;
+			}
 		}
 
 			.banner h2:before, .banner h2:after {
@@ -2169,7 +2174,7 @@
 					font-size: 1.25em;
 				}
 
-				.banner br {
+				.banner br:not(.always) {
 					display: none;
 				}
 
