@@ -9,6 +9,9 @@ node_modules
 # OS metadata
 .DS_Store
 
+# Translation build files
+build/*
+
 .ebextensions/*
 
 public/bundle.js

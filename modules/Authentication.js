@@ -8,6 +8,7 @@ import { Button, Grid, Col, Row, ControlLabel, FormGroup, FormControl, Alert } f
 import GoogleLogin from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
 import validator from 'email-validator';
+import { FormattedMessage } from 'react-intl';
 
 import { push } from 'react-router-redux'
 
@@ -121,7 +122,12 @@ class Signup extends React.Component {
                 </Alert>
               }
               <FormGroup validationState={(this.state.hasClickedSignup && !firstNameValid) ? 'error' : null}>
-                <ControlLabel>First Name</ControlLabel>
+                <ControlLabel>
+                  <FormattedMessage
+                      id={'Signup.firstname'}
+                      defaultMessage={'First Name'}
+                  />
+                </ControlLabel>
                 <FormControl type="text" value={this.state.firstName} placeholder="John" onChange={(e) => {this.onChange(e, 'firstName')}}/>
               </FormGroup>
               <FormGroup validationState={(this.state.hasClickedSignup && !lastNameValid) ? 'error' : null}>

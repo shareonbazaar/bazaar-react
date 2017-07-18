@@ -17,7 +17,7 @@ import { IntlProvider, addLocaleData } from 'react-intl';
 import en from 'react-intl/locale-data/en';
 import de from 'react-intl/locale-data/de';
 import ar from 'react-intl/locale-data/ar';
-import localeData from './build/locales/data.json';
+import localeData from './locales/data.json';
 
 addLocaleData([...en, ...de, ...ar]);
 

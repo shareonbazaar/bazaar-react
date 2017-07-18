@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import { Element } from 'react-scroll';
 import { Link as ScrollLink } from 'react-scroll';
 import { Helmet } from "react-helmet";
+import { FormattedMessage } from 'react-intl';
 import styles from '../public/css/splash.css';
 
 export default class Splash extends React.Component {
@@ -46,7 +47,12 @@ export default class Splash extends React.Component {
                       <ul>
                         <li className="special">
                           <a onClick={() => this.setState({openSideBar: true})} className="menuToggle">
-                            <span>Menu</span>
+                            <span>
+                                <FormattedMessage
+                                    id={'Splash.menu'}
+                                    defaultMessage={'Menu'}
+                                />
+                            </span>
                           </a>
 
                         </li>
@@ -62,17 +68,38 @@ export default class Splash extends React.Component {
                       </h2>
                       <p>HALLO, SALAM,<br />              HELLO, BONJOUR,<br />              MARHABA, OLÁ!</p>
                       <ul className="actions">
-                        <li><Link to="/login" className="button special">LOGIN</Link></li>
+                        <li>
+                            <Link to="/login" className="button special">
+                                <FormattedMessage
+                                    id={'Splash.login'}
+                                    defaultMessage={'Login'}
+                                />
+                            </Link>
+                        </li>
                       </ul>
                     </div>
-                    <ScrollLink className='more' to='zero' smooth={true} duration={500}>Learn More</ScrollLink>
+                    <ScrollLink className='more' to='zero' smooth={true} duration={500}>
+                        <FormattedMessage
+                            id={'Splash.learn'}
+                            defaultMessage={'Learn More'}
+                        />
+                    </ScrollLink>
                   </section>
                   <Element name='zero' ref={(e) => { this.firstSection = e }}>
                       <section className="zero wrapper style0 special">
                         <div className="inner">
                           <header className="major">
-                            <h2>Bazaar is a place for empowerment<br />                </h2>
-                            <p>We believe, locals and newcomers should share their skills and learn from each other.</p>
+                            <h2>
+                                <FormattedMessage
+                                    id={'Splash.statement0'}
+                                    defaultMessage={'Bazaar is a place for empowerment'}
+                                /><br /></h2>
+                            <p>
+                                <FormattedMessage
+                                    id={'Splash.statement1'}
+                                    defaultMessage={'We believe, locals and newcomers should share their skills and learn from each other.'}
+                                />
+                            </p>
                           </header>
                           <iframe width="100%" height="480" src="https://www.youtube.com/embed/uoVlosNJjZY?rel=0?ecver=1" frameBorder="0" allowFullScreen=""></iframe>
                         </div>
@@ -81,42 +108,126 @@ export default class Splash extends React.Component {
                   <section className="one wrapper style1 special">
                     <div className="inner">
                       <header className="major">
-                        <h2>What skills can you share here? </h2>
-                        <p>People offer cool things from leisure time activities to professional competences. Currently we have about thirty skills to choose from. </p>
+                        <h2>
+                            <FormattedMessage
+                                id={'Splash.skillq'}
+                                defaultMessage={'What skills can you share here?'}
+                            />
+                        </h2>
+                        <p>
+                            <FormattedMessage
+                                id={'Splash.skillsdesc'}
+                                defaultMessage={'People offer cool things from leisure time activities to professional competences. Currently we have about thirty skills to choose from.'}
+                            />
+                        </p>
                       </header><img width="75%" src="images/skills.png" />
                     </div>
                   </section>
                   <section className="two wrapper alt style2 special" style={{padding: '40px 0px'}}>
                     <div className="inner">
                       <header className="major">
-                        <h2>Our vision</h2>
-                        <p>Let‘s create a network where everyone can offer what they are good at.<br />We see huge potential in all the people coming to new countries at the moment.  Bazaar wants to enable them and provide a tool to participate in their new society </p>
+                        <h2>
+                            <FormattedMessage
+                                id={'Splash.vision'}
+                                defaultMessage={'Our vision'}
+                            />
+                        </h2>
+                        <p>
+                            <FormattedMessage
+                                id={'Splash.network'}
+                                defaultMessage={'Let‘s create a network where everyone can offer what they are good at.'}
+                            />
+                            <br />
+                            <FormattedMessage
+                                id={'Splash.network2'}
+                                defaultMessage={'We see huge potential in all the people coming to new countries at the moment.  Bazaar wants to enable them and provide a tool to participate in their new society'}
+                            />
+                        </p>
                       </header><img width="75%" src="images/network.png" />
                     </div>
                   </section>
                   <section className="three wrapper style3">
                     <div className="inner">
                       <header className="major">
-                        <h2>How does it work?</h2>
-                        <p>We use time banking to make skills exchange fair and flexible.<br />Here is an example:</p>
+                        <h2>
+                            <FormattedMessage
+                                id={'Splash.how'}
+                                defaultMessage={'How does it work?'}
+                            />
+                        </h2>
+                        <p>
+                            <FormattedMessage
+                                id={'Splash.tb'}
+                                defaultMessage={'We use time banking to make skills exchange fair and flexible.'}
+                            />
+                            <br />
+                            <FormattedMessage
+                                id={'Splash.example'}
+                                defaultMessage={'Here is an example:'}
+                            />
+                        </p>
                       </header>
                       <ol>
-                        <li>Mustafa helps Anna fixing her bike, which takes one hour</li>
-                        <li>Therefore, Anna pays Mustafa one Time-Coin.</li>
-                        <li>With this Time-Coin, Mustafa can receive one hour of German lessons from Luigi, who is a cook.</li>
-                        <li>That way, they not only exchange skills but learn about their backgrounds and cultural values. </li>
+                        <li>
+                            <FormattedMessage
+                                id={'Splash.example1'}
+                                defaultMessage={'Mustafa helps Anna fixing her bike, which takes one hour'}
+                            />
+                        </li>
+                        <li>
+                            <FormattedMessage
+                                id={'Splash.example2'}
+                                defaultMessage={'Therefore, Anna pays Mustafa one Time-Coin.'}
+                            />
+                        </li>
+                        <li>
+                            <FormattedMessage
+                                id={'Splash.example3'}
+                                defaultMessage={'With this Time-Coin, Mustafa can receive one hour of German lessons from Luigi, who is a cook.'}
+                            />
+                        </li>
+                        <li>
+                            <FormattedMessage
+                                id={'Splash.example4'}
+                                defaultMessage={'That way, they not only exchange skills but learn about their backgrounds and cultural values.'}
+                            />
+                        </li>
                       </ol><img style={{display:'block', margin:'0 auto', width: '75%'}} src="images/timebanking.png" />
                     </div>
                   </section>
                   <section className="cta wrapper style4" style={{padding: '12em 0 10em 0'}}>
                     <div className="inner">
                       <header>
-                        <h2>Sound good?</h2>
-                        <p>Let's get started! It's easy.</p>
+                        <h2>
+                            <FormattedMessage
+                                id={'Splash.start1'}
+                                defaultMessage={'Sound good?'}
+                            />
+                        </h2>
+                        <p>
+                            <FormattedMessage
+                                id={'Splash.start2'}
+                                defaultMessage={"Let's get started! It's easy."}
+                            />
+                        </p>
                       </header>
                       <ul className="actions vertical">
-                        <li><Link to="/signup" className="button fit special">Sign Up</Link></li>
-                        <li><Link to="/login" className="button fit">Login</Link></li>
+                        <li>
+                            <Link to="/signup" className="button fit special">
+                                <FormattedMessage
+                                    id={'Splash.signup'}
+                                    defaultMessage={'Sign Up'}
+                                />
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to="/login" className="button fit">
+                                <FormattedMessage
+                                    id={'Splash.login'}
+                                    defaultMessage={'Login'}
+                                />
+                            </Link>
+                        </li>
                       </ul>
                     </div>
                   </section>
@@ -133,12 +244,33 @@ export default class Splash extends React.Component {
                   </footer>
                 </div>
                 <div className={`menu ${this.state.openSideBar ? 'toggled' : ''}`}>
-                    <ul>
-                      <li><Link to="/">Home</Link></li>
-                      <li><Link to="/signup">Sign Up</Link></li>
-                      <li><Link to="/login">Log In</Link></li>
-                    </ul>
-                    <a onClick={() => this.setState({openSideBar: false})} className='menu-close'></a>
+                  <ul>
+                    <li>
+                      <Link to="/">
+                        <FormattedMessage
+                          id={'Splash.menuhome'}
+                          defaultMessage={'Home'}
+                        />
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/signup">
+                        <FormattedMessage
+                          id={'Splash.menusignup'}
+                          defaultMessage={'Sign Up'}
+                        />
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/login">
+                        <FormattedMessage
+                          id={'Splash.menulogin'}
+                          defaultMessage={'Login'}
+                        />
+                      </Link>
+                    </li>
+                  </ul>
+                  <a onClick={() => this.setState({openSideBar: false})} className='menu-close'></a>
                 </div>
             </div>
         )
