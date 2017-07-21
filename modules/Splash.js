@@ -71,7 +71,7 @@ export default class Splash extends React.Component {
                         <li>
                             <Link to="/login" className="button special">
                                 <FormattedMessage
-                                    id={'Splash.login'}
+                                    id={'Signup.login'}
                                     defaultMessage={'Login'}
                                 />
                             </Link>
@@ -215,15 +215,15 @@ export default class Splash extends React.Component {
                         <li>
                             <Link to="/signup" className="button fit special">
                                 <FormattedMessage
-                                    id={'Splash.signup'}
-                                    defaultMessage={'Sign Up'}
+                                    id={'Signup.signup'}
+                                    defaultMessage={'Sign up'}
                                 />
                             </Link>
                         </li>
                         <li>
                             <Link to="/login" className="button fit">
                                 <FormattedMessage
-                                    id={'Splash.login'}
+                                    id={'Signup.login'}
                                     defaultMessage={'Login'}
                                 />
                             </Link>
@@ -256,15 +256,15 @@ export default class Splash extends React.Component {
                     <li>
                       <Link to="/signup">
                         <FormattedMessage
-                          id={'Splash.menusignup'}
-                          defaultMessage={'Sign Up'}
+                          id={'Signup.signup'}
+                          defaultMessage={'Sign up'}
                         />
                       </Link>
                     </li>
                     <li>
                       <Link to="/login">
                         <FormattedMessage
-                          id={'Splash.menulogin'}
+                          id={'Signup.login'}
                           defaultMessage={'Login'}
                         />
                       </Link>

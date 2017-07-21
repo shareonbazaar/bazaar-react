@@ -22,9 +22,13 @@ function SocialMediaLogin (props) {
               fields="name,email,picture"
               callback={props.responseFacebook}
               icon="fa-facebook"
-              textButton="Login with Facebook"
               cssClass='social-media-buttons facebook-login'
-            />
+            >
+                <FormattedMessage
+                    id={'Signup.loginwithFacebook'}
+                    defaultMessage={'Login with Facebook'}
+                />
+            </FacebookLogin>
             <GoogleLogin
               clientId="402876983916-k3pi2lsqh130r3a95o0rp1s3c2v0ugb2.apps.googleusercontent.com"
               buttonText="Login with Google"
@@ -34,7 +38,12 @@ function SocialMediaLogin (props) {
               className='social-media-buttons google-login'
             >
               <i className='fa fa-google'></i>
-              <span>Login with Google</span>
+              <span>
+                  <FormattedMessage
+                      id={'Signup.loginwithGoogle'}
+                      defaultMessage={'Login with Google'}
+                  />
+              </span>
             </GoogleLogin>
           </div>
         </FormGroup>
@@ -131,30 +140,63 @@ class Signup extends React.Component {
                 <FormControl type="text" value={this.state.firstName} placeholder="John" onChange={(e) => {this.onChange(e, 'firstName')}}/>
               </FormGroup>
               <FormGroup validationState={(this.state.hasClickedSignup && !lastNameValid) ? 'error' : null}>
-                <ControlLabel>Last Name</ControlLabel>
+                <ControlLabel>
+                  <FormattedMessage
+                      id={'Signup.lastname'}
+                      defaultMessage={'Last Name'}
+                  />
+                </ControlLabel>
                 <FormControl type="text" value={this.state.lastName} placeholder="Doe" onChange={(e) => {this.onChange(e, 'lastName')}}/>
               </FormGroup>
               <FormGroup validationState={(this.state.hasClickedSignup && !emailValid) ? 'error' : null}>
-                <ControlLabel>Email</ControlLabel>
+                <ControlLabel>
+                  <FormattedMessage
+                      id={'Signup.email'}
+                      defaultMessage={'Email'}
+                  />
+                </ControlLabel>
                 <FormControl type="email" value={this.state.emailText} placeholder="Email" onChange={(e) => {this.onChange(e, 'emailText')}}/>
               </FormGroup>
               <FormGroup>
-                <ControlLabel>Password</ControlLabel>
+                <ControlLabel>
+                  <FormattedMessage
+                      id={'Signup.password'}
+                      defaultMessage={'Password'}
+                  />
+                </ControlLabel>
                 <FormControl type="password" value={this.state.password} placeholder="Password" onChange={(e) => {this.onChange(e, 'password')}}/>
               </FormGroup>
               <FormGroup validationState={(this.state.hasClickedSignup && !passwordsValid) ? 'error' : null}>
-                <ControlLabel>Confirm Password</ControlLabel>
+                <ControlLabel>
+                  <FormattedMessage
+                      id={'Signup.confirmpassword'}
+                      defaultMessage={'Confirm password'}
+                  />
+                </ControlLabel>
                 <FormControl type="password" value={this.state.confirmPassword} placeholder="Password" onChange={(e) => {this.onChange(e, 'confirmPassword')}}/>
               </FormGroup>
               <FormGroup>
                 <div className='form-offset'>
-                  <Button className='login-button' bsStyle='primary' onClick={onSignupClicked}>Signup</Button>
+                  <Button className='login-button' bsStyle='primary' onClick={onSignupClicked}>
+                    <FormattedMessage
+                        id={'Signup.signup'}
+                        defaultMessage={'Sign up'}
+                    />
+                  </Button>
                 </div>
               </FormGroup>
               <FormGroup>
                 <div className='form-offset'>
-                  Already have an account?
-                  <Link className='sign-up-link' to='/login'>Login</Link>
+                  <FormattedMessage
+                      id={'Signup.alreadyhaveaccount'}
+                      defaultMessage={'Already have an account?'}
+                  />
+                  <Link className='sign-up-link' to='/login'>
+                    <FormattedMessage
+                        id={'Signup.login'}
+                        defaultMessage={'Login'}
+                    />
+                  </Link>
                 </div>
               </FormGroup>
             </Col>
@@ -183,11 +225,21 @@ class Login extends Signup {
             </Alert>
           }
           <FormGroup>
-            <ControlLabel>Email</ControlLabel>
+            <ControlLabel>
+              <FormattedMessage
+                  id={'Signup.email'}
+                  defaultMessage={'Email'}
+              />
+            </ControlLabel>
             <FormControl type="email" value={this.state.emailText} placeholder="Email" onChange={(e) => {this.onChange(e, 'emailText')}}/>
           </FormGroup>
           <FormGroup>
-            <ControlLabel>Password</ControlLabel>
+            <ControlLabel>
+              <FormattedMessage
+                  id={'Signup.password'}
+                  defaultMessage={'Password'}
+              />
+            </ControlLabel>
             <FormControl type="password" value={this.state.password} placeholder="Password" onChange={(e) => {this.onChange(e, 'password')}}/>
           </FormGroup>
           <FormGroup>
@@ -202,15 +254,31 @@ class Login extends Signup {
                         password: this.state.password,
                     }
                 })}>
-                Login
+                <FormattedMessage
+                    id={'Signup.login'}
+                    defaultMessage={'Login'}
+                />
               </Button>
-              <Link className='forgot-link' to='/forgot'>Forgot password?</Link>
+              <Link className='forgot-link' to='/forgot'>
+                <FormattedMessage
+                    id={'Signup.forgotpassword'}
+                    defaultMessage={'Forgot password?'}
+                />
+              </Link>
             </div>
           </FormGroup>
           <FormGroup>
             <div className='form-offset'>
-              Don't have an account?
-              <Link className='sign-up-link' to='/signup'>Sign up</Link>
+              <FormattedMessage
+                  id={'Signup.noaccount'}
+                  defaultMessage={"Don't have an account?"}
+              />
+              <Link className='sign-up-link' to='/signup'>
+                <FormattedMessage
+                    id={'Signup.signup'}
+                    defaultMessage={"Sign up"}
+                />
+              </Link>
             </div>
           </FormGroup>
           <SocialMediaLogin className='form-offset' responseGoogle={this.responseGoogle} responseFacebook={this.responseFacebook} />
@@ -247,27 +315,55 @@ class Forgot extends Signup {
                     <p>{this.props.response.message}</p>
                   </Alert>
                   :
-                  <div>Validating token...</div>
+                  <div>
+                    <FormattedMessage
+                        id={'Signup.validatetoken'}
+                        defaultMessage={'Validating token...'}
+                    />
+                  </div>
                 }
               </div>
           )
       }
       return (
         <div className='content-page forgot-page'>
-          <div className='page-header'><h3>Forgot Password</h3></div>
+          <div className='page-header'>
+            <h3>
+              <FormattedMessage
+                  id={'Forgot.forgotpassword'}
+                  defaultMessage={"Forgot Password"}
+              />
+            </h3>
+          </div>
           {
             this.props.forgotEmail ?
 
             <div>
-              <p>If there is an account associated with {this.props.forgotEmail}, an email will be sent to that account with instructions on how to reset password</p>
-              <a onClick={this.props.clearForgotEmail}>Reset a different account</a>
+              <p>
+                <FormattedMessage
+                  id={'Forgot.sendreset'}
+                  defaultMessage={`If there is an account associated with {forgotEmail}, an email will be sent to that account with instructions on how to reset password`}
+                  values={{forgotEmail: this.props.forgotEmail}}
+                />
+              </p>
+              <a onClick={this.props.clearForgotEmail}>
+                <FormattedMessage
+                    id={'Forgot.resetanother'}
+                    defaultMessage={"Reset a different account"}
+                />
+              </a>
             </div>
 
             :
             (
               <div>
                 <FormGroup>
-                  <ControlLabel>Email</ControlLabel>
+                  <ControlLabel>
+                    <FormattedMessage
+                        id={'Signup.email'}
+                        defaultMessage={"Email"}
+                    />
+                  </ControlLabel>
                   <FormControl type="email" value={this.state.emailText} placeholder="Email" onChange={(e) => {this.onChange(e, 'emailText')}}/>
                 </FormGroup>
                 <FormGroup>
@@ -276,7 +372,10 @@ class Forgot extends Signup {
                       className='login-button'
                       bsStyle='primary'
                       onClick={() => this.props.forgotPasswordRequest(this.state.emailText)}>
-                      Reset
+                      <FormattedMessage
+                        id={'Forgot.reset'}
+                        defaultMessage={"Reset"}
+                      />
                     </Button>
                   </div>
                 </FormGroup>
