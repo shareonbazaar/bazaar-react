@@ -287,5 +287,6 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, don
                 return done(null, false, {msg: 'Invalid email or password'})
             }
         });
-    });
+    })
+    .catch(err => console.log(err))
 }));

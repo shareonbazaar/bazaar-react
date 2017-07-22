@@ -75,7 +75,15 @@ userSchema.pre('findOneAndUpdate', function (next) {
  * Helper method for validating user's password.
  */
 userSchema.methods.comparePassword = function (candidatePassword) {
-    return bcrypt.compare(candidatePassword, this.password);
+    return new Promise((resolve, reject) => {
+        if (!candidatePassword || !this.password) {
+            resolve(false);
+        } else {
+            bcrypt.compare(candidatePassword, this.password)
+            .then(isMatch => resolve(isMatch))
+            .catch(err => reject(err))
+        }
+    });
 };
 
 /**
