@@ -17,7 +17,7 @@ function SocialMediaLogin (props) {
         <FormGroup>
           <div className={props.className}>
             <FacebookLogin
-              appId="542727669212147"
+              appId={FACEBOOK_ID}
               autoLoad={false}
               fields="name,email,picture"
               callback={props.responseFacebook}
@@ -30,7 +30,7 @@ function SocialMediaLogin (props) {
                 />
             </FacebookLogin>
             <GoogleLogin
-              clientId="402876983916-k3pi2lsqh130r3a95o0rp1s3c2v0ugb2.apps.googleusercontent.com"
+              clientId={GOOGLE_ID}
               buttonText="Login with Google"
               onSuccess={props.responseGoogle}
               onFailure={props.responseGoogle}

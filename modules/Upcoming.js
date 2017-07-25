@@ -174,7 +174,7 @@ class Upcoming extends React.Component {
                             defaultZoom={this.defaultProps.zoom}
                             center={this.state.markerLocation.coords}
                             zoom={this.state.zoom}
-                            bootstrapURLKeys={{key: 'AIzaSyBQ2hLVYEOmR5pX5MMOaxpeT5OikIxE6gk'}}
+                            bootstrapURLKeys={{key: GOOGLE_MAP_API}}
                           >
                             {
                                 this.state.markerLocation ?

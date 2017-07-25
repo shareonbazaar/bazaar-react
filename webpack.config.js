@@ -1,3 +1,6 @@
+const dotenv = require('dotenv');
+const webpack = require('webpack');
+dotenv.load({ path: '.env' });
 module.exports = {
 	entry: "./main.js",
 	output: {
@@ -5,6 +8,13 @@ module.exports = {
 		filename: "bundle.js",
 		publicPath: '/'
 	},
+	plugins: [
+		new webpack.DefinePlugin({
+			'GOOGLE_MAP_API': JSON.stringify(process.env.GOOGLE_MAP_API),
+			'FACEBOOK_ID': JSON.stringify(process.env.FACEBOOK_ID),
+			'GOOGLE_ID': JSON.stringify(process.env.GOOGLE_ID),
+		})
+	],
 	module: {
 		loaders: [
 			{
