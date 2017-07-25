@@ -1,5 +1,6 @@
 import React from 'react'
 import { Modal, Button } from 'react-bootstrap';
+import { FormattedMessage } from 'react-intl';
 
 export default class ConfirmationModal extends React.Component {
 
@@ -20,8 +21,18 @@ export default class ConfirmationModal extends React.Component {
                     </Modal.Header>
 
                     <Modal.Footer>
-                        <Button onClick={() => this.setState({showModal: false})} bsStyle={this.props.cancelStyle}>Cancel</Button>
-                        <Button onClick={() => {this.setState({showModal: false}); this.props.onConfirmation()}} bsStyle={this.props.confirmStyle}>Yes</Button>
+                        <Button onClick={() => this.setState({showModal: false})} bsStyle={this.props.cancelStyle}>
+                            <FormattedMessage
+                                id={'ConfirmationModal.cancel'}
+                                defaultMessage={"Cancel"}
+                            />
+                        </Button>
+                        <Button onClick={() => {this.setState({showModal: false}); this.props.onConfirmation()}} bsStyle={this.props.confirmStyle}>
+                            <FormattedMessage
+                                id={'ConfirmationModal.yes'}
+                                defaultMessage={"Yes"}
+                            />
+                        </Button>
                     </Modal.Footer>
                 </Modal>
             </div>

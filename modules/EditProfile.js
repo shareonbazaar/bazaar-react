@@ -4,7 +4,30 @@ import { connect } from 'react-redux'
 import CircularImage from './CircularImage'
 import SkillsModal from './SkillsModal'
 import { updateProfile, clearProfileAlert } from '../utils/actions'
+import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
 
+const messages = defineMessages({
+    male: {
+        id: 'EditProfile.male',
+        defaultMessage: 'Male',
+    },
+    female: {
+        id: 'EditProfile.female',
+        defaultMessage: 'Female',
+    },
+    other: {
+        id: 'EditProfile.other',
+        defaultMessage: 'Other',
+    },
+    local: {
+        id: 'EditProfile.local',
+        defaultMessage: 'Local',
+    },
+    newcomer: {
+        id: 'EditProfile.newcomer',
+        defaultMessage: 'Newcomer',
+    },
+});
 
 function Radio (props) {
     var klass = `radio ${props.name === props.selected ? 'selected' : ''}`;
@@ -130,9 +153,17 @@ class EditProfile extends React.Component {
     }
 
     render () {
+        const {formatMessage} = this.props.intl;
         return (
           <div className='content-page edit-profile-page'>
-            <div className='page-header'><h3>Edit your profile</h3></div>
+            <div className='page-header'>
+                <h3>
+                    <FormattedMessage
+                      id={'EditProfile.title'}
+                      defaultMessage={'Edit your profile'}
+                    />
+                </h3>
+            </div>
             <div>
               {this.props.response &&
                 <Alert
@@ -143,25 +174,45 @@ class EditProfile extends React.Component {
                 </Alert>
               }
               <FormGroup>
-                <ControlLabel className='label-top'>Profile picture</ControlLabel>
+                <ControlLabel className='label-top'>
+                    <FormattedMessage
+                      id={'EditProfile.pic'}
+                      defaultMessage={'Profile picture'}
+                    />
+                </ControlLabel>
                 <UploadPhoto className='user-activities' imageUrl={this.state.picture} onImageChange={this.onImageChange} />
               </FormGroup>
               <FormGroup>
-                <ControlLabel>Email</ControlLabel>
+                <ControlLabel>
+                    <FormattedMessage
+                      id={'Signup.email'}
+                      defaultMessage={'Email'}
+                    />
+                </ControlLabel>
                 <FormControl type="email" value={this.state.email} placeholder="Email" onChange={(e) => {this.onChange(e, 'email')}}/>
               </FormGroup>
               <FormGroup>
-                <ControlLabel>Name</ControlLabel>
+                <ControlLabel>
+                    <FormattedMessage
+                      id={'EditProfile.name'}
+                      defaultMessage={'Name'}
+                    />
+                </ControlLabel>
                 <FormControl type="name" value={this.state.name} placeholder="John Doe" onChange={(e) => {this.onChange(e, 'name')}}/>
               </FormGroup>
               <FormGroup>
-                <ControlLabel>Gender</ControlLabel>
+                <ControlLabel>
+                    <FormattedMessage
+                      id={'EditProfile.gender'}
+                      defaultMessage={'Gender'}
+                    />
+                </ControlLabel>
                 <div className='radio-block'>
                     {
                         [
-                            {name: 'male', label: 'Male'},
-                            {name: 'female', label: 'Female'},
-                            {name: 'other', label: 'Other'}
+                            {name: 'male', label: formatMessage(messages.male)},
+                            {name: 'female', label: formatMessage(messages.female)},
+                            {name: 'other', label: formatMessage(messages.other)}
                         ].map((props, i) => (
                                 <Radio
                                     key={i}
@@ -174,20 +225,35 @@ class EditProfile extends React.Component {
                 </div>
               </FormGroup>
               <FormGroup>
-                <ControlLabel>Location</ControlLabel>
+                <ControlLabel>
+                    <FormattedMessage
+                      id={'EditProfile.location'}
+                      defaultMessage={'Location'}
+                    />
+                </ControlLabel>
                 <FormControl type="name" value={this.state.location} placeholder="Location" onChange={(e) => {this.onChange(e, 'location')}}/>
               </FormGroup>
               <FormGroup>
-                <ControlLabel>Hometown</ControlLabel>
+                <ControlLabel>
+                    <FormattedMessage
+                      id={'EditProfile.hometown'}
+                      defaultMessage={'Hometown'}
+                    />
+                </ControlLabel>
                 <FormControl type="name" value={this.state.hometown} placeholder="Hometown" onChange={(e) => {this.onChange(e, 'hometown')}}/>
               </FormGroup>
               <FormGroup>
-                <ControlLabel>Status</ControlLabel>
+                <ControlLabel>
+                    <FormattedMessage
+                      id={'EditProfile.status'}
+                      defaultMessage={'Status'}
+                    />
+                </ControlLabel>
                 <div className='radio-block'>
                     {
                         [
-                            {name: 'local', label: 'Local'},
-                            {name: 'newcomer', label: 'Newcomer'}
+                            {name: 'local', label: formatMessage(messages.local)},
+                            {name: 'newcomer', label: formatMessage(messages.newcomer)}
                         ].map((props, i) => (
                                 <Radio
                                     key={i}
@@ -200,7 +266,12 @@ class EditProfile extends React.Component {
                 </div>
               </FormGroup>
               <FormGroup>
-                <ControlLabel className='label-top'>About Me</ControlLabel>
+                <ControlLabel className='label-top'>
+                    <FormattedMessage
+                      id={'EditProfile.aboutme'}
+                      defaultMessage={'About Me'}
+                    />
+                </ControlLabel>
                 <FormControl
                     componentClass="textarea"
                     value={this.state.aboutMe}
@@ -209,7 +280,12 @@ class EditProfile extends React.Component {
                 />
               </FormGroup>
               <FormGroup>
-                <ControlLabel className='label-top'>Skills</ControlLabel>
+                <ControlLabel className='label-top'>
+                    <FormattedMessage
+                      id={'EditProfile.skills'}
+                      defaultMessage={'Skills'}
+                    />
+                </ControlLabel>
                 <div className='user-activities'>
                     <ul>
                         {
@@ -230,7 +306,12 @@ class EditProfile extends React.Component {
                 </div>
               </FormGroup>
               <FormGroup>
-                <ControlLabel className='label-top'>Interests</ControlLabel>
+                <ControlLabel className='label-top'>
+                    <FormattedMessage
+                      id={'EditProfile.interests'}
+                      defaultMessage={'Interests'}
+                    />
+                </ControlLabel>
                 <div className='user-activities'>
                     <ul>
                         {
@@ -253,7 +334,12 @@ class EditProfile extends React.Component {
               <hr />
               <FormGroup>
                 <div className='save-button'>
-                    <Button onClick={this.onSubmit} bsStyle='primary'>Save changes</Button>
+                    <Button onClick={this.onSubmit} bsStyle='primary'>
+                        <FormattedMessage
+                          id={'EditProfile.savechanges'}
+                          defaultMessage={'Save changes'}
+                        />
+                    </Button>
                 </div>
               </FormGroup>
             </div>
@@ -269,4 +355,4 @@ function mapStateToProps({auth}) {
     }
 }
 
-export default connect(mapStateToProps, {updateProfile, clearProfileAlert})(EditProfile);
+export default connect(mapStateToProps, {updateProfile, clearProfileAlert})(injectIntl(EditProfile));

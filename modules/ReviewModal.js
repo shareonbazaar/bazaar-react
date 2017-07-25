@@ -1,5 +1,13 @@
 import React from 'react'
 import { Button, Modal, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
+import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
+
+const messages = defineMessages({
+    entertext: {
+        id: 'ReviewModal.entertext',
+        defaultMessage: 'Enter text',
+    },
+});
 
 const NUM_STARS = 5;
 
@@ -18,7 +26,7 @@ class StarRating extends React.Component {
     }
 }
 
-export default class ReviewModal extends React.Component {
+class ReviewModal extends React.Component {
     constructor (props) {
         super(props);
         this.state = {
@@ -36,34 +44,60 @@ export default class ReviewModal extends React.Component {
     }
 
     render () {
+        const {formatMessage} = this.props.intl;
         return (
             <div>
-                <Button bsStyle='primary' onClick={() => this.setState({showModal: true})}>Write Review</Button>
+                <Button bsStyle='primary' onClick={() => this.setState({showModal: true})}>
+                    <FormattedMessage
+                      id={'ReviewModal.writereview'}
+                      defaultMessage={'Write a Review'}
+                    />
+                </Button>
                 <Modal show={this.state.showModal} onHide={() => this.setState({showModal: false})}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Please leave a review for this exchange</Modal.Title>
+                        <Modal.Title>
+                            <FormattedMessage
+                              id={'ReviewModal.modaltitle'}
+                              defaultMessage={'Please leave a review for this exchange'}
+                            />
+                        </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <form>
                             <FormGroup>
-                                <ControlLabel>Rating</ControlLabel>
+                                <ControlLabel>
+                                    <FormattedMessage
+                                      id={'ReviewModal.rating'}
+                                      defaultMessage={'Rating'}
+                                    />
+                                </ControlLabel>
                                 <StarRating
                                     selected={this.state.ratingSelected}
                                     onSelect={(i) => this.setState({ratingSelected: i})} />
                             </FormGroup>
                             <FormGroup>
-                                <ControlLabel>Write a Review</ControlLabel>
+                                <ControlLabel>
+                                    <FormattedMessage
+                                      id={'ReviewModal.writereview'}
+                                      defaultMessage={'Write a Review'}
+                                    />
+                                </ControlLabel>
                                 <FormControl
                                     componentClass="textarea"
                                     value={this.state.value}
-                                    placeholder="Enter text"
+                                    placeholder={formatMessage(messages.entertext)}
                                     onChange={this.handleChange}
                                 />
                             </FormGroup>
                         </form>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button onClick={() => this.setState({showModal: false})} bsStyle='danger'>Not now</Button>
+                        <Button onClick={() => this.setState({showModal: false})} bsStyle='danger'>
+                            <FormattedMessage
+                              id={'ReviewModal.notnow'}
+                              defaultMessage={'Not now'}
+                            />
+                        </Button>
                         <Button
                             onClick={() => {
                                 this.props.onSubmit({
@@ -74,7 +108,10 @@ export default class ReviewModal extends React.Component {
                                 this.setState({showModal: false});
                             }}
                             bsStyle='primary'>
-                            Submit Review
+                            <FormattedMessage
+                              id={'ReviewModal.submitreview'}
+                              defaultMessage={'Submit Review'}
+                            />
                         </Button>
                     </Modal.Footer>
                 </Modal>
@@ -82,3 +119,5 @@ export default class ReviewModal extends React.Component {
         )
     }
 }
+
+export default injectIntl(ReviewModal);

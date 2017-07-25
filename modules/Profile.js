@@ -5,6 +5,7 @@ import { loadProfile } from '../utils/actions'
 import { push } from 'react-router-redux'
 import RequestButton from './RequestButton'
 import Review from './Review'
+import { FormattedMessage } from 'react-intl';
 
 import { connect } from 'react-redux'
 
@@ -24,7 +25,14 @@ class Profile extends React.Component {
 
     render () {
         if (Object.keys(this.props.profiledUser).length === 0) {
-            return <div>Loading...</div>
+            return (
+                <div>
+                    <FormattedMessage
+                      id={'Profile.loading'}
+                      defaultMessage={'Loading...'}
+                    />
+                </div>
+            )
         }
         return (
             <div className='user-profile content-page'>
@@ -39,15 +47,37 @@ class Profile extends React.Component {
                                     <h3>{this.props.profiledUser.name}</h3>
                                     <div className='place'>{this.props.profiledUser.hometown}</div>
                                     <div className='place'>{this.props.profiledUser.location}</div>
-                                    <div className='place'>Member since {moment(this.props.profiledUser.createdAt).format('MMM YYYY')}</div>
-                                    <div className='place'>{this.props.profiledUser.skills.length} skills to share with you</div>
+                                    <div className='place'>
+                                        <FormattedMessage
+                                          id={'Profile.membersince'}
+                                          defaultMessage={'Member since {createdAt}'}
+                                          values={{createdAt: moment(this.props.profiledUser.createdAt).format('MMM YYYY')}}
+                                        />
+                                    </div>
+                                    <div className='place'>
+                                        <FormattedMessage
+                                          id={'Profile.skillstoshare'}
+                                          defaultMessage={'{numSkills} skills to share with you'}
+                                          values={{numSkills: this.props.profiledUser.skills.length}}
+                                        />
+                                    </div>
                                 </div>
-                                <h4>About Me</h4>
+                                <h4>
+                                    <FormattedMessage
+                                      id={'EditProfile.aboutme'}
+                                      defaultMessage={'About Me'}
+                                    />
+                                </h4>
                                 <p>{this.props.profiledUser.aboutMe}</p>
                             </div>
                             {
                                 this.props.profiledUser._id === this.props.loggedInUser._id ? (
-                                    <Button onClick={() => this.props.push('/editprofile')} bsStyle="primary" bsSize="large" block>Edit Profile</Button>
+                                    <Button onClick={() => this.props.push('/editprofile')} bsStyle="primary" bsSize="large" block>
+                                        <FormattedMessage
+                                            id={'Profile.editprofile'}
+                                            defaultMessage={'Edit Profile'}
+                                        />
+                                    </Button>
                                 ) : (
                                     <RequestButton user={this.props.profiledUser} />
                                 )
@@ -58,13 +88,23 @@ class Profile extends React.Component {
                         <Col md={12} className='info-box'>
                             <div className='skills-box'>
                                 <div className='box'>
-                                    <h4>I can offer</h4>
+                                    <h4>
+                                        <FormattedMessage
+                                            id={'Profile.icanoffer'}
+                                            defaultMessage={'I can offer'}
+                                        />
+                                    </h4>
                                     {this.props.profiledUser.skills.map((skill, i) => <div className='skill-label' key={i}>{skill.label.en}</div>)}
                                 </div>
                             </div>
                             <div className='skills-box'>
                                 <div className='box'>
-                                    <h4>I am interested in</h4>
+                                    <h4>
+                                        <FormattedMessage
+                                            id={'Profile.iaminterestedin'}
+                                            defaultMessage={'I am interested in'}
+                                        />
+                                    </h4>
                                     {this.props.profiledUser.interests.map((skill, i) => <div className='skill-label' key={i}>{skill.label.en}</div>)}
                                 </div>
                             </div>
@@ -73,7 +113,12 @@ class Profile extends React.Component {
                     <Row>
                         <Col md={12}>
                             <div className='box'>
-                                <h3>Reviews</h3>
+                                <h3>
+                                    <FormattedMessage
+                                        id={'Profile.reviews'}
+                                        defaultMessage={'Reviews'}
+                                    />
+                                </h3>
                                 {
                                     this.props.profiledUser.reviews.map((review, i) =>
                                     <Review
@@ -90,7 +135,6 @@ class Profile extends React.Component {
                         </Col>
                     </Row>
                 </Grid>
-
             </div>
         )
     }

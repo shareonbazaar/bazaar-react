@@ -11,24 +11,39 @@ import Chat from './Chat';
 import Complete from './Complete';
 import { updateTransaction } from '../utils/actions'
 import AcceptanceModal from './AcceptanceModal';
+import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
 
+const messages = defineMessages({
+    receivePast: {
+        id: 'Transaction.receivePast',
+        defaultMessage: 'received',
+    },
+    receiveFuture: {
+        id: 'Transaction.receiveFuture',
+        defaultMessage: 'will receive',
+    },
+    givePast: {
+        id: 'Transaction.givePast',
+        defaultMessage: 'gave',
+    },
+    giveFuture: {
+        id: 'Transaction.giveFuture',
+        defaultMessage: 'will give',
+    },
+    exchangePast: {
+        id: 'Transaction.exchangePast',
+        defaultMessage: 'exchanged',
+    },
+    exchangeFuture: {
+        id: 'Transaction.exchangeFuture',
+        defaultMessage: 'will exchange',
+    },
+    you: {
+        id: 'Transaction.you',
+        defaultMessage: 'You',
+    },
+});
 
-
-const verbs = (past) => {
-    if (past) {
-        return {
-            [RequestType.LEARN]: 'received',
-            [RequestType.SHARE]: 'gave',
-            [RequestType.EXCHANGE]: 'exchanged',
-        }
-    } else {
-        return {
-            [RequestType.LEARN]: 'will receive',
-            [RequestType.SHARE]: 'will give',
-            [RequestType.EXCHANGE]: 'will exchange',
-        }
-    }
-}
 
 const ProposedButtons = connect(null, { updateTransaction }) (props => {
     if (props.userIsOwner) {
@@ -40,7 +55,11 @@ const ProposedButtons = connect(null, { updateTransaction }) (props => {
                                 t_id: props.content._id,
                                 transaction: {status: StatusType.CANCELLED},
                             })}
-                            >Cancel
+                            >
+                    <FormattedMessage
+                      id={'Transaction.cancel'}
+                      defaultMessage={'Cancel'}
+                    />
                     </Button>
                 </Col>
             </Row>
@@ -57,14 +76,25 @@ const ProposedButtons = connect(null, { updateTransaction }) (props => {
                                 })}
                             />
                 </Col>
-                <Col xs={4}><Button onClick={props.onChatClick} bsStyle='primary'>Chat</Button></Col>
+                <Col xs={4}>
+                    <Button onClick={props.onChatClick} bsStyle='primary'>
+                        <FormattedMessage
+                          id={'Transaction.chat'}
+                          defaultMessage={'Chat'}
+                        />
+                    </Button>
+                </Col>
                 <Col xs={4}>
                     <Button bsStyle='danger'
                             onClick={() => props.updateTransaction({
                                 t_id: props.content._id,
                                 transaction: {status: StatusType.REJECTED},
                             })}
-                            >Reject
+                            >
+                        <FormattedMessage
+                          id={'Transaction.reject'}
+                          defaultMessage={'Reject'}
+                        />
                     </Button>
                 </Col>
             </Row>
@@ -122,7 +152,7 @@ class TransactionCollapsable extends React.Component {
     }
 }
 
-export default class Transaction extends React.Component {
+class Transaction extends React.Component {
     constructor (props) {
         super(props);
         this.state = {
@@ -131,9 +161,25 @@ export default class Transaction extends React.Component {
     }
 
     render () {
+        const {formatMessage} = this.props.intl;
+        const verbs = (past) => {
+            if (past) {
+                return {
+                    [RequestType.LEARN]: formatMessage(messages.receivePast),
+                    [RequestType.SHARE]: formatMessage(messages.givePast),
+                    [RequestType.EXCHANGE]: formatMessage(messages.exchangePast),
+                }
+            } else {
+                return {
+                    [RequestType.LEARN]: formatMessage(messages.receiveFuture),
+                    [RequestType.SHARE]: formatMessage(messages.giveFuture),
+                    [RequestType.EXCHANGE]: formatMessage(messages.exchangeFuture),
+                }
+            }
+        }
         const partner = this.props.content._participants.find(user => user._id !== this.props.user._id);
         const userIsOwner = this.props.content._creator._id == this.props.user._id
-        const subject =  userIsOwner ? 'You' : partner.profile.name.split(' ')[0];
+        const subject =  userIsOwner ? formatMessage(messages.you) : partner.profile.name.split(' ')[0];
         return (
             <div className='transaction'>
                 <div className='t-wrapper' onClick={() => this.setState({ collapsed: !this.state.collapsed })}>
@@ -162,4 +208,6 @@ export default class Transaction extends React.Component {
         )
   }
 }
+
+export default (injectIntl(Transaction));
 

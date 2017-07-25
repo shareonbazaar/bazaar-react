@@ -3,7 +3,22 @@ import { connect } from 'react-redux'
 import { skillRequest } from '../utils/actions'
 import {RequestType, StatusType} from '../models/Enums'
 import { Button, Modal, Grid, Row, Col, ControlLabel, FormGroup, FormControl, Alert } from 'react-bootstrap';
+import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
 
+const messages = defineMessages({
+    receive: {
+        id: 'RequestButton.receive',
+        defaultMessage: 'Receive',
+    },
+    give: {
+        id: 'RequestButton.give',
+        defaultMessage: 'Give',
+    },
+    exchange: {
+        id: 'RequestButton.exchange',
+        defaultMessage: 'Exchange',
+    },
+});
 
 class RequestButton extends React.Component {
     constructor (props) {
@@ -57,7 +72,8 @@ class RequestButton extends React.Component {
     }
 
     render () {
-        let {user, loggedInUser} = this.props;
+        const {formatMessage} = this.props.intl;
+        const {user, loggedInUser} = this.props;
         let activities = [];
         switch (this.state.exchange_type) {
             case RequestType.LEARN:
@@ -75,7 +91,13 @@ class RequestButton extends React.Component {
             <div>
                 <Modal show={this.state.showModal} onHide={this.onClose}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Request from {user.name}</Modal.Title>
+                        <Modal.Title>
+                            <FormattedMessage
+                              id={'RequestButton.request'}
+                              defaultMessage={'Request from {name}'}
+                              values={{name: user.name}}
+                            />
+                        </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <Grid fluid={true}>
@@ -84,15 +106,15 @@ class RequestButton extends React.Component {
                                     [
                                         {
                                             exchange_type: RequestType.LEARN,
-                                            label: "Receive",
+                                            label: formatMessage(messages.receive),
                                         },
                                         {
                                             exchange_type: RequestType.SHARE,
-                                            label: "Give",
+                                            label: formatMessage(messages.give),
                                         },
                                         {
                                             exchange_type: RequestType.EXCHANGE,
-                                            label: "Exchange",
+                                            label: formatMessage(messages.exchange),
                                         }
                                     ].map(obj => {
                                         var extraClass = (this.state.exchange_type == obj.exchange_type) ? 'selected' : '';
@@ -102,7 +124,12 @@ class RequestButton extends React.Component {
                             </Row>
                         </Grid>
                         <FormGroup>
-                            <ControlLabel>Request one skill:</ControlLabel>
+                            <ControlLabel>
+                                <FormattedMessage
+                                  id={'RequestButton.formtitle'}
+                                  defaultMessage={'Request one skill:'}
+                                />
+                            </ControlLabel>
                             {this.state.errorMessage &&
                                 <Alert bsStyle='danger'>
                                   <p>{this.state.errorMessage}</p>
@@ -116,7 +143,12 @@ class RequestButton extends React.Component {
                             </div>
                         </FormGroup>
                         <FormGroup>
-                            <ControlLabel>Message: </ControlLabel>
+                            <ControlLabel>
+                                <FormattedMessage
+                                  id={'RequestButton.message'}
+                                  defaultMessage={'Message:'}
+                                />
+                            </ControlLabel>
                             <FormControl
                                 componentClass="textarea"
                                 value={this.state.message}
@@ -126,10 +158,20 @@ class RequestButton extends React.Component {
                         </FormGroup>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button bsStyle='primary' onClick={this.onSubmit}>Request</Button>
+                        <Button bsStyle='primary' onClick={this.onSubmit}>
+                            <FormattedMessage
+                              id={'RequestButton.makerequest'}
+                              defaultMessage={'Request'}
+                            />
+                        </Button>
                     </Modal.Footer>
                 </Modal>
-                <Button onClick={this.onOpen} bsStyle="primary" bsSize="large" block>Request</Button>
+                <Button onClick={this.onOpen} bsStyle="primary" bsSize="large" block>
+                    <FormattedMessage
+                      id={'RequestButton.makerequest'}
+                      defaultMessage={'Request'}
+                    />
+                </Button>
             </div>
         )
     }
@@ -143,4 +185,4 @@ function mapStateToProps(state, ownProps) {
     }
 }
 
-export default connect(mapStateToProps, { skillRequest })(RequestButton);
+export default connect(mapStateToProps, { skillRequest })(injectIntl(RequestButton));

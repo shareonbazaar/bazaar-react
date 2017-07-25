@@ -10,7 +10,26 @@ import ConfirmationModal from './ConfirmationModal';
 import {StatusType} from '../models/Enums'
 import { connect } from 'react-redux'
 import { updateTransaction, confirmTransaction } from '../utils/actions'
+import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
 
+const messages = defineMessages({
+    edit: {
+        id: 'Upcoming.edit',
+        defaultMessage: 'Edit',
+    },
+    update: {
+        id: 'Upcoming.update',
+        defaultMessage: 'Update',
+    },
+    didOccur: {
+        id: 'Upcoming.didOccur',
+        defaultMessage: 'Did this exchange take place?',
+    },
+    markcomplete: {
+        id: 'Upcoming.markcomplete',
+        defaultMessage: 'Mark Complete',
+    },
+});
 
 function Marker (props) {
     return (
@@ -142,6 +161,7 @@ class Upcoming extends React.Component {
     }
 
     render () {
+        const {formatMessage} = this.props.intl;
         // GoogleMap must only render when its container div is actually visible on screen
         if (this.props.collapsed) return null;
         return (
@@ -170,14 +190,24 @@ class Upcoming extends React.Component {
 
                     <Col sm={6}>
                         <div>
-                            <h4 className='title'>Location</h4>
+                            <h4 className='title'>
+                                <FormattedMessage
+                                  id={'Upcoming.location'}
+                                  defaultMessage={'Location'}
+                                />
+                            </h4>
                             <LocationPicker
                                 location={this.state.markerLocation}
                                 onPlaceSelected={this.onPlaceSelected}
                                 editMode={!this.state.inViewMode}/>
                         </div>
                         <div>
-                            <h4 className='title'>Date</h4>
+                            <h4 className='title'>
+                                <FormattedMessage
+                                  id={'Upcoming.date'}
+                                  defaultMessage={'Date'}
+                                />
+                            </h4>
                             <TimePicker
                                 time={this.state.happenedAt}
                                 onTimeSelected={this.onTimeSelected}
@@ -187,13 +217,23 @@ class Upcoming extends React.Component {
                 </Row>
 
                 <Row className='responses'>
-                    <Col sm={7} ><Button bsStyle='primary' onClick={this.onEditClick}>{this.state.inViewMode ? 'Edit' : 'Update'}</Button></Col>
-                    <Col sm={7} ><Button bsStyle='primary' onClick={this.props.onChatClick}>Chat</Button></Col>
+                    <Col sm={7} >
+                        <Button bsStyle='primary' onClick={this.onEditClick}>{this.state.inViewMode ? formatMessage(messages.edit) : formatMessage(messages.update)}
+                        </Button>
+                    </Col>
+                    <Col sm={7} >
+                        <Button bsStyle='primary' onClick={this.props.onChatClick}>
+                            <FormattedMessage
+                              id={'Transaction.chat'}
+                              defaultMessage={'Chat'}
+                            />
+                        </Button>
+                    </Col>
                     <Col sm={7} >
                         <ConfirmationModal
                             onConfirmation={this.onConfirmation}
-                            title='Did this exchange take place?'
-                            buttonText='Mark Complete'
+                            title={formatMessage(messages.didOccur)}
+                            buttonText={formatMessage(messages.markcomplete)}
                             cancelStyle='danger'
                             confirmStyle='primary'
                             buttonStyle='primary'
@@ -205,4 +245,4 @@ class Upcoming extends React.Component {
   }
 }
 
-export default connect(null, { updateTransaction, confirmTransaction } )(Upcoming)
+export default connect(null, { updateTransaction, confirmTransaction } )(injectIntl(Upcoming))

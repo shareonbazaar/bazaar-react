@@ -1,12 +1,28 @@
 import React from 'react'
 import FilterItem from './FilterItem'
+import { FormattedMessage } from 'react-intl';
 
 // Potentially this component unnecessary and just stick all three in TransactionList
 const FilterBar = () => (
   <div className='filter-bar'>
-    <FilterItem filter="PROPOSED">Proposed</FilterItem>
-    <FilterItem filter="UPCOMING">Upcoming</FilterItem>
-    <FilterItem filter="COMPLETE">Complete</FilterItem>
+    <FilterItem filter="PROPOSED">
+        <FormattedMessage
+          id={'FilterBar.proposed'}
+          defaultMessage={'Proposed'}
+        />
+    </FilterItem>
+    <FilterItem filter="UPCOMING">
+        <FormattedMessage
+          id={'FilterBar.upcoming'}
+          defaultMessage={'Upcoming'}
+        />
+    </FilterItem>
+    <FilterItem filter="COMPLETE">
+        <FormattedMessage
+          id={'FilterBar.complete'}
+          defaultMessage={'Complete'}
+        />
+    </FilterItem>
   </div>
 )
 

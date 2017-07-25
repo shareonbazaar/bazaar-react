@@ -3,6 +3,7 @@ import { Button, FormGroup, FormControl, ControlLabel, Alert } from 'react-boots
 import { submitContact, clearContactAlert } from '../utils/actions'
 import { connect } from 'react-redux'
 import validator from 'email-validator';
+import { FormattedMessage } from 'react-intl';
 
 class Contact extends React.Component {
 
@@ -35,7 +36,14 @@ class Contact extends React.Component {
         }
         return (
           <div className='content-page contact-page'>
-            <div className='page-header'><h3>Contact Form</h3></div>
+            <div className='page-header'>
+              <h3>
+                <FormattedMessage
+                    id={'Contact.header'}
+                    defaultMessage={'Contact Form'}
+                />
+              </h3>
+            </div>
             <div>
               {this.props.response &&
                 <Alert
@@ -46,15 +54,30 @@ class Contact extends React.Component {
                 </Alert>
               }
               <FormGroup validationState={(this.state.hasClickedSubmit && !nameValid) ? 'error' : null}>
-                <ControlLabel>Your Name</ControlLabel>
+                <ControlLabel>
+                  <FormattedMessage
+                    id={'Contact.name'}
+                    defaultMessage={'Your Name'}
+                  />
+                </ControlLabel>
                 <FormControl type="name" value={this.state.name} placeholder="John Doe" onChange={(e) => {this.onChange(e, 'name')}}/>
               </FormGroup>
               <FormGroup validationState={(this.state.hasClickedSubmit && !emailValid) ? 'error' : null}>
-                <ControlLabel>Your Email</ControlLabel>
+                <ControlLabel>
+                  <FormattedMessage
+                    id={'Contact.email'}
+                    defaultMessage={'Your Email'}
+                  />
+                </ControlLabel>
                 <FormControl type="email" value={this.state.email} placeholder="Email" onChange={(e) => {this.onChange(e, 'email')}}/>
               </FormGroup>
               <FormGroup validationState={(this.state.hasClickedSubmit && !messageValid) ? 'error' : null}>
-                <ControlLabel className='label-top'>Your Message</ControlLabel>
+                <ControlLabel className='label-top'>
+                  <FormattedMessage
+                    id={'Contact.message'}
+                    defaultMessage={'Your Message'}
+                  />
+                </ControlLabel>
                 <FormControl
                     componentClass="textarea"
                     rows={7}
@@ -66,7 +89,12 @@ class Contact extends React.Component {
               <hr />
               <FormGroup>
                 <div className='save-button'>
-                    <Button onClick={onSubmitClicked} bsStyle='primary'>Submit</Button>
+                    <Button onClick={onSubmitClicked} bsStyle='primary'>
+                      <FormattedMessage
+                        id={'Contact.submit'}
+                        defaultMessage={'Submit'}
+                      />
+                    </Button>
                 </div>
               </FormGroup>
             </div>

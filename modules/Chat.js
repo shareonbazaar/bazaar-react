@@ -2,6 +2,7 @@ import React from 'react'
 import { Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import io from 'socket.io-client';
+import { FormattedMessage } from 'react-intl';
 const socket = io('/', {query: `token=${localStorage.getItem('token')}`});
 
 
@@ -67,8 +68,18 @@ class Chat extends React.Component {
                     rows='4'
                     className='messageInput'>
                 </textarea>
-                <Button onClick={this.props.onBack}>Back</Button>
-                <Button bsStyle='primary' className='sendButton' onClick={this.onSendMessage}>Send Message</Button>
+                <Button onClick={this.props.onBack}>
+                    <FormattedMessage
+                        id={'Chat.back'}
+                        defaultMessage={"Back"}
+                    />
+                </Button>
+                <Button bsStyle='primary' className='sendButton' onClick={this.onSendMessage}>
+                    <FormattedMessage
+                        id={'Chat.send'}
+                        defaultMessage={"Send Message"}
+                    />
+                </Button>
             </div>
         )
   }

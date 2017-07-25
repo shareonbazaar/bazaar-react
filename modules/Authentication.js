@@ -120,7 +120,14 @@ class Signup extends React.Component {
     }
     return (
       <div className='content-page signup-page'>
-        <div className='page-header'><h3>Sign Up</h3></div>
+        <div className='page-header'>
+          <h3>
+            <FormattedMessage
+                id={'Signup.signup'}
+                defaultMessage={'Sign up'}
+            />
+          </h3>
+        </div>
 
         <Grid fluid={true}>
           <Row>

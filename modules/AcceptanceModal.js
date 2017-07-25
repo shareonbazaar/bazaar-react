@@ -1,6 +1,7 @@
 import React from 'react'
 import MtSvgLines from 'react-mt-svg-lines';
 import { Button, Modal, ControlLabel, FormGroup, FormControl } from 'react-bootstrap';
+import { FormattedMessage } from 'react-intl';
 
 
 export default class AcceptanceModal extends React.Component {
@@ -19,7 +20,12 @@ export default class AcceptanceModal extends React.Component {
                 <Button bsStyle='primary' onClick={() => this.setState({showModal: true})}>Accept</Button>
                 <Modal className='acceptModal' show={this.state.showModal} onHide={() => this.setState({showModal: false})}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Confirm Acceptance</Modal.Title>
+                        <Modal.Title>
+                            <FormattedMessage
+                                id={'AcceptanceModal.confirm'}
+                                defaultMessage={'Confirm Acceptance'}
+                            />
+                        </Modal.Title>
                     </Modal.Header>
 
                     <Modal.Body>
@@ -29,11 +35,22 @@ export default class AcceptanceModal extends React.Component {
                                 <path stroke="green" strokeWidth="20" fill="none" d='M10,30 l30,50 l95,-70' />
                               </svg>
                             </MtSvgLines>
-                            <div>Get ready for {this.props.skill}</div>
+                            <div>
+                                <FormattedMessage
+                                    id={'AcceptanceModal.getready'}
+                                    defaultMessage={'Get ready for {skill}'}
+                                    values={{skill: this.props.skill}}
+                                />
+                            </div>
                         </div>
                         <form>
                             <FormGroup>
-                                <ControlLabel>Message: </ControlLabel>
+                                <ControlLabel>
+                                    <FormattedMessage
+                                        id={'AcceptanceModal.message'}
+                                        defaultMessage={'Message:'}
+                                    />
+                                </ControlLabel>
                                 <FormControl
                                     componentClass="textarea"
                                     value={this.state.message}
@@ -45,11 +62,19 @@ export default class AcceptanceModal extends React.Component {
                     </Modal.Body>
 
                     <Modal.Footer>
-                        <Button onClick={() => this.setState({showModal: false})} bsStyle='danger'>Close</Button>
+                        <Button onClick={() => this.setState({showModal: false})} bsStyle='danger'>
+                            <FormattedMessage
+                                id={'AcceptanceModal.close'}
+                                defaultMessage={'Close'}
+                            />
+                        </Button>
                         <Button
                             onClick={() => {this.setState({showModal: false}); this.props.onConfirmation(this.state.message)}}
                             bsStyle='primary'>
-                            Confirm Acceptance
+                            <FormattedMessage
+                                id={'AcceptanceModal.confirm'}
+                                defaultMessage={'Confirm Acceptance'}
+                            />
                         </Button>
                     </Modal.Footer>
                 </Modal>
