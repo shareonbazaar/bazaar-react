@@ -6,7 +6,6 @@ import { Collapse, Grid, Col, Row, Button } from 'react-bootstrap';
 import Identity from './Identity'
 import Upcoming from './Upcoming'
 import ConfirmationModal from './ConfirmationModal'
-import WriteReviewButton from './WriteReviewButton'
 import Chat from './Chat';
 import Complete from './Complete';
 import { updateTransaction } from '../utils/actions'
