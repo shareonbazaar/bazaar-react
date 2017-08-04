@@ -12,6 +12,9 @@ node_modules
 # Translation build files
 build/*
 
+# yarn metadata
+.lock
+
 .ebextensions/*
 
 public/bundle.js
