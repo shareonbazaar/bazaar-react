@@ -9,6 +9,8 @@ node_modules
 # OS metadata
 .DS_Store
 
+# yarn metadata
+.lock
 .ebextensions/*
 
 public/bundle.js
