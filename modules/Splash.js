@@ -62,9 +62,11 @@ export default class Splash extends React.Component {
                   <section className="banner">
                     <div className="inner">
                       <h2>
-                        share on<br className='always' />
-                        <img width='20' src='/images/logo.png' />
-                        bazaar
+                        <div className='logo-image' />
+                        <div className='splash-title'>
+                          <p className='logo-top'>share on</p>
+                          <p className='logo-bottom'>bazaar</p>
+                        </div>
                       </h2>
                       <p>HALLO, SALAM,<br />              HELLO, BONJOUR,<br />              MARHABA, OLÁ!</p>
                       <ul className="actions">

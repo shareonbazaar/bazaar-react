@@ -2,6 +2,9 @@
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,800,800italic");
 @import "_variables";
 @import "_font-awesome.min.css";
+@font-face { font-family: 'Caecilia';
+             src: url('/fonts/CaeciliaLTStd-Roman.otf') format('truetype'); }
+
 
 /*
 	Spectral by HTML5 UP
@@ -2049,9 +2052,42 @@
 			z-index: 1;
 			color: white;
 
-			img {
-				vertical-align: middle;
-				margin: 0 8px 1px 0;
+			.logo-image {
+				background-image: url('../images/logo.png');
+				background-repeat: no-repeat;
+				background-size: cover;
+				display: inline-block;
+				width: 45px;
+				height: 107px;
+				vertical-align: bottom;
+			}
+
+			.splash-title {
+				display: inline-block;
+				margin: 0 5px;
+				p {
+					letter-spacing: initial;
+					text-transform: lowercase;
+					color: white; /*#58595B;*/
+					font-family: 'Caecilia';
+					font-weight: normal;
+					margin: 0;
+				}
+				.logo-top {
+					font-size: 41px;
+					@media (max-width: $screen-sm) {
+						font-size: 30px;
+					}
+					text-align: right;
+					width: 100%;
+					display: inline-block;
+				}
+				.logo-bottom {
+					font-size: 70px;
+					@media (max-width: $screen-sm) {
+						font-size: 51px;
+					}
+				}
 			}
 		}
 
