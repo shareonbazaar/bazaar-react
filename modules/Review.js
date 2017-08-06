@@ -1,26 +1,46 @@
-import React from 'react'
-import moment from 'moment'
-import Identity from './Identity'
+import React from 'react';
+import PropTypes from 'prop-types';
+import moment from 'moment';
+import Identity from './Identity';
 
 export default function Review (props) {
-    return (
-        <div className='review'>
-            <Identity
-                imageUrl={props.imageUrl}
-                name={props.name}
-            />
-            <div className='review-body'>
-                <div className='rating'>
-                    {
-                        Array(props.rating).fill(0).map((v, i) => <span key={i}>★</span>)
-                    }
-                </div>
-                <em>{props.service}</em>
-                <div className='quote'>{props.text}</div>
-                <time className='review-timestamp'>
-                    {moment(props.createdAt).format('MMM YYYY')}
-                </time>
-            </div>
+  const { imageUrl, name, rating, service, text, createdAt } = props;
+  return (
+    <div className='review'>
+      <Identity
+        imageUrl={imageUrl}
+        name={name}
+      />
+      <div className='review-body'>
+        <div className='rating'>
+          {
+            Array(rating).fill(0).map((v, i) => <span key={i}>★</span>)
+          }
         </div>
-    )
+        <em>{service}</em>
+        <div className='quote'>{text}</div>
+        <time className='review-timestamp'>
+          {moment(createdAt).format('MMM YYYY')}
+        </time>
+      </div>
+    </div>
+  )
 }
+
+Review.propTypes = {
+  imageUrl: PropTypes.string,
+  name: PropTypes.string,
+  rating: PropTypes.number,
+  service: PropTypes.string,
+  text: PropTypes.string,
+  createdAt: PropTypes.string,
+};
+
+Review.defaultProps = {
+  imageUrl: '',
+  name: '',
+  rating: 0,
+  service: '',
+  text: '',
+  createdAt: Date(),
+};

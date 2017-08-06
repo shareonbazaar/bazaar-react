@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { IndexLink } from 'react-router';
 import { Navbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
@@ -34,7 +35,12 @@ class App extends React.Component {
             && this.props.isAuthenticated
             && <QueryBox />
           }
-          <button onClick={() => this.setState({openSideBar: !this.state.openSideBar})} id='menu-toggle' type='button' className='navbar-toggle'>
+          <button
+            onClick={() => this.setState({openSideBar: !this.state.openSideBar})}
+            id='menu-toggle'
+            type='button'
+            className='navbar-toggle'
+          >
             <span className='sr-only'>Toggle navigation</span>
             <span className='icon-bar'></span>
             <span className='icon-bar'></span>
@@ -48,16 +54,19 @@ class App extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  return {
-    isAuthenticated: state.auth.isAuthenticated,
-  });
-}
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
+});
 
 App.propTypes = {
-  location: PropTypes.node,
+  location: PropTypes.object,
   isAuthenticated: PropTypes.bool,
   children: PropTypes.node,
-}
+};
+App.defaultProps = {
+  location: {},
+  isAuthenticated: false,
+  children: null,
+};
 
 export default connect(mapStateToProps, { loadUsers })(App);

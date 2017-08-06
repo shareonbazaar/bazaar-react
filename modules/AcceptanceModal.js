@@ -82,11 +82,11 @@ export default class AcceptanceModal extends React.Component {
 }
 
 AcceptanceModal.defaultProps = {
-  skill: null,
+  skill: '',
   onConfirmation: () => {},
 };
 
 AcceptanceModal.propTypes = {
-  skill: PropTypes.node,
+  skill: PropTypes.string,
   onConfirmation: PropTypes.func,
 };

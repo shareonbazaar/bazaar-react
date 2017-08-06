@@ -1,53 +1,74 @@
-import React from 'react'
-import UserCard from './UserCard'
-import Masonry from 'react-masonry-component'
+import React from 'react';
+import PropTypes from 'prop-types';
+import UserCard from './UserCard';
+import Masonry from 'react-masonry-component';
 
-var masonryOptions = {
-    gutter: 20,
-    itemSelector: '.grid-item',
-    fitWidth: true,
-}
+const masonryOptions = {
+  gutter: 20,
+  itemSelector: '.grid-item',
+  fitWidth: true,
+};
 
 export default class CardGrid extends React.Component {
 
-    componentWillMount () {
-        this.props.loadUsers()
+  componentWillMount() {
+    this.props.loadUsers();
+  }
+
+  toggleBookmark (id) {
+    let form = new FormData();
+    let bookmarks = this.props.loggedInUser.bookmarks.slice();
+    let index = bookmarks.indexOf(id);
+    if (index < 0) {
+      bookmarks.push(id);
+    } else {
+      bookmarks.splice(index, 1);
+    }
+    if (bookmarks.length === 0) {
+      form.append('bookmarks', '')
+    } else {
+      bookmarks.forEach(b => form.append('bookmarks', b))
     }
 
-    toggleBookmark (id) {
-        let form = new FormData();
-        var bookmarks = this.props.loggedInUser.bookmarks.slice();
-        var index = bookmarks.indexOf(id);
-        if (index < 0) {
-            bookmarks.push(id);
-        } else {
-            bookmarks.splice(index, 1);
-        }
-        if (bookmarks.length === 0) {
-            form.append('bookmarks', '')
-        } else {
-            bookmarks.forEach(b => form.append('bookmarks', b))
-        }
+    this.props.updateProfile(form);
+  }
 
-        this.props.updateProfile(form);
+  render () {
+    const { users, isFetching, loggedInUser } = this.props;
+    if (!users || isFetching) {
+      return (<div>Loading...</div>);
     }
 
-    render () {
-        if (!this.props.users || this.props.isFetching) {
-            return <div>Loading...</div>
-        }
-        return (
-            <div className='community-page'>
-                <Masonry className='user-list' options={masonryOptions}>
-                    {this.props.users.map(user => <UserCard
-                                                    onBookmarkClicked={() => this.toggleBookmark(user._id)}
-                                                    key={user._id}
-                                                    user={user}
-                                                    bookmarked={this.props.loggedInUser.bookmarks.indexOf(user._id) >= 0}
-                                                 />)
-                    }
-                </Masonry>
-            </div>
-        )
+    return (
+      <div className='community-page'>
+        <Masonry className='user-list' options={masonryOptions}>
+          {users.map(user => (
+            <UserCard
+              onBookmarkClicked={() => this.toggleBookmark(user._id)}
+              key={user._id}
+              user={user}
+              bookmarked={loggedInUser.bookmarks.indexOf(user._id) >= 0}
+            />
+          ))
+          }
+        </Masonry>
+      </div>
+    )
   }
 }
+
+CardGrid.propTypes = {
+  users: PropTypes.array,
+  isFetching: PropTypes.bool,
+  loadUsers: PropTypes.func,
+  loggedInUser: PropTypes.object,
+  bookmarkCard: PropTypes.func,
+};
+
+CardGrid.defaultProps = {
+  users: [],
+  isFetching: false,
+  loadUsers: () => {},
+  loggedInUser: {},
+  bookmarkCard: () => {},
+};

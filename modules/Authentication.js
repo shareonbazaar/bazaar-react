@@ -102,25 +102,27 @@ Authentic
   }
 
   render() {
-    const firstNameValid = this.state.firstName.length > 0;
-    const lastNameValid = this.state.lastName.length > 0;
-    const emailValid = validator.validate(this.state.emailText);
-    const passwordsValid = (this.state.password.length > 0 && this.state.password === this.state.confirmPassword);
+    const { firstName, lastName, emailText, password, confirmPassword } = this.state;
+    const firstNameValid = firstName.length > 0;
+    const lastNameValid = lastName.length > 0;
+    const emailValid = validator.validate(emailText);
+    const passwordsValid = (password.length > 0 && password === confirmPassword);
     const onSignupClicked = () => {
       this.setState({ hasClickedSignup: true });
       if (firstNameValid && lastNameValid && emailValid && passwordsValid) {
         this.props.loginUser({
           endpoint: '/api/signup',
           data: {
-            firstName: this.state.firstName,
-            lastName: this.state.lastName,
-            email: this.state.emailText,
-            password: this.state.password,
-            confirmPassword: this.state.confirmPassword,
+            firstName,
+            lastName,
+            email: emailText,
+            password,
+            confirmPassword,
           }
         });
       }
     }
+
     return (
       <div className='content-page signup-page'>
         <div className='page-header'>
@@ -140,32 +142,53 @@ Authentic
                   <p>{this.props.response.message}</p>
                 </Alert>
               }
-              <FormGroup validationState={(this.state.hasClickedSignup && !firstNameValid) ? 'error' : null}>
+              <FormGroup
+                validationState={(this.state.hasClickedSignup && !firstNameValid) ? 'error' : null}
+              >
                 <ControlLabel>
                   <FormattedMessage
                     id={'Signup.firstname'}
                     defaultMessage={'First Name'}
                   />
                 </ControlLabel>
-                <FormControl type="text" value={this.state.firstName} placeholder="John" onChange={(e) => {this.onChange(e, 'firstName')}}/>
+                <FormControl
+                  type="text"
+                  value={this.state.firstName}
+                  placeholder="John"
+                  onChange={(e) => {this.onChange(e, 'firstName')}}
+                />
               </FormGroup>
-              <FormGroup validationState={(this.state.hasClickedSignup && !lastNameValid) ? 'error' : null}>
+              <FormGroup
+                validationState={(this.state.hasClickedSignup && !lastNameValid) ? 'error' : null}
+              >
                 <ControlLabel>
                   <FormattedMessage
                     id={'Signup.lastname'}
                     defaultMessage={'Last Name'}
                   />
                 </ControlLabel>
-                <FormControl type="text" value={this.state.lastName} placeholder="Doe" onChange={(e) => {this.onChange(e, 'lastName')}}/>
+                <FormControl
+                  type="text"
+                  value={this.state.lastName}
+                  placeholder="Doe"
+                  onChange={(e) => {this.onChange(e, 'lastName')}}
+                />
               </FormGroup>
-              <FormGroup validationState={(this.state.hasClickedSignup && !emailValid) ? 'error' : null}>
+              <FormGroup
+                validationState={(this.state.hasClickedSignup && !emailValid) ? 'error' : null}
+              >
                 <ControlLabel>
                   <FormattedMessage
                     id={'Signup.email'}
                     defaultMessage={'Email'}
                   />
                 </ControlLabel>
-                <FormControl type="email" value={this.state.emailText} placeholder="Email" onChange={(e) => {this.onChange(e, 'emailText')}}/>
+                <FormControl
+                  type="email"
+                  value={this.state.emailText}
+                  placeholder="Email"
+                  onChange={(e) => {this.onChange(e, 'emailText')}}
+                />
               </FormGroup>
               <FormGroup>
                 <ControlLabel>
@@ -174,20 +197,35 @@ Authentic
                     defaultMessage={'Password'}
                   />
                 </ControlLabel>
-                <FormControl type="password" value={this.state.password} placeholder="Password" onChange={(e) => {this.onChange(e, 'password')}}/>
+                <FormControl
+                  type="password"
+                  value={this.state.password}
+                  placeholder="Password"
+                  onChange={(e) => {this.onChange(e, 'password')}}
+                />
               </FormGroup>
-              <FormGroup validationState={(this.state.hasClickedSignup && !passwordsValid) ? 'error' : null}>
+              <FormGroup
+                validationState={(this.state.hasClickedSignup && !passwordsValid) ? 'error' : null}
+              >
                 <ControlLabel>
                   <FormattedMessage
                     id={'Signup.confirmpassword'}
                     defaultMessage={'Confirm password'}
                   />
                 </ControlLabel>
-                <FormControl type="password" value={this.state.confirmPassword} placeholder="Password" onChange={(e) => {this.onChange(e, 'confirmPassword')}}/>
+                <FormControl
+                  type="password"
+                  value={this.state.confirmPassword}
+                  placeholder="Password"
+                  onChange={(e) => {this.onChange(e, 'confirmPassword')}}
+                />
               </FormGroup>
               <FormGroup>
                 <div className='form-offset'>
-                  <Button className='login-button' bsStyle='primary' onClick={onSignupClicked}>
+                  <Button
+                    className='login-button'
+                    bsStyle='primary'
+                    onClick={onSignupClicked}>
                     <FormattedMessage
                       id={'Signup.signup'}
                       defaultMessage={'Sign up'}
@@ -201,7 +239,10 @@ Authentic
                     id={'Signup.alreadyhaveaccount'}
                     defaultMessage={'Already have an account?'}
                   />
-                  <Link className='sign-up-link' to='/login'>
+                  <Link
+                    className='sign-up-link'
+                    to='/login'
+                  >
                     <FormattedMessage
                       id={'Signup.login'}
                       defaultMessage={'Login'}
@@ -225,6 +266,8 @@ Authentic
 
 class Login extends Signup {
   render() {
+    const response = this.props.response;
+    const { emailText, password } = this.state;
     return (
       <div className='content-page login-page'>
         <Helmet>
@@ -232,9 +275,9 @@ class Login extends Signup {
         </Helmet>
         <div className='page-header'><h3>Login</h3></div>
         <div>
-          {this.props.response &&
-            <Alert bsStyle='danger'>
-              <p>{this.props.response.message}</p>
+          {response &&
+            <Alert bsStyle="danger">
+              <p>{response.message}</p>
             </Alert>
           }
           <FormGroup>
@@ -246,7 +289,7 @@ class Login extends Signup {
             </ControlLabel>
             <FormControl
               type="email"
-              value={this.state.emailText}
+              value={emailText}
               placeholder="Email"
               onChange={(e) => {this.onChange(e, 'emailText')}}/>
           </FormGroup>
@@ -259,7 +302,7 @@ class Login extends Signup {
             </ControlLabel>
             <FormControl
               type="password"
-              value={this.state.password}
+              value={password}
               placeholder="Password"
               onChange={(e) => {this.onChange(e, 'password')}}/>
           </FormGroup>
@@ -269,18 +312,21 @@ class Login extends Signup {
                 className="login-button"
                 bsStyle="primary"
                 onClick={() => this.props.loginUser({
-                    endpoint: '/api/login',
-                    data: {
-                      email: this.state.emailText,
-                      password: this.state.password,
-                    }
+                  endpoint: '/api/login',
+                  data: {
+                    email: this.state.emailText,
+                    password: this.state.password,
+                  }
                 })}>
                 <FormattedMessage
                   id={'Signup.login'}
                   defaultMessage={'Login'}
                 />
               </Button>
-              <Link className='forgot-link' to='/forgot'>
+              <Link
+                className='forgot-link'
+                to='/forgot'
+              >
                 <FormattedMessage
                   id={'Signup.forgotpassword'}
                   defaultMessage={'Forgot password?'}
@@ -428,31 +474,30 @@ function mapStateToProps ({ auth }) {
 
 SocialMediaLogin.defaultProps = {
   className: '',
-  responseFacebook: null,
-  responseGoogle: null,
+  responseFacebook: () => {},
+  responseGoogle: () => {},
 };
 
 SocialMediaLogin.propTypes = {
   className: PropTypes.string,
-  responseFacebook: PropTypes.node,
-  responseGoogle: PropTypes.node,
+  responseFacebook: PropTypes.func,
+  responseGoogle: PropTypes.func,
 };
 
 Signup.defaultProps = {
   isAuthenticated: false,
-  location: null,
-  push: null,
-  loginUser: null,
-  errorMessage: '',
+  location: {},
+  push: () => {},
+  loginUser: () => {},
+  response: {},
 };
 
 Signup.propTypes = {
   isAuthenticated: PropTypes.bool,
-  location: PropTypes.node,
+  location: PropTypes.object,
   push: PropTypes.func,
-  loginUser: PropTypes.node,
-  errorMessage: PropTypes.string,
-  className: PropTypes.string,
+  loginUser: PropTypes.func,
+  response: PropTypes.object,
 };
 
 
