@@ -9,8 +9,10 @@
     "comma-dangle": "off",
     "max-len": [2, 120, 2, {
       "ignoreUrls": true,
-      "ignoreComments": false
+      "ignoreComments": false,
+      "ignoreStrings": true,
     }],
+    "no-underscore-dangle": "off",
     "import/no-duplicates": "off",
     "import/no-extraneous-dependencies": "off",
     "import/no-named-default": 1,
