@@ -3,7 +3,7 @@ import GoogleLogin from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
 import validator from 'email-validator';
 import { push } from 'react-router-redux';
-import React, { PropTypes as T } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
@@ -89,25 +89,28 @@ Authentic
   }
 
   render() {
-    const firstNameValid = this.state.firstName.length > 0;
-    const lastNameValid = this.state.lastName.length > 0;
-    const emailValid = validator.validate(this.state.emailText);
-    const passwordsValid = (this.state.password.length > 0 && this.state.password === this.state.confirmPassword);
+    const { firstName, lastName, emailText, password, confirmPassword } = this.state;
+    const firstNameValid = firstName.length > 0;
+    const lastNameValid = lastName.length > 0;
+    const emailValid = validator.validate(emailText);
+    const passwordsValid = (password.length > 0 && password === confirmPassword);
     const onSignupClicked = () => {
       this.setState({ hasClickedSignup: true });
       if (firstNameValid && lastNameValid && emailValid && passwordsValid) {
         this.props.loginUser({
           endpoint: '/api/signup',
           data: {
-            firstName: this.state.firstName,
-            lastName: this.state.lastName,
-            email: this.state.emailText,
-            password: this.state.password,
-            confirmPassword: this.state.confirmPassword,
+            firstName,
+            lastName,
+            email: emailText,
+            password,
+            confirmPassword,
           }
         });
       }
     };
+    const errorMessage = this.props.errorMessage;
+    const hasClickedSignup = this.state.hasClickedSignup;
 
     return (
       <div className="content-page signup-page">
@@ -117,38 +120,38 @@ Authentic
         <Grid fluid>
           <Row>
             <Col md={7}>
-              {this.props.errorMessage &&
+              {errorMessage &&
                 <Alert bsStyle="danger">
-                  <p>{this.props.errorMessage}</p>
+                  <p>{errorMessage}</p>
                 </Alert>
               }
               <FormGroup
-                validationState={(this.state.hasClickedSignup && !firstNameValid) ? 'error' : null}
+                validationState={(hasClickedSignup && !firstNameValid) ? 'error' : null}
               >
                 <ControlLabel>First Name</ControlLabel>
                 <FormControl
                   type="text"
-                  value={this.state.firstName}
-                  placeholder="Jochen"
+                  value={firstName}
+                  placeholder="John"
                   onChange={(e) => { this.onChange(e, 'firstName'); }}
                 />
               </FormGroup>
               <FormGroup
-                validationState={(this.state.hasClickedSignup && !lastNameValid) ? 'error' : null}
+                validationState={(hasClickedSignup && !lastNameValid) ? 'error' : null}
               >
                 <ControlLabel>Last Name</ControlLabel>
                 <FormControl
                   type="text"
-                  value={this.state.lastName}
-                  placeholder="Doberman"
+                  value={lastName}
+                  placeholder="Doe"
                   onChange={(e) => { this.onChange(e, 'lastName'); }}
                 />
               </FormGroup>
-              <FormGroup validationState={(this.state.hasClickedSignup && !emailValid) ? 'error' : null}>
+              <FormGroup validationState={(hasClickedSignup && !emailValid) ? 'error' : null}>
                 <ControlLabel>Email</ControlLabel>
                 <FormControl
                   type="email"
-                  value={this.state.emailText}
+                  value={emailText}
                   placeholder="Email"
                   onChange={(e) => { this.onChange(e, 'emailText'); }}
                 />
@@ -157,18 +160,18 @@ Authentic
                 <ControlLabel>Password</ControlLabel>
                 <FormControl
                   type="password"
-                  value={this.state.password}
+                  value={password}
                   placeholder="Password"
                   onChange={(e) => { this.onChange(e, 'password'); }}
                 />
               </FormGroup>
               <FormGroup
-                validationState={(this.state.hasClickedSignup && !passwordsValid) ? 'error' : null}
+                validationState={(hasClickedSignup && !passwordsValid) ? 'error' : null}
               >
                 <ControlLabel>Confirm Password</ControlLabel>
                 <FormControl
                   type="password"
-                  value={this.state.confirmPassword}
+                  value={confirmPassword}
                   placeholder="Password"
                   onChange={(e) => { this.onChange(e, 'confirmPassword'); }}
                 />
@@ -206,20 +209,22 @@ Authentic
 
 class Login extends Signup {
   render() {
+    const errorMessage = this.props;
+    const { emailText, password } = this.state;
     return (
       <div className="content-page login-page">
         <div className="page-header"><h3>Sign In</h3></div>
         <div>
-          {this.props.errorMessage &&
+          {errorMessage &&
             <Alert bsStyle="danger">
-              <p>{this.props.errorMessage}</p>
+              <p>{errorMessage}</p>
             </Alert>
           }
           <FormGroup>
             <ControlLabel>Email</ControlLabel>
             <FormControl
               type="email"
-              value={this.state.emailText}
+              value={emailText}
               placeholder="Email"
               onChange={(e) => { this.onChange(e, 'emailText'); }}
             />
@@ -228,7 +233,7 @@ class Login extends Signup {
             <ControlLabel>Password</ControlLabel>
             <FormControl
               type="password"
-              value={this.state.password}
+              value={password}
               placeholder="Password"
               onChange={(e) => { this.onChange(e, 'password'); }}
             />
@@ -241,8 +246,8 @@ class Login extends Signup {
                 onClick={() => this.props.loginUser({
                   endpoint: '/api/login',
                   data: {
-                    email: this.state.emailText,
-                    password: this.state.password,
+                    email: emailText,
+                    password,
                   }
                 })}
               >
@@ -270,19 +275,41 @@ class Login extends Signup {
 
 // These props come from the application's
 // state when it is started
-function mapStateToProps(state, ownProps) {
+// function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
+  const { isAuthenticated, errorMessage } = state.auth;
   return {
-    isAuthenticated: state.auth.isAuthenticated,
-    errorMessage: state.auth.errorMessage,
+    isAuthenticated,
+    errorMessage,
   };
 }
+
+SocialMediaLogin.defaultProps = {
+  className: '',
+  responseFacebook: null,
+  responseGoogle: null,
+};
+
+SocialMediaLogin.propTypes = {
+  className: PropTypes.string,
+  responseFacebook: PropTypes.node,
+  responseGoogle: PropTypes.node,
+};
+
+Signup.defaultProps = {
+  isAuthenticated: false,
+  location: null,
+  push: null,
+  loginUser: null,
+  errorMessage: '',
+};
+
 Signup.propTypes = {
   isAuthenticated: PropTypes.bool,
   location: PropTypes.node,
   push: PropTypes.func,
   loginUser: PropTypes.node,
   errorMessage: PropTypes.string,
-  className: PropTypes.string,
 };
 
 exports.Signup = connect(mapStateToProps, { loginUser, push })(Signup);

@@ -1,9 +1,10 @@
-import React from 'react'
+import React from 'react';
 
-export default function CircularImage (props) {
-    return (
-        <div className='circular-img'>
-            <img src={props.imageUrl} />
-        </div>
-    )
+export default function CircularImage(props) {
+  const imageUrl = props;
+  return (
+    <div className="circular-img">
+      <img src={imageUrl} alt="" />
+    </div>
+  );
 }

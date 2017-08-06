@@ -12,12 +12,14 @@ export default class AcceptanceModal extends React.Component {
   }
 
   render() {
+    const { showModal, value } = this.state;
+    const { skill } = this.props;
     return (
       <div>
         <Button bsStyle="primary" onClick={() => this.setState({ showModal: true })}>Accept</Button>
         <Modal
           className="acceptModal"
-          show={this.state.showModal}
+          show={showModal}
           onHide={() => this.setState({ showModal: false })}
         >
           <Modal.Header closeButton>
@@ -30,14 +32,14 @@ export default class AcceptanceModal extends React.Component {
                   <path stroke="green" strokeWidth="20" fill="none" d="M10,30 l30,50 l95,-70" />
                 </svg>
               </MtSvgLines>
-              <div>Get ready for {this.props.skill}</div>
+              <div>Get ready for {skill}</div>
             </div>
             <form>
               <FormGroup>
                 <ControlLabel>Message: </ControlLabel>
                 <FormControl
                   componentClass="textarea"
-                  value={this.state.value}
+                  value={value}
                   placeholder="Enter text"
                   onChange={this.handleChange}
                 />
@@ -66,6 +68,7 @@ export default class AcceptanceModal extends React.Component {
     );
   }
 }
+
 AcceptanceModal.defaultProps = {
   skill: null,
   onConfirmation: () => {},

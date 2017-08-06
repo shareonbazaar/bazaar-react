@@ -1,10 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router';
+import PropTypes from 'prop-types';
+// import { Link } from 'react-router';
 import { IndexLink } from 'react-router';
 import { Navbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import SideBar from './SideBar';
-import PropTypes from 'prop-types';
 import QueryBox from './QueryBox';
 
 class App extends React.Component {
@@ -36,10 +36,10 @@ class App extends React.Component {
             type="button"
             className="navbar-toggle"
           >
-            <span className='sr-only'>Toggle navigation</span>
-            <span className='icon-bar'></span>
-            <span className='icon-bar'></span>
-            <span className='icon-bar'></span>
+            <span className="sr-only">Toggle navigation</span>
+            <span className="icon-bar" />
+            <span className="icon-bar" />
+            <span className="icon-bar" />
           </button>
         </Navbar>
         <SideBar toggled={openSideBar} />
@@ -48,16 +48,23 @@ class App extends React.Component {
     );
   }
 }
-
-const mapStateToProps = (state) => ({
-  return {
-    isAuthenticated: state.auth.isAuthenticated,
-  });
-}
-
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
+});
+// const mapStateToProps = (state) => ({
+//   return {
+//     isAuthenticated: state.auth.isAuthenticated,
+//   });
+// }
 App.propTypes = {
   location: PropTypes.node,
   isAuthenticated: PropTypes.bool,
   children: PropTypes.node,
-}
+};
+App.defaultProps = {
+  location: null,
+  isAuthenticated: false,
+  children: null,
+};
+
 export default connect(mapStateToProps, null)(App);
