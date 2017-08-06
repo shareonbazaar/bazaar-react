@@ -1,3 +1,5 @@
+const webpack = require('webpack');
+
 module.exports = {
 	entry: "./main.js",
 	output: {
@@ -5,6 +7,9 @@ module.exports = {
 		filename: "bundle.js",
 		publicPath: '/'
 	},
+	plugins: [
+		new webpack.HotModuleReplacementPlugin(),
+	],
 	module: {
 		loaders: [
 			{
