@@ -1,6 +1,7 @@
 const dotenv = require('dotenv');
 const webpack = require('webpack');
 dotenv.load({ path: '.env' });
+
 module.exports = {
 	entry: "./main.js",
 	output: {
@@ -13,7 +14,8 @@ module.exports = {
 			'GOOGLE_MAP_API': JSON.stringify(process.env.GOOGLE_MAP_API),
 			'FACEBOOK_ID': JSON.stringify(process.env.FACEBOOK_ID),
 			'GOOGLE_ID': JSON.stringify(process.env.GOOGLE_ID),
-		})
+		}),
+		new webpack.HotModuleReplacementPlugin(),
 	],
 	module: {
 		loaders: [
