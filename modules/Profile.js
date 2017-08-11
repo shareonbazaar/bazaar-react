@@ -72,7 +72,7 @@ class Profile extends React.Component {
               </div>
               {
                 profiledUser._id === loggedInUser._id ? (
-                  <Button onClick={() => push('/editprofile')} bsStyle="primary" bsSize="large" block>
+                  <Button onClick={() => this.props.push('/editprofile')} bsStyle="primary" bsSize="large" block>
                     <FormattedMessage
                       id={'Profile.editprofile'}
                       defaultMessage={'Edit Profile'}
