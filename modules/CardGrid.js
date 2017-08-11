@@ -34,7 +34,6 @@ export default class CardGrid extends React.Component {
   }
 
   render() {
-    console.log('CARDGRID');
     const { users, isFetching, loggedInUser } = this.props;
     if (!users || isFetching) {
       return (<div>Loading...</div>);

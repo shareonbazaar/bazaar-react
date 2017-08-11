@@ -2,30 +2,32 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TransitionMotion, spring } from 'react-motion';
 
-import Transaction from './Transaction'
-import FilterBar from './FilterBar'
+import Transaction from './Transaction';
+import FilterBar from './FilterBar';
 import Loader from './Loader';
 
 class TransactionList extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+  // constructor(props) {
+  //   super(props);
+  // }
 
-  componentDidMount () {
+  componentDidMount() {
     this.props.loadTransactions();
 
     // Clear unreadTransactions array since now user is seeing them
-    let form = new FormData();
+    const form = new FormData();
     form.append('unreadTransactions', '');
     this.props.updateProfile(form);
   }
-  
+
   renderInterpolatedStyles(config) {
+    const { loggedInUser } = this.props;
+    const { style, data, key } = config;
     return (
-      <div key={config.key} style={{ transform: `translate(${config.style.transform}%)` }}>
+      <div key={key} style={{ transform: `translate(${style.transform}%)` }}>
         <Transaction
-          loggedInUser={this.props.loggedInUser}
-          content={config.data}
+          loggedInUser={loggedInUser}
+          content={data}
         />
       </div>
     );
@@ -55,20 +57,25 @@ class TransactionList extends React.Component {
   }
 }
 
+TransactionList.defaultProps = {
+  loggedInUser: null,
+  isFetching: false,
+  useAnimation: false,
+  transactions: [],
+  loadTransactions: () => {},
+  loadProfile: () => {},
+  updateProfile: () => {},
+};
+
 TransactionList.propTypes = {
   loggedInUser: PropTypes.object,
   isFetching: PropTypes.bool,
   useAnimation: PropTypes.bool,
   transactions: PropTypes.array,
   loadTransactions: PropTypes.func,
+  loadProfile: PropTypes.func,
+  updateProfile: PropTypes.func,
 };
 
-Transaction.defaultProps = {
-  loggedInUser: {},
-  isFetching: false,
-  useAnimation: false,
-  transactions: [],
-  loadTransactions: () => {},
-};
 
 export default TransactionList;

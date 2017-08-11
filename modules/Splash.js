@@ -4,8 +4,9 @@ import { Link } from 'react-router';
 import { Element } from 'react-scroll';
 import { Link as ScrollLink } from 'react-scroll';
 
-import { Helmet } from "react-helmet";
+import { Helmet } from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
+// eslint-disable-next-line
 import styles from '../public/css/splash.css';
 
 export default class Splash extends React.Component {
@@ -18,14 +19,6 @@ export default class Splash extends React.Component {
     this.handleScroll = this.handleScroll.bind(this);
   }
 
-  handleScroll (e) {
-    const {showHeader} = this.state;
-    ReactDOM.findDOMNode(this.firstSection).getBoundingClientRect().top > 0 ?
-    showHeader && this.setState({showHeader: false})
-    :
-    !showHeader && this.setState({showHeader: true})
-  }
-
   componentDidMount() {
     window.addEventListener('scroll', this.handleScroll);
   }
@@ -34,9 +27,18 @@ export default class Splash extends React.Component {
     window.removeEventListener('scroll', this.handleScroll);
   }
 
-  render () {
+  /* eslint-disable */
+  handleScroll(e) {
+    const { showHeader } = this.state;
+    (ReactDOM.findDOMNode(this.firstSection).getBoundingClientRect().top > 0) ?
+    showHeader && this.setState({ showHeader: false })
+    :
+    !showHeader && this.setState({ showHeader: true })
+  }
+  /* eslint-enable */
+  render() {
     return (
-      <div className='landing'>
+      <div className="landing">
         <Helmet>
           <meta name="viewport" content="width=device-width, initial-scale=1" />
         </Helmet>
@@ -46,7 +48,7 @@ export default class Splash extends React.Component {
             <nav className="nav">
               <ul>
                 <li className="special">
-                  <a onClick={() => this.setState({openSideBar: true})} className="menuToggle">
+                  <a onClick={() => this.setState({ openSideBar: true })} className="menuToggle">
                     <span>
                       <FormattedMessage
                         id={'Splash.menu'}
@@ -61,10 +63,10 @@ export default class Splash extends React.Component {
           <section className="banner">
             <div className="inner">
               <h2>
-                <div className='logo-image' />
-                <div className='splash-title'>
-                  <p className='logo-top'>share on</p>
-                  <p className='logo-bottom'>bazaar</p>
+                <div className="logo-image" />
+                <div className="splash-title">
+                  <p className="logo-top">share on</p>
+                  <p className="logo-bottom">bazaar</p>
                 </div>
               </h2>
               <p>HALLO, SALAM,<br />              HELLO, BONJOUR,<br />              MARHABA, OLÁ!</p>
@@ -79,32 +81,34 @@ export default class Splash extends React.Component {
                 </li>
               </ul>
             </div>
-            <ScrollLink className='more' to='zero' smooth={true} duration={500}>
+            <ScrollLink className="more" to="zero" smooth duration={500}>
               <FormattedMessage
                 id={'Splash.learn'}
                 defaultMessage={'Learn More'}
               />
             </ScrollLink>
           </section>
-          <Element name='zero' ref={(e) => { this.firstSection = e }}>
+          <Element name="zero" ref={(e) => { this.firstSection = e; }}>
             <section className="zero wrapper style0 special">
               <div className="inner">
                 <header className="major">
                   <h2>
                     <FormattedMessage
-                        id={'Splash.statement0'}
-                        defaultMessage={'Bazaar is a place for empowerment'}
+                      id={'Splash.statement0'}
+                      defaultMessage={'Bazaar is a place for empowerment'}
                     />
                     <br />
                   </h2>
                   <p>
                     <FormattedMessage
-                        id={'Splash.statement1'}
-                        defaultMessage={'We believe, locals and newcomers should share their skills and learn from each other.'}
+                      id={'Splash.statement1'}
+                      defaultMessage={'We believe, locals and newcomers should share their skills and learn from each other.'}
                     />
                   </p>
                 </header>
-                <iframe width="100%" height="480" src="https://www.youtube.com/embed/uoVlosNJjZY?rel=0?ecver=1" frameBorder="0" allowFullScreen=""></iframe>
+                {/* eslint-disable */}
+                <iframe width="100%" height="480" src="https://www.youtube.com/embed/uoVlosNJjZY?rel=0?ecver=1" frameBorder="0" allowFullScreen="" />
+                {/* eslint-enable */}
               </div>
             </section>
           </Element>
@@ -113,20 +117,21 @@ export default class Splash extends React.Component {
               <header className="major">
                 <h2>
                   <FormattedMessage
-                      id={'Splash.skillq'}
-                      defaultMessage={'What skills can you share here?'}
+                    id={'Splash.skillq'}
+                    defaultMessage={'What skills can you share here?'}
                   />
                 </h2>
                 <p>
                   <FormattedMessage
-                      id={'Splash.skillsdesc'}
-                      defaultMessage={'People offer cool things from leisure time activities to professional competences. Currently we have about thirty skills to choose from.'}
+                    id={'Splash.skillsdesc'}
+                    defaultMessage={'People offer cool things from leisure time activities to professional competences. Currently we have about thirty skills to choose from.'}
                   />
                 </p>
-              </header><img width="75%" src="images/skills.png" />
+              </header>
+              <img alt="" width="75%" src="images/skills.png" />
             </div>
           </section>
-          <section className="two wrapper alt style2 special" style={{padding: '40px 0px'}}>
+          <section className="two wrapper alt style2 special" style={{ padding: '40px 0px' }}>
             <div className="inner">
               <header className="major">
                 <h2>
@@ -146,7 +151,8 @@ export default class Splash extends React.Component {
                     defaultMessage={'We see huge potential in all the people coming to new countries at the moment.  Bazaar wants to enable them and provide a tool to participate in their new society'}
                   />
                 </p>
-              </header><img width="75%" src="images/network.png" />
+              </header>
+              <img alt="" width="75%" src="images/network.png" />
             </div>
           </section>
           <section className="three wrapper style3">
@@ -196,10 +202,10 @@ export default class Splash extends React.Component {
                   />
                 </li>
               </ol>
-              <img style={{display:'block', margin:'0 auto', width: '75%'}} src="images/timebanking.png" />
+              <img alt="" style={{ display: 'block', margin: '0 auto', width: '75%' }} src="images/timebanking.png" />
             </div>
           </section>
-          <section className="cta wrapper style4" style={{padding: '12em 0 10em 0'}}>
+          <section className="cta wrapper style4" style={{ padding: '12em 0 10em 0' }}>
             <div className="inner">
               <header>
                 <h2>
@@ -274,7 +280,7 @@ export default class Splash extends React.Component {
               </Link>
             </li>
           </ul>
-          <a onClick={() => this.setState({openSideBar: false})} className='menu-close'></a>
+          <a onClick={() => this.setState({ openSideBar: false })} className="menu-close" />
         </div>
         <ScrollLink className="more" to="zero" smooth duration={500}>Learn More</ScrollLink>
       </div>

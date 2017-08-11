@@ -404,14 +404,14 @@ EditProfile.propTypes = {
   loggedInUser: PropTypes.object,
   submitChanges: PropTypes.func,
   updateProfile: PropTypes.func,
-  response: PropTypes.string,
+  response: PropTypes.object,
   intl: PropTypes.object,
 };
 EditProfile.defaultProps = {
   loggedInUser: null,
   submitChanges: () => {},
   updateProfile: () => {},
-  response: '',
+  response: null,
   intl: null,
 };
 

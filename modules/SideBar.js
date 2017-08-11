@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SideBarLink from './SideBarLink';
-import { connect } from 'react-redux';
-import { requestLogout } from '../utils/actions';
 import { defineMessages, injectIntl } from 'react-intl';
+
+import { connect } from 'react-redux';
+import SideBarLink from './SideBarLink';
+import { requestLogout } from '../utils/actions';
+
 
 const messages = defineMessages({
   bookmarks: {
@@ -36,29 +38,29 @@ const messages = defineMessages({
 //eslint-disable-next-line
 class SideBar extends React.Component {
   render() {
-    const { user, isAuthenticated } = this.props;
-    const {formatMessage} = this.props.intl;
+    const { user, isAuthenticated, toggled } = this.props;
+    const { formatMessage } = this.props.intl;
     return (
-      <div className={`sidebar-wrapper ${this.props.toggled ? 'toggled' : ''}`}>
-        <ul className='sidebar-nav'>
+      <div className={`sidebar-wrapper ${toggled ? 'toggled' : ''}`}>
+        <ul className="sidebar-nav">
           {
             isAuthenticated &&
             <SideBarLink
               badgeNum={user.unreadTransactions.length > 0 ? user.unreadTransactions.length : null}
-              toLink='/transactions'
-              imageSrc='/images/chat.png'
+              toLink="/transactions"
+              imageSrc="/images/chat.png"
               text={'Wallet'}
             />
           }
-          {isAuthenticated && <SideBarLink toLink='/bookmarks' imageSrc='/images/bookmark_icon.png' text={formatMessage(messages.bookmarks)} />}
-          {isAuthenticated && <SideBarLink toLink={`/profile/${user._id}`} imageSrc='/images/profile.png' text={formatMessage(messages.profile)} />}
-          {isAuthenticated && <SideBarLink toLink='/settings/' imageSrc='/images/settings.png' text={formatMessage(messages.settings)} />}
-          <SideBarLink toLink='/contact' imageSrc='/images/help.png' text={formatMessage(messages.contact)} />
-          {!isAuthenticated && <SideBarLink toLink='/login' imageSrc='/images/logout.png' text={formatMessage(messages.login)} />}
-          {isAuthenticated && <SideBarLink onClick={this.props.requestLogout} toLink='/' imageSrc='/images/logout.png' text={formatMessage(messages.logout)} />}
+          {isAuthenticated && <SideBarLink toLink="/bookmarks" imageSrc="/images/bookmark_icon.png" text={formatMessage(messages.bookmarks)} />}
+          {isAuthenticated && <SideBarLink toLink={`/profile/${user._id}`} imageSrc="/images/profile.png" text={formatMessage(messages.profile)} />}
+          {isAuthenticated && <SideBarLink toLink="/settings/" imageSrc="/images/settings.png" text={formatMessage(messages.settings)} />}
+          <SideBarLink toLink="/contact" imageSrc="/images/help.png" text={formatMessage(messages.contact)} />
+          {!isAuthenticated && <SideBarLink toLink="/login" imageSrc="/images/logout.png" text={formatMessage(messages.login)} />}
+          {isAuthenticated && <SideBarLink onClick={requestLogout} toLink="/" imageSrc="/images/logout.png" text={formatMessage(messages.logout)} />}
         </ul>
       </div>
-    )
+    );
   }
 }
 SideBar.propTypes = {
@@ -66,6 +68,7 @@ SideBar.propTypes = {
   user: PropTypes.object,
   requestLogout: PropTypes.func,
   toggled: PropTypes.bool,
+  intl: PropTypes.object,
 };
 
 SideBar.defaultProps = {
@@ -73,13 +76,14 @@ SideBar.defaultProps = {
   user: null,
   requestLogout: () => {},
   toggled: false,
+  intl: null,
 };
 
-function mapStateToProps ({ auth }) {
+function mapStateToProps({ auth }) {
   return {
     user: auth.user,
     isAuthenticated: auth.isAuthenticated,
-  }
+  };
 }
 
-export default connect(mapStateToProps, {requestLogout})(injectIntl(SideBar));
+export default connect(mapStateToProps, { requestLogout })(injectIntl(SideBar));

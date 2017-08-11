@@ -5,15 +5,15 @@ import { Link } from 'react-router';
 //eslint-disable-next-line
 export default class SideBarLink extends React.Component {
   render() {
-    const { imageSrc, text, toLink, badgeNum } = this.props;
+    const { imageSrc, text, toLink, badgeNum, onClick } = this.props;
     return (
-    	<li>
-        <Link data-badge={badgeNum} className='sidebar-link' onClick={this.props.onClick} to={toLink}>
-          <img src={imageSrc}/>
+      <li>
+        <Link data-badge={badgeNum} className="sidebar-link" onClick={onClick} to={toLink}>
+          <img alt="" src={imageSrc} />
           {text}
         </Link>
       </li>
-    )
+    );
   }
 }
 

@@ -29,4 +29,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { loadTransactions, updateProfile }) (TransactionList);
+export default connect(mapStateToProps, { loadTransactions, updateProfile })(TransactionList);

@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { RequestType, StatusType } from '../models/Enums';
 import Identity from './Identity';
 import Upcoming from './Upcoming';
-import ConfirmationModal from './ConfirmationModal';
+// import ConfirmationModal from './ConfirmationModal';
 
 import Chat from './Chat';
 import Complete from './Complete';
@@ -16,47 +16,48 @@ import { updateTransaction } from '../utils/actions';
 import AcceptanceModal from './AcceptanceModal';
 
 const messages = defineMessages({
-    receivePast: {
-        id: 'Transaction.receivePast',
-        defaultMessage: 'received',
-    },
-    receiveFuture: {
-        id: 'Transaction.receiveFuture',
-        defaultMessage: 'will receive',
-    },
-    givePast: {
-        id: 'Transaction.givePast',
-        defaultMessage: 'gave',
-    },
-    giveFuture: {
-        id: 'Transaction.giveFuture',
-        defaultMessage: 'will give',
-    },
-    exchangePast: {
-        id: 'Transaction.exchangePast',
-        defaultMessage: 'exchanged',
-    },
-    exchangeFuture: {
-        id: 'Transaction.exchangeFuture',
-        defaultMessage: 'will exchange',
-    },
-    you: {
-        id: 'Transaction.you',
-        defaultMessage: 'You',
-    },
+  receivePast: {
+    id: 'Transaction.receivePast',
+    defaultMessage: 'received',
+  },
+  receiveFuture: {
+    id: 'Transaction.receiveFuture',
+    defaultMessage: 'will receive',
+  },
+  givePast: {
+    id: 'Transaction.givePast',
+    defaultMessage: 'gave',
+  },
+  giveFuture: {
+    id: 'Transaction.giveFuture',
+    defaultMessage: 'will give',
+  },
+  exchangePast: {
+    id: 'Transaction.exchangePast',
+    defaultMessage: 'exchanged',
+  },
+  exchangeFuture: {
+    id: 'Transaction.exchangeFuture',
+    defaultMessage: 'will exchange',
+  },
+  you: {
+    id: 'Transaction.you',
+    defaultMessage: 'You',
+  },
 });
 
-
-const ProposedButtons = connect(null, { updateTransaction }) (props => {
-  if (props.userIsOwner) {
+// eslint-disable-next-line
+const ProposedButtons = connect(null, { updateTransaction })(props => {
+  const { userIsOwner, content } = props;
+  if (userIsOwner) {
     return (
-      <Row className='responses'>
+      <Row className="responses">
         <Col mdOffset={3} md={6}>
-          <Button 
-            bsStyle='danger'
-            onClick={()=> props.updateTransaction({
-              t_id: props.content._id,
-              transaction: {status: StatusType.CANCELLED},
+          <Button
+            bsStyle="danger"
+            onClick={() => updateTransaction({
+              t_id: content._id,
+              transaction: { status: StatusType.CANCELLED },
             })}
           >
             <FormattedMessage
@@ -66,22 +67,23 @@ const ProposedButtons = connect(null, { updateTransaction }) (props => {
           </Button>
         </Col>
       </Row>
-    )
+    );
+  // eslint-disable-next-line
   } else {
     return (
-      <Row className='responses'>
+      <Row className="responses">
         <Col xs={4}>
           <AcceptanceModal
             skill={props.content.service.label.en}
-            onConfirmation={(msg) => props.updateTransaction({
+            onConfirmation={msg => props.updateTransaction({
               t_id: props.content._id,
-              transaction: {status: StatusType.ACCEPTED},
+              transaction: { status: StatusType.ACCEPTED },
               message: msg,
             })}
           />
         </Col>
         <Col xs={4}>
-          <Button onClick={props.onChatClick} bsStyle='primary'>
+          <Button onClick={props.onChatClick} bsStyle="primary">
             <FormattedMessage
               id={'Transaction.chat'}
               defaultMessage={'Chat'}
@@ -89,10 +91,11 @@ const ProposedButtons = connect(null, { updateTransaction }) (props => {
           </Button>
         </Col>
         <Col xs={4}>
-          <Button bsStyle='danger'
+          <Button
+            bsStyle="danger"
             onClick={() => props.updateTransaction({
               t_id: props.content._id,
-              transaction: {status: StatusType.REJECTED},
+              transaction: { status: StatusType.REJECTED },
             })}
           >
             <FormattedMessage
@@ -102,9 +105,9 @@ const ProposedButtons = connect(null, { updateTransaction }) (props => {
           </Button>
         </Col>
       </Row>
-    )
+    );
   }
-})
+});
 
 
 function Proposed(props) {
@@ -151,39 +154,43 @@ class TransactionCollapsable extends React.Component {
     });
   }
 
-  render () {
-    if (this.state.inChatMode) {
-      return ( 
+  render() {
+    const { content, collapsed, partner, status, user, userIsOwner } = this.props;
+    const { inChatMode } = this.state;
+    if (inChatMode) {
+      return (
         <Chat
-          t_id={this.props.content._id}
+          t_id={content._id}
           onBack={this.onChatClick}
-          messages={this.props.content._messages}
+          messages={content._messages}
         />
-      )
-    } else if (this.props.status === StatusType.PROPOSED) {
+      );
+    } else if (status === StatusType.PROPOSED) {
       return (
         <Proposed
-          content={this.props.content}
-          userIsOwner={this.props.userIsOwner}
+          content={content}
+          userIsOwner={userIsOwner}
           onChatClick={this.onChatClick}
         />
-      )
-    } else if (this.props.status === StatusType.ACCEPTED && this.props.content._confirmations.length == 0) {
+      );
+    // eslint-disable-next-line
+    } else if (status === StatusType.ACCEPTED && content._confirmations.length == 0) {
       return (
         <Upcoming
-          content={this.props.content}
-          collapsed={this.props.collapsed}
+          content={content}
+          collapsed={collapsed}
           onChatClick={this.onChatClick}
         />
-      )
+      );
+    // eslint-disable-next-line
     } else {
       return (
         <Complete
-          transaction={this.props.content}
-          user={this.props.user}
-          partner={this.props.partner}
+          transaction={content}
+          user={user}
+          partner={partner}
         />
-      )
+      );
     }
   }
 }
@@ -205,75 +212,85 @@ TransactionCollapsable.defaultProps = {
   partner: {},
   collapsed: true,
 };
-
+// eslint-disable-next-line
 class Transaction extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.state = {
       collapsed: true,
-    }
+    };
   }
 
-  render () {
+  render() {
     const { formatMessage } = this.props.intl;
+    const { collapsed } = this.state;
     const verbs = (past) => {
       if (past) {
         return {
           [RequestType.LEARN]: formatMessage(messages.receivePast),
           [RequestType.SHARE]: formatMessage(messages.givePast),
           [RequestType.EXCHANGE]: formatMessage(messages.exchangePast),
-        }
+        };
+      // eslint-disable-next-line
       } else {
         return {
           [RequestType.LEARN]: formatMessage(messages.receiveFuture),
           [RequestType.SHARE]: formatMessage(messages.giveFuture),
           [RequestType.EXCHANGE]: formatMessage(messages.exchangeFuture),
-        }
+        };
       }
-    }
+    };
     const { content, loggedInUser } = this.props;
     const partner = content._participants.find(user => user._id !== loggedInUser._id);
-    const userIsOwner = content._creator._id == loggedInUser._id;
-    const subject =  userIsOwner ? formatMessage(messages.you) : partner.profile.name.split(' ')[0];
+    const userIsOwner = content._creator._id === loggedInUser._id;
+    const subject = userIsOwner ? formatMessage(messages.you) : partner.profile.name.split(' ')[0];
     return (
-      <div className='transaction'>
-        <div className='t-wrapper' onClick={() => this.setState({ collapsed: !this.state.collapsed })}>
-          <div className='content'>
-            <div><img className='direction' src='/images/arrow_left_down.png' /></div>
-            <Identity imageUrl={partner.profile.picture} name={partner.profile.name.split(' ')[0]}/>
-            <div className='exchange'>
-                <div className='request-type'>{subject + " " + verbs(this.props.content._confirmations.length > 0)[content.request_type]}</div>
-                <div className='service'>{content.service.label.en}</div>
+      <div className="transaction">
+        <div className="t-wrapper" onClick={() => this.setState({ collapsed: !collapsed })}>
+          <div className="content">
+            <div><img alt="" className="direction" src="/images/arrow_left_down.png" /></div>
+            <Identity imageUrl={partner.profile.picture} name={partner.profile.name.split(' ')[0]} />
+            <div className="exchange">
+              <div className="request-type">
+                {`${subject} ${verbs(this.props.content._confirmations.length > 0)[content.request_type]}`}
+              </div>
+              <div className="service">{content.service.label.en}</div>
             </div>
           </div>
-          <time className='timestamp'>{moment(content.createdAt).fromNow()}</time>
+          <time className="timestamp">{moment(content.createdAt).fromNow()}</time>
         </div>
-        <Collapse in={!this.state.collapsed}>
-          <div className='action-area'>
-            <TransactionCollapsable 
+        <Collapse in={!collapsed}>
+          <div className="action-area">
+            <TransactionCollapsable
               onChatClick={this.onChatClick}
               status={content.status}
               userIsOwner={userIsOwner}
               user={loggedInUser}
               partner={partner}
               content={content}
-              collapsed={this.state.collapsed}
+              collapsed={collapsed}
             />
           </div>
         </Collapse>
       </div>
-    )
+    );
   }
 }
 
 Transaction.propTypes = {
   content: PropTypes.object,
   loggedInUser: PropTypes.object,
+  intl: {
+    formatMessage: PropTypes.func,
+  },
 };
 
 Transaction.defaultProps = {
   content: {},
   loggedInUser: {},
+  intl: {
+    formatMessage: () => {},
+  },
 };
 
 export default (injectIntl(Transaction));

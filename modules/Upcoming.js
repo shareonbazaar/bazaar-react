@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Grid, Col, Row, Button } from 'react-bootstrap';
 import GoogleMapReact from 'google-map-react';
+// eslint-disable-next-line
 import moment from 'moment';
 import DateTime from 'react-datetime';
 import Autocomplete from 'react-google-autocomplete';
@@ -11,6 +12,7 @@ import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
 import ConfirmationModal from './ConfirmationModal';
 import { updateTransaction, confirmTransaction } from '../utils/actions';
 
+/* global GOOGLE_MAP_API: true */
 const messages = defineMessages({
   edit: {
     id: 'Upcoming.edit',
@@ -64,26 +66,26 @@ LocationPicker.propTypes = {
 };
 
 function TimePicker(props) {
-  const { editMode, time } = props;
+  const { editMode, time, onTimeSelected } = props;
   if (!editMode) {
     if (!time) {
-      return (
-        <em>Suggest a place to meet by clicking the edit button</em>
-      );
+      return <em>Suggest a place to meet by clicking the edit button</em>;
+    // eslint-disable-next-line
     } else {
       return (
         <DateTime
           dateFormat={'MMMM Do YYYY'}
-          onChange={props.onTimeSelected}
+          onChange={onTimeSelected}
           defaultValue={time ? new Date(time) : Date.now()}
         />
-      )
+      );
     }
+  // eslint-disable-next-line
   } else {
     return (
       <DateTime
         dateFormat={'MMMM Do YYYY'}
-        onChange={props.onTimeSelected}
+        onChange={onTimeSelected}
         defaultValue={new Date(time)}
       />
     );
@@ -125,23 +127,24 @@ class Upcoming extends React.Component {
     this.onConfirmation = this.onConfirmation.bind(this);
   }
 
-  onEditClick () {
-    const { markerLocation } = this.state;
-    if (!this.state.inViewMode) {
-      this.props.updateTransaction({
-        t_id: this.props.content._id,
+  onEditClick() {
+    const { markerLocation, inViewMode, happenedAt } = this.state;
+    const { content } = this.props;
+    if (!inViewMode) {
+      updateTransaction({
+        t_id: content._id,
         transaction: {
           loc: {
             type: 'Point',
             coordinates: [markerLocation.coords.lng, markerLocation.coords.lat]
           },
           placeName: markerLocation.name,
-          happenedAt: this.state.happenedAt,
+          happenedAt,
         }
       });
     }
     this.setState({
-      inViewMode: !this.state.inViewMode,
+      inViewMode: !inViewMode,
     });
   }
 
@@ -164,74 +167,78 @@ class Upcoming extends React.Component {
     });
   }
 
-  onConfirmation () {
-    this.props.confirmTransaction({
-      t_id: this.props.content._id,
+  onConfirmation() {
+    const { content } = this.props;
+    confirmTransaction({
+      t_id: content._id,
     });
   }
 
-  render () {
-    const {formatMessage} = this.props.intl;
+  render() {
+    const { markerLocation, zoom, inViewMode, happenedAt } = this.state;
+    const { collapsed, onChatClick } = this.props;
+    const { formatMessage } = this.props.intl;
     // GoogleMap must only render when its container div is actually visible on screen
-    if (this.props.collapsed) return null;
+    if (collapsed) return null;
     return (
-      <Grid fluid={true}>
+      <Grid fluid>
         <Row>
           <Col sm={6}>
-            <div style={{height: "200px"}}>
+            <div style={{ height: '200px' }}>
               <GoogleMapReact
                 defaultCenter={this.defaultProps.center}
                 defaultZoom={this.defaultProps.zoom}
-                center={this.state.markerLocation.coords}
-                zoom={this.state.zoom}
-                bootstrapURLKeys={{key: GOOGLE_MAP_API}}>
+                center={markerLocation.coords}
+                zoom={zoom}
+                bootstrapURLKeys={{ key: GOOGLE_MAP_API }}
+              >
                 {
-                  this.state.markerLocation ?
-                  <Marker
-                    lat={this.state.markerLocation.coords.lat}
-                    lng={this.state.markerLocation.coords.lng}
-                  />
-                  : null
+                  markerLocation ?
+                    <Marker
+                      lat={markerLocation.coords.lat}
+                      lng={markerLocation.coords.lng}
+                    />
+                    : null
                 }
               </GoogleMapReact>
             </div>
-          </Col>  
+          </Col>
           <Col sm={6}>
             <div>
-              <h4 className='title'>
+              <h4 className="title">
                 <FormattedMessage
                   id={'Upcoming.location'}
                   defaultMessage={'Location'}
                 />
               </h4>
               <LocationPicker
-                location={this.state.markerLocation}
+                location={markerLocation}
                 onPlaceSelected={this.onPlaceSelected}
-                editMode={!this.state.inViewMode}
+                editMode={!inViewMode}
               />
             </div>
             <div>
-              <h4 className='title'>
+              <h4 className="title">
                 <FormattedMessage
                   id={'Upcoming.date'}
                   defaultMessage={'Date'}
                 />
               </h4>
               <TimePicker
-                time={this.state.happenedAt}
+                time={happenedAt}
                 onTimeSelected={this.onTimeSelected}
-                editMode={!this.state.inViewMode}
+                editMode={!inViewMode}
               />
             </div>
           </Col>
-        </Row>  
-        <Row className='responses'>
+        </Row>
+        <Row className="responses">
           <Col sm={7} >
-            <Button bsStyle='primary' onClick={this.onEditClick}>{this.state.inViewMode ? formatMessage(messages.edit) : formatMessage(messages.update)}
+            <Button bsStyle="primary" onClick={this.onEditClick}>{inViewMode ? formatMessage(messages.edit) : formatMessage(messages.update)}
             </Button>
           </Col>
           <Col sm={7} >
-            <Button bsStyle='primary' onClick={this.props.onChatClick}>
+            <Button bsStyle="primary" onClick={onChatClick}>
               <FormattedMessage
                 id={'Transaction.chat'}
                 defaultMessage={'Chat'}
@@ -243,22 +250,26 @@ class Upcoming extends React.Component {
               onConfirmation={this.onConfirmation}
               title={formatMessage(messages.didOccur)}
               buttonText={formatMessage(messages.markcomplete)}
-              cancelStyle='danger'
-              confirmStyle='primary'
-              buttonStyle='primary'
+              cancelStyle="danger"
+              confirmStyle="primary"
+              buttonStyle="primary"
             />
           </Col>
         </Row>
       </Grid>
-    )
+    );
   }
 }
 
 Upcoming.propTypes = {
   updateTransaction: PropTypes.func,
+  collapsed: PropTypes.bool,
   onTimeSelected: PropTypes.func,
   onChatClick: PropTypes.func,
   content: PropTypes.object,
+  intl: {
+    formatMessage: PropTypes.func,
+  }
 };
 
 Upcoming.defaultProps = {
@@ -270,4 +281,4 @@ Upcoming.defaultProps = {
   content: {},
 };
 
-export default connect(null, { updateTransaction, confirmTransaction } )(injectIntl(Upcoming))
+export default connect(null, { updateTransaction, confirmTransaction })(injectIntl(Upcoming));

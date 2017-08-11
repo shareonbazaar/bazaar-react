@@ -203,18 +203,14 @@ RequestButton.propTypes = {
   skillRequest: PropTypes.func,
   loggedInUser: PropTypes.object,
   user: PropTypes.object,
-  intl: {
-    formatMessage: PropTypes.func,
-  }
+  intl: PropTypes.object,
 };
 
 RequestButton.defaultProps = {
   skillRequest: () => {},
   loggedInUser: {},
   user: {},
-  intl: {
-    formatMessage: () => {},
-  },
+  intl: null,
 };
 
 function mapStateToProps(state) {
@@ -222,5 +218,12 @@ function mapStateToProps(state) {
     loggedInUser: state.auth.user,
   };
 }
+/*
+ connect
+ 1. mapStateToProps
 
+ 2. mapDispatchToProps
+
+ 3.
+ */
 export default connect(mapStateToProps, { skillRequest })(injectIntl(RequestButton));
