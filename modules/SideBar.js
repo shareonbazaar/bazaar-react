@@ -57,7 +57,7 @@ class SideBar extends React.Component {
           {isAuthenticated && <SideBarLink toLink="/settings/" imageSrc="/images/settings.png" text={formatMessage(messages.settings)} />}
           <SideBarLink toLink="/contact" imageSrc="/images/help.png" text={formatMessage(messages.contact)} />
           {!isAuthenticated && <SideBarLink toLink="/login" imageSrc="/images/logout.png" text={formatMessage(messages.login)} />}
-          {isAuthenticated && <SideBarLink onClick={requestLogout} toLink="/" imageSrc="/images/logout.png" text={formatMessage(messages.logout)} />}
+          {isAuthenticated && <SideBarLink onClick={this.props.requestLogout} toLink="/" imageSrc="/images/logout.png" text={formatMessage(messages.logout)} />}
         </ul>
       </div>
     );

@@ -1,11 +1,15 @@
 const dotenv = require('dotenv');
 const webpack = require('webpack');
+const path = require('path');
 dotenv.load({ path: '.env' });
 
 module.exports = {
-	entry: "./main.js",
+	entry: [
+    "webpack-hot-middleware/client",
+    "./main.js"
+  ],
 	output: {
-		path: 'public',
+		path: path.join(__dirname, 'public'),
 		filename: "bundle.js",
 		publicPath: '/'
 	},
@@ -16,6 +20,7 @@ module.exports = {
 			'GOOGLE_ID': JSON.stringify(process.env.GOOGLE_ID),
 		}),
 		new webpack.HotModuleReplacementPlugin(),
+    // new webpack.NoEmitOnErrorsPlugin(),
 	],
 	module: {
 		loaders: [

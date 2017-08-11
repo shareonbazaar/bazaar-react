@@ -6,13 +6,15 @@ import RequestButton from './RequestButton';
 
 //eslint-disable-next-line
 class UserCard extends React.Component {
-  static renderSkill(skill, i) {
+
+  renderSkill(skill, i) {
     return (
       <div key={i} className="skill-label">
         {skill.label.en}
       </div>
     );
   }
+
   render() {
     const { user, onBookmarkClicked, bookmarked } = this.props;
     const imageStyle = {

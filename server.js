@@ -6,6 +6,9 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
+const webpack = require('webpack');
+const webpackConfig = require('./webpack.config');
+const compiler = webpack(webpackConfig);
 
 // Use native promises
 mongoose.Promise = global.Promise;
@@ -66,6 +69,10 @@ app.use(upload.single('profilepic'));
 // serve our static stuff like index.css
 app.use(express.static(path.join(__dirname, 'public')))
 
+app.use(require("webpack-dev-middleware")(compiler, {
+    noInfo: true, publicPath: webpackConfig.output.publicPath
+}));
+app.use(require("webpack-hot-middleware")(compiler));
 // Initialize the sockets for sending and receiving messages
 messageController.initSockets(server);
 
