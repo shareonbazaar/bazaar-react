@@ -1,11 +1,12 @@
-import React from 'react'
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, FormGroup, FormControl, ControlLabel, Alert } from 'react-bootstrap';
-import { connect } from 'react-redux'
-import CircularImage from './CircularImage'
-import SkillsModal from './SkillsModal'
-import { updateProfile, clearProfileAlert } from '../utils/actions'
 import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
+import { Button, FormGroup, FormControl, ControlLabel, Alert } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import CircularImage from './CircularImage';
+import SkillsModal from './SkillsModal';
+import { updateProfile, clearProfileAlert } from '../utils/actions';
+
 
 const messages = defineMessages({
   male: {
@@ -80,6 +81,12 @@ function SkillLabel(props) {
   const { label } = props;
   return <div className="skill-label">{label}</div>;
 }
+SkillLabel.propTypes = {
+  label: PropTypes.string,
+};
+SkillLabel.defaultProps = {
+  label: '',
+};
 
 class EditProfile extends React.Component {
   constructor(props) {
@@ -146,42 +153,44 @@ class EditProfile extends React.Component {
     }
   }
 
-  onSubmit () {
-    const { state } = this;
-    let form = new FormData();
-    form.append('profile.name', state.name)
-    form.append('profile.gender', state.gender)
-    form.append('profile.hometown', state.hometown)
-    form.append('profile.location', state.location)
-    form.append('profile.status', state.status)
-    form.append('aboutMe', state.aboutMe)
+  onSubmit() {
+    const { name, gender, hometown, location, status, aboutMe, skills, interests, file } = this.state;
+    const form = new FormData();
+    form.append('profile.name', name);
+    form.append('profile.gender', gender);
+    form.append('profile.hometown', hometown);
+    form.append('profile.location', location);
+    form.append('profile.status', status);
+    form.append('aboutMe', aboutMe);
 
     // FormData won't let you send an empty array so we have to
     // fake it by sending an empty string and then checking for
     // that on client side
-    if (state.skills.length === 0) {
-      form.append('_skills', '')
+    if (skills.length === 0) {
+      form.append('_skills', '');
     } else {
-      state.skills.forEach(s => form.append('_skills', s._id))
+      skills.forEach(s => form.append('_skills', s._id));
     }
 
-    if (state.interests.length === 0) {
-      form.append('_interests', '')
+    if (interests.length === 0) {
+      form.append('_interests', '');
     } else {
-      state.interests.forEach(s => form.append('_interests', s._id))
+      interests.forEach(s => form.append('_interests', s._id));
     }
 
-    if (state.file) {
-      form.append('profilepic', state.file)
+    if (file) {
+      form.append('profilepic', file);
     }
-    this.props.updateProfile(form);
+    updateProfile(form);
   }
 
-  render () {
-    const { formatMessage } = this.props.intl;
+  render() {
+    const { name, gender, email, picture, hometown, location, status, aboutMe, skills, interests } = this.state;
+    const { response, intl } = this.props;
+    const { formatMessage } = intl;
     return (
-      <div className='content-page edit-profile-page'>
-        <div className='page-header'>
+      <div className="content-page edit-profile-page">
+        <div className="page-header">
           <h3>
             <FormattedMessage
               id={'EditProfile.title'}
@@ -190,22 +199,22 @@ class EditProfile extends React.Component {
           </h3>
         </div>
         <div>
-          {this.props.response &&
+          {response &&
             <Alert
-              bsStyle={`${this.props.response.type === 'error' ? 'danger' : 'success'}`}
-              onDismiss={this.props.clearProfileAlert}
+              bsStyle={`${response.type === 'error' ? 'danger' : 'success'}`}
+              onDismiss={clearProfileAlert}
             >
-              <p>{this.props.response.message}</p>
+              <p>{response.message}</p>
             </Alert>
           }
           <FormGroup>
-            <ControlLabel className='label-top'>
+            <ControlLabel className="label-top">
               <FormattedMessage
                 id={'EditProfile.pic'}
                 defaultMessage={'Profile picture'}
               />
             </ControlLabel>
-            <UploadPhoto className='user-activities' imageUrl={this.state.picture} onImageChange={this.onImageChange} />
+            <UploadPhoto className="user-activities" imageUrl={picture} onImageChange={this.onImageChange} />
           </FormGroup>
           <FormGroup>
             <ControlLabel>
@@ -214,16 +223,16 @@ class EditProfile extends React.Component {
                 defaultMessage={'Email'}
               />
             </ControlLabel>
-            <FormControl type="email" value={this.state.email} placeholder="Email" onChange={(e) => {this.onChange(e, 'email')}}/>
+            <FormControl type="email" value={email} placeholder="Email" onChange={(e) => { this.onChange(e, 'email'); }} />
           </FormGroup>
           <FormGroup>
             <ControlLabel>
               <FormattedMessage
-                  id={'EditProfile.name'}
+                id={'EditProfile.name'}
                 defaultMessage={'Name'}
               />
             </ControlLabel>
-            <FormControl type="name" value={this.state.name} placeholder="John Doe" onChange={(e) => {this.onChange(e, 'name')}}/>
+            <FormControl type="name" value={name} placeholder="John Doe" onChange={(e) => { this.onChange(e, 'name'); }} />
           </FormGroup>
           <FormGroup>
             <ControlLabel>
@@ -232,66 +241,78 @@ class EditProfile extends React.Component {
                 defaultMessage={'Gender'}
               />
             </ControlLabel>
-            <div className='radio-block'>
-                {
-                    [
-                      {name: 'male', label: formatMessage(messages.male)},
-                      {name: 'female', label: formatMessage(messages.female)},
-                      {name: 'other', label: formatMessage(messages.other)}
-                    ].map((props, i) => (
-                            <Radio
-                                key={i}
-                                selected={this.state.gender}
-                                name={props.name} 
-                                onClick={() => this.setState({gender: props.name})} 
-                                label={props.label} />
-                            ))
-                }
+            <div className="radio-block">
+              {
+                [
+                  { name: 'male', label: formatMessage(messages.male) },
+                  { name: 'female', label: formatMessage(messages.female) },
+                  { name: 'other', label: formatMessage(messages.other) }
+                ].map((props, i) => (
+                  <Radio
+                    key={i}
+                    selected={gender}
+                    name={props.name}
+                    onClick={() => this.setState({ gender: props.name })}
+                    label={props.label}
+                  />
+                ))
+              }
             </div>
           </FormGroup>
           <FormGroup>
             <ControlLabel>
-                <FormattedMessage
-                  id={'EditProfile.location'}
-                  defaultMessage={'Location'}
-                />
+              <FormattedMessage
+                id={'EditProfile.location'}
+                defaultMessage={'Location'}
+              />
             </ControlLabel>
-            <FormControl type="name" value={this.state.location} placeholder="Location" onChange={(e) => {this.onChange(e, 'location')}}/>
+            <FormControl
+              type="name"
+              value={location}
+              placeholder="Location"
+              onChange={(e) => { this.onChange(e, 'location'); }}
+            />
           </FormGroup>
           <FormGroup>
             <ControlLabel>
-                <FormattedMessage
-                  id={'EditProfile.hometown'}
-                  defaultMessage={'Hometown'}
-                />
+              <FormattedMessage
+                id={'EditProfile.hometown'}
+                defaultMessage={'Hometown'}
+              />
             </ControlLabel>
-            <FormControl type="name" value={this.state.hometown} placeholder="Hometown" onChange={(e) => {this.onChange(e, 'hometown')}}/>
+            <FormControl
+              type="name"
+              value={hometown}
+              placeholder="Hometown"
+              onChange={(e) => { this.onChange(e, 'hometown'); }}
+            />
           </FormGroup>
           <FormGroup>
             <ControlLabel>
-                <FormattedMessage
-                  id={'EditProfile.status'}
-                  defaultMessage={'Status'}
-                />
+              <FormattedMessage
+                id={'EditProfile.status'}
+                defaultMessage={'Status'}
+              />
             </ControlLabel>
-            <div className='radio-block'>
-                {
-                    [
-                        {name: 'local', label: formatMessage(messages.local)},
-                        {name: 'newcomer', label: formatMessage(messages.newcomer)}
-                    ].map((props, i) => (
-                      <Radio
-                        key={i}
-                        selected={this.state.status}
-                        name={props.name}
-                        onClick={() => this.setState({status: props.name})}
-                        label={props.label} />
-                      ))
-                }
+            <div className="radio-block">
+              {
+                [
+                  { name: 'local', label: formatMessage(messages.local) },
+                  { name: 'newcomer', label: formatMessage(messages.newcomer) }
+                ].map((props, i) => (
+                  <Radio
+                    key={i}
+                    selected={status}
+                    name={props.name}
+                    onClick={() => this.setState({ status: props.name })}
+                    label={props.label}
+                  />
+                ))
+              }
             </div>
           </FormGroup>
           <FormGroup>
-            <ControlLabel className='label-top'>
+            <ControlLabel className="label-top">
               <FormattedMessage
                 id={'EditProfile.aboutme'}
                 defaultMessage={'About Me'}
@@ -299,69 +320,66 @@ class EditProfile extends React.Component {
             </ControlLabel>
             <FormControl
               componentClass="textarea"
-              value={this.state.aboutMe}
+              value={aboutMe}
               placeholder="Enter text"
-              onChange={(e) => {this.onChange(e, 'aboutMe')}}
+              onChange={(e) => { this.onChange(e, 'aboutMe'); }}
             />
           </FormGroup>
           <FormGroup>
-            <ControlLabel className='label-top'>
+            <ControlLabel className="label-top">
               <FormattedMessage
                 id={'EditProfile.skills'}
                 defaultMessage={'Skills'}
               />
             </ControlLabel>
-            <div className='user-activities'>
+            <div className="user-activities">
               <ul>
                 {
-                  this.state.skills.map((skill, i) => {
-                    return (
-                      <SkillLabel
-                        key={skill._id}
-                        label={skill.label.en}
-                      />
-                    )
-                  })
+                  // skills.map((skill, i) => (
+                  skills.map(skill => (
+                    <SkillLabel key={skill._id} label={skill.label.en} />
+                  ))
                 }
               </ul>
-                <SkillsModal
-                  title="Skills"
-                  skills={this.state.skills.map(s => s._id)}
-                  onSkillClick={(skill) => {this.onArrayChange('skills', skill)}}
-                />
+              <SkillsModal
+                title="Skills"
+                skills={skills.map(s => s._id)}
+                onSkillClick={(skill) => { this.onArrayChange('skills', skill); }}
+              />
             </div>
           </FormGroup>
           <FormGroup>
-            <ControlLabel className='label-top'>
+            <ControlLabel className="label-top">
               <FormattedMessage
                 id={'EditProfile.interests'}
                 defaultMessage={'Interests'}
               />
             </ControlLabel>
-            <div className='user-activities'>
+            <div className="user-activities">
               <ul>
                 {
-                  this.state.interests.map((skill, i) => {
+                  // eslint-disable-next-line
+                  interests.map((skill, i) => {
                     return (
                       <SkillLabel
                         key={skill._id}
                         label={skill.label.en}
                       />
-                    )
+                    );
                   })
                 }
               </ul>
               <SkillsModal
                 title="Interests"
-                skills={this.state.interests.map(s => s._id)}
-                onSkillClick={(skill) => {this.onArrayChange('interests', skill)}}
+                skills={interests.map(s => s._id)}
+                onSkillClick={(skill) => { this.onArrayChange('interests', skill); }}
               />
             </div>
           </FormGroup>
           <hr />
           <FormGroup>
-            <div className='save-button'>
-              <Button onClick={this.onSubmit} bsStyle='primary'>
+            <div className="save-button">
+              <Button onClick={this.onSubmit} bsStyle="primary">
                 <FormattedMessage
                   id={'EditProfile.savechanges'}
                   defaultMessage={'Save changes'}
@@ -370,21 +388,31 @@ class EditProfile extends React.Component {
             </div>
           </FormGroup>
         </div>
-    </div>
-    )
+      </div>
+    );
   }
 }
 
-function mapStateToProps({auth}) {
+function mapStateToProps({ auth }) {
   return {
     loggedInUser: auth.user,
     response: auth.profileUpdateResponse
-  }
+  };
 }
 
 EditProfile.propTypes = {
   loggedInUser: PropTypes.object,
   submitChanges: PropTypes.func,
+  updateProfile: PropTypes.func,
+  response: PropTypes.string,
+  intl: PropTypes.object,
+};
+EditProfile.defaultProps = {
+  loggedInUser: null,
+  submitChanges: () => {},
+  updateProfile: () => {},
+  response: '',
+  intl: null,
 };
 
-export default connect(mapStateToProps, {updateProfile, clearProfileAlert})(injectIntl(EditProfile));
+export default connect(mapStateToProps, { updateProfile, clearProfileAlert })(injectIntl(EditProfile));

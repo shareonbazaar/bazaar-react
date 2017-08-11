@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export default function CircularImage(props) {
   const { imageUrl } = props;
@@ -8,3 +9,11 @@ export default function CircularImage(props) {
     </div>
   );
 }
+
+CircularImage.propTypes = {
+  imageUrl: PropTypes.string
+};
+
+CircularImage.defaultProps = {
+  imageUrl: ''
+};

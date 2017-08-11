@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import UserCard from './UserCard';
 import Masonry from 'react-masonry-component';
+import UserCard from './UserCard';
+
 
 const masonryOptions = {
   gutter: 20,
@@ -10,38 +11,38 @@ const masonryOptions = {
 };
 
 export default class CardGrid extends React.Component {
-
   componentWillMount() {
     this.props.loadUsers();
   }
 
-  toggleBookmark (id) {
-    let form = new FormData();
-    let bookmarks = this.props.loggedInUser.bookmarks.slice();
-    let index = bookmarks.indexOf(id);
+  toggleBookmark(id) {
+    const form = new FormData();
+    const bookmarks = this.props.loggedInUser.bookmarks.slice();
+    const index = bookmarks.indexOf(id);
     if (index < 0) {
       bookmarks.push(id);
     } else {
       bookmarks.splice(index, 1);
     }
     if (bookmarks.length === 0) {
-      form.append('bookmarks', '')
+      form.append('bookmarks', '');
     } else {
-      bookmarks.forEach(b => form.append('bookmarks', b))
+      bookmarks.forEach(b => form.append('bookmarks', b));
     }
 
     this.props.updateProfile(form);
   }
 
-  render () {
+  render() {
+    console.log('CARDGRID');
     const { users, isFetching, loggedInUser } = this.props;
     if (!users || isFetching) {
       return (<div>Loading...</div>);
     }
 
     return (
-      <div className='community-page'>
-        <Masonry className='user-list' options={masonryOptions}>
+      <div className="community-page">
+        <Masonry className="user-list" options={masonryOptions}>
           {users.map(user => (
             <UserCard
               onBookmarkClicked={() => this.toggleBookmark(user._id)}
@@ -53,7 +54,7 @@ export default class CardGrid extends React.Component {
           }
         </Masonry>
       </div>
-    )
+    );
   }
 }
 
@@ -63,6 +64,7 @@ CardGrid.propTypes = {
   loadUsers: PropTypes.func,
   loggedInUser: PropTypes.object,
   bookmarkCard: PropTypes.func,
+  updateProfile: PropTypes.func,
 };
 
 CardGrid.defaultProps = {
@@ -71,4 +73,5 @@ CardGrid.defaultProps = {
   loadUsers: () => {},
   loggedInUser: {},
   bookmarkCard: () => {},
+  updateProfile: () => {},
 };

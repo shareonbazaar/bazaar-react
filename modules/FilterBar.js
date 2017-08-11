@@ -1,10 +1,10 @@
 import React from 'react';
-import FilterItem from './FilterItem';
 import { FormattedMessage } from 'react-intl';
+import FilterItem from './FilterItem';
 
 // Potentially this component unnecessary and just stick all three in TransactionList
 const FilterBar = () => (
-  <div className='filter-bar'>
+  <div className="filter-bar">
     <FilterItem filter="PROPOSED">
       <FormattedMessage
         id={'FilterBar.proposed'}

@@ -1,6 +1,6 @@
-import { connect } from 'react-redux'
-import CardGrid from './CardGrid'
-import { loadUsers, updateProfile } from '../utils/actions'
+import { connect } from 'react-redux';
+import CardGrid from './CardGrid';
+import { loadUsers, updateProfile } from '../utils/actions';
 
 export const Bookmarks = connect(state =>
   ({
@@ -8,8 +8,8 @@ export const Bookmarks = connect(state =>
     isFetching: state.isFetching,
     loggedInUser: state.auth.user,
   }),
-  { loadUsers, updateProfile }
-)(CardGrid)
+{ loadUsers, updateProfile }
+)(CardGrid);
 
 export const Community = connect(state =>
   ({
@@ -17,5 +17,5 @@ export const Community = connect(state =>
     isFetching: state.isFetching,
     loggedInUser: state.auth.user,
   }),
-  { loadUsers, updateProfile }
-)(CardGrid)
+{ loadUsers, updateProfile }
+)(CardGrid);
