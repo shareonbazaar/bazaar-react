@@ -50,7 +50,7 @@ mongoose.connection.on('error', () => {
   process.exit(1);
 });
 
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 3002);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

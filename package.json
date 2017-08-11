@@ -50,6 +50,7 @@
     "react-google-login": "^2.8.1",
     "react-helmet": "^5.1.3",
     "react-intl": "^2.3.0",
+    "react-joyride": "^1.10.1",
     "react-masonry-component": "^5.0.3",
     "react-motion": "^0.4.7",
     "react-mt-svg-lines": "^0.6.0",

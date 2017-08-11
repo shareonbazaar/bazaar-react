@@ -3,6 +3,7 @@
 @import "_bootstrap-slider.min.css";
 @import "_react-datetime";
 @import 'react-select-plus/dist/react-select-plus.css';
+@import 'react-joyride/lib/react-joyride-compiled.css';
 @import "_variables";
 
 @font-face { font-family: 'Avenir';
