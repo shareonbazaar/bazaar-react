@@ -5,13 +5,14 @@ import { StatusType } from '../models/Enums';
 
 import { setVisibilityFilter } from '../utils/actions';
 
+//eslint-disable-next-line
 class FilterItem extends React.Component {
   render() {
     const { filter, active, children } = this.props;
     const exchangeType = 'exchange-type';
     return (
       <div
-        onClick={() => this.props.setVisibilityFilter(filter)}
+        onClick={() => setVisibilityFilter(filter)}
         className={exchangeType + (active ? ' selected' : '')}
       >
         {children}

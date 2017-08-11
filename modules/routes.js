@@ -1,4 +1,6 @@
 import React from 'react';
+import { Route, IndexRoute } from 'react-router';
+
 import App from './App';
 import { Community, Bookmarks } from './CommunityContainer';
 import Splash from './Splash';
@@ -8,7 +10,7 @@ import EditProfile from './EditProfile';
 import Contact from './Contact';
 import Settings from './Settings';
 import { Login, Signup, Forgot } from './Authentication';
-import { Route, IndexRoute } from 'react-router';
+
 
 export default (store) => {
   // validate authentication for private routes

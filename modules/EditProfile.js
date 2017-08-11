@@ -181,7 +181,7 @@ class EditProfile extends React.Component {
     if (file) {
       form.append('profilepic', file);
     }
-    updateProfile(form);
+    this.props.updateProfile(form);
   }
 
   render() {

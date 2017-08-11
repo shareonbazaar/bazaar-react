@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import Select from 'react-select-plus';
 import ReactBootstrapSlider from 'react-bootstrap-slider';
 import { connect } from 'react-redux';
-import { Button, Grid, Col, Row } from 'react-bootstrap';
-import { push } from 'react-router-redux';
+// import { Button, Grid, Col, Row } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
+// import { push } from 'react-router-redux';
 import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
 
 import { RequestType } from '../models/Enums';
@@ -49,7 +50,8 @@ class QueryBox extends React.Component {
   }
 
   getOptions(input) {
-    const { formatMessage } = this.props.intl;
+    const { loggedInUser, intl } = this.props;
+    const { formatMessage } = intl;
     const inputL = input.toLowerCase();
     return fetch('/api/categories')
       .then(response => response.json())
@@ -60,7 +62,7 @@ class QueryBox extends React.Component {
           options: [
             {
               label: formatMessage(messages.yourinterests),
-              options: this.props.loggedInUser._skills
+              options: loggedInUser._skills
                 .filter(s => s.label.en.toLowerCase().indexOf(inputL) >= 0)
                 .map(s => ({ label: s.label.en, value: s._id }))
             },
@@ -80,9 +82,10 @@ class QueryBox extends React.Component {
 
   render() {
     const { formatMessage } = this.props.intl;
+    const { queryBoxOpen, request_type, sliderValue, selectValue } = this.state;
     return (
       <div className="query-box">
-        <div className={`filter-options ${this.state.queryBoxOpen ? 'toggled' : ''}`}>
+        <div className={`filter-options ${queryBoxOpen ? 'toggled' : ''}`}>
           {
             [
               {
@@ -99,7 +102,8 @@ class QueryBox extends React.Component {
               }
             // eslint-disable-next-line
             ].map(obj => {
-              const klass = `service-type ${this.state.request_type === obj.request_type ? 'selected' : ''}`;
+              // eslint-disable-next-line
+              const klass = `service-type ${request_type === obj.request_type ? 'selected' : ''}`;
               return (
                 <div
                   key={obj.request_type}
@@ -116,7 +120,7 @@ class QueryBox extends React.Component {
               defaultMessage={'Distance'}
             />
             <ReactBootstrapSlider
-              value={this.state.sliderValue}
+              value={sliderValue}
               change={v => this.setState({ sliderValue: v })}
               slideStop={v => this.setState({ sliderValue: v })}
               step={2}
@@ -124,6 +128,7 @@ class QueryBox extends React.Component {
               min={2}
             />
           </div>
+
           <div className="button-wrapper">
             <Button onClick={() => this.setState({ queryBoxOpen: false })} bsStyle="primary">
               <FormattedMessage
@@ -133,13 +138,13 @@ class QueryBox extends React.Component {
             </Button>
             <Button
               onClick={() => {
-                if (this.state.selectValue.length === 0) {
+                if (selectValue.length === 0) {
                   return;
                 }
                 this.props.loadUsers({
                   // distance: state.sliderValue, // NEED long, lat
-                  request_type: this.state.request_type,
-                  skills: this.state.selectValue.map(s => s.value)
+                  request_type,
+                  skills: selectValue.map(s => s.value)
                 });
               }}
               bsStyle="primary"
@@ -161,7 +166,7 @@ class QueryBox extends React.Component {
           name="skill-select"
           multi
           loadOptions={this.getOptions}
-          value={this.state.selectValue}
+          value={selectValue}
           placeholder={formatMessage(messages.search)}
           onChange={v => this.setState({ selectValue: v })}
           onFocus={() => { this.setState({ queryBoxOpen: true }); return true; }}
@@ -174,12 +179,14 @@ QueryBox.propTypes = {
   loggedInUser: PropTypes.object,
   loadUsers: PropTypes.func,
   getSurprise: PropTypes.func,
+  intl: PropTypes.object,
 };
 
 QueryBox.defaultProps = {
   loggedInUser: {},
   loadUsers: () => {},
   getSurprise: () => {},
+  intl: null,
 };
 
 //eslint-disable-next-line

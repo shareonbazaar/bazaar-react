@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { Helmet } from "react-helmet";
+import { Helmet } from 'react-helmet';
 import { push } from 'react-router-redux';
 import { Button, Grid, Col, Row, ControlLabel, FormGroup, FormControl, Alert } from 'react-bootstrap';
 import GoogleLogin from 'react-google-login';
@@ -11,9 +11,9 @@ import validator from 'email-validator';
 import { FormattedMessage } from 'react-intl';
 
 import { loginUser, forgotPasswordRequest, clearForgotEmail } from '../utils/actions';
+/* global FACEBOOK_ID: true GOOGLE_ID: true */
 
-
-function SocialMediaLogin (props) {
+function SocialMediaLogin(props) {
   return (
     <FormGroup>
       <div className={props.className}>
@@ -23,7 +23,7 @@ function SocialMediaLogin (props) {
           fields="name,email,picture"
           callback={props.responseFacebook}
           icon="fa-facebook"
-          cssClass='social-media-buttons facebook-login'
+          cssClass="social-media-buttons facebook-login"
         >
           <FormattedMessage
             id={'Signup.loginwithFacebook'}
@@ -35,10 +35,10 @@ function SocialMediaLogin (props) {
           buttonText="Login with Google"
           onSuccess={props.responseGoogle}
           onFailure={props.responseGoogle}
-          fetchBasicProfile={true}
-          className='social-media-buttons google-login'
+          fetchBasicProfile
+          className="social-media-buttons google-login"
         >
-          <i className='fa fa-google'></i>
+          <i className="fa fa-google" />
           <span>
             <FormattedMessage
               id={'Signup.loginwithGoogle'}
@@ -48,7 +48,7 @@ function SocialMediaLogin (props) {
         </GoogleLogin>
       </div>
     </FormGroup>
-  )
+  );
 }
 
 
@@ -121,24 +121,24 @@ Authentic
           }
         });
       }
-    }
+    };
 
     return (
-      <div className='content-page signup-page'>
-        <div className='page-header'>
+      <div className="content-page signup-page">
+        <div className="page-header">
           <h3>
             <FormattedMessage
-                id={'Signup.signup'}
-                defaultMessage={'Sign up'}
+              id={'Signup.signup'}
+              defaultMessage={'Sign up'}
             />
           </h3>
         </div>
 
-        <Grid fluid={true}>
+        <Grid fluid>
           <Row>
             <Col md={7}>
               {this.props.response &&
-                <Alert bsStyle='danger'>
+                <Alert bsStyle="danger">
                   <p>{this.props.response.message}</p>
                 </Alert>
               }
@@ -155,7 +155,7 @@ Authentic
                   type="text"
                   value={this.state.firstName}
                   placeholder="John"
-                  onChange={(e) => {this.onChange(e, 'firstName')}}
+                  onChange={(e) => { this.onChange(e, 'firstName'); }}
                 />
               </FormGroup>
               <FormGroup
@@ -171,7 +171,7 @@ Authentic
                   type="text"
                   value={this.state.lastName}
                   placeholder="Doe"
-                  onChange={(e) => {this.onChange(e, 'lastName')}}
+                  onChange={(e) => { this.onChange(e, 'lastName'); }}
                 />
               </FormGroup>
               <FormGroup
@@ -187,7 +187,7 @@ Authentic
                   type="email"
                   value={this.state.emailText}
                   placeholder="Email"
-                  onChange={(e) => {this.onChange(e, 'emailText')}}
+                  onChange={(e) => { this.onChange(e, 'emailText'); }}
                 />
               </FormGroup>
               <FormGroup>
@@ -201,7 +201,7 @@ Authentic
                   type="password"
                   value={this.state.password}
                   placeholder="Password"
-                  onChange={(e) => {this.onChange(e, 'password')}}
+                  onChange={(e) => { this.onChange(e, 'password'); }}
                 />
               </FormGroup>
               <FormGroup
@@ -217,15 +217,16 @@ Authentic
                   type="password"
                   value={this.state.confirmPassword}
                   placeholder="Password"
-                  onChange={(e) => {this.onChange(e, 'confirmPassword')}}
+                  onChange={(e) => { this.onChange(e, 'confirmPassword'); }}
                 />
               </FormGroup>
               <FormGroup>
-                <div className='form-offset'>
+                <div className="form-offset">
                   <Button
-                    className='login-button'
-                    bsStyle='primary'
-                    onClick={onSignupClicked}>
+                    className="login-button"
+                    bsStyle="primary"
+                    onClick={onSignupClicked}
+                  >
                     <FormattedMessage
                       id={'Signup.signup'}
                       defaultMessage={'Sign up'}
@@ -234,14 +235,14 @@ Authentic
                 </div>
               </FormGroup>
               <FormGroup>
-                <div className='form-offset'>
+                <div className="form-offset">
                   <FormattedMessage
                     id={'Signup.alreadyhaveaccount'}
                     defaultMessage={'Already have an account?'}
                   />
                   <Link
-                    className='sign-up-link'
-                    to='/login'
+                    className="sign-up-link"
+                    to="/login"
                   >
                     <FormattedMessage
                       id={'Signup.login'}
@@ -269,11 +270,11 @@ class Login extends Signup {
     const response = this.props.response;
     const { emailText, password } = this.state;
     return (
-      <div className='content-page login-page'>
+      <div className="content-page login-page">
         <Helmet>
           <title>Login</title>
         </Helmet>
-        <div className='page-header'><h3>Login</h3></div>
+        <div className="page-header"><h3>Login</h3></div>
         <div>
           {response &&
             <Alert bsStyle="danger">
@@ -291,7 +292,8 @@ class Login extends Signup {
               type="email"
               value={emailText}
               placeholder="Email"
-              onChange={(e) => {this.onChange(e, 'emailText')}}/>
+              onChange={(e) => { this.onChange(e, 'emailText'); }}
+            />
           </FormGroup>
           <FormGroup>
             <ControlLabel>
@@ -304,7 +306,8 @@ class Login extends Signup {
               type="password"
               value={password}
               placeholder="Password"
-              onChange={(e) => {this.onChange(e, 'password')}}/>
+              onChange={(e) => { this.onChange(e, 'password'); }}
+            />
           </FormGroup>
           <FormGroup>
             <div className="form-offset">
@@ -317,15 +320,16 @@ class Login extends Signup {
                     email: this.state.emailText,
                     password: this.state.password,
                   }
-                })}>
+                })}
+              >
                 <FormattedMessage
                   id={'Signup.login'}
                   defaultMessage={'Login'}
                 />
               </Button>
               <Link
-                className='forgot-link'
-                to='/forgot'
+                className="forgot-link"
+                to="/forgot"
               >
                 <FormattedMessage
                   id={'Signup.forgotpassword'}
@@ -335,15 +339,15 @@ class Login extends Signup {
             </div>
           </FormGroup>
           <FormGroup>
-            <div className='form-offset'>
+            <div className="form-offset">
               <FormattedMessage
                 id={'Signup.noaccount'}
                 defaultMessage={"Don't have an account?"}
               />
-              <Link className='sign-up-link' to='/signup'>
+              <Link className="sign-up-link" to="/signup">
                 <FormattedMessage
                   id={'Signup.signup'}
-                  defaultMessage={"Sign up"}
+                  defaultMessage={'Sign up'}
                 />
               </Link>
             </div>
@@ -361,29 +365,29 @@ class Login extends Signup {
 
 
 class Forgot extends Signup {
-  componentDidMount () {
+  componentDidMount() {
     if (this.props.params.id) {
       this.props.loginUser({
         endpoint: '/api/resetPassword',
         data: {
           resetToken: this.props.params.id,
         }
-      })
+      });
     }
   }
 
-  componentWillReceiveProps (newProps) {
+  componentWillReceiveProps(newProps) {
     if (newProps.isAuthenticated) {
       this.props.push('/settings');
     }
   }
 
-  render () {
+  render() {
     if (this.props.params.id) {
       return (
-        <div className='content-page forgot-page'>
+        <div className="content-page forgot-page">
           {this.props.response ?
-            <Alert bsStyle='danger'>
+            <Alert bsStyle="danger">
               <p>{this.props.response.message}</p>
             </Alert>
             :
@@ -395,81 +399,82 @@ class Forgot extends Signup {
             </div>
           }
         </div>
-      )
+      );
     }
     return (
-      <div className='content-page forgot-page'>
-        <div className='page-header'>
+      <div className="content-page forgot-page">
+        <div className="page-header">
           <h3>
             <FormattedMessage
               id={'Forgot.forgotpassword'}
-              defaultMessage={"Forgot Password"}
+              defaultMessage={'Forgot Password'}
             />
           </h3>
         </div>
         {
           this.props.forgotEmail ?
 
-          <div>
-            <p>
-              <FormattedMessage
-                id={'Forgot.sendreset'}
-                defaultMessage={`If there is an account associated with {forgotEmail}, an email will be sent to that account with instructions on how to reset password`}
-                values={{forgotEmail: this.props.forgotEmail}}
-              />
-            </p>
-            <a onClick={this.props.clearForgotEmail}>
-              <FormattedMessage
-                id={'Forgot.resetanother'}
-                defaultMessage={"Reset a different account"}
-              />
-            </a>
-          </div>
-
-          :
-          (
             <div>
-              <FormGroup>
-                <ControlLabel>
-                  <FormattedMessage
-                    id={'Signup.email'}
-                    defaultMessage={"Email"}
-                  />
-                </ControlLabel>
-                <FormControl
-                  type="email"
-                  value={this.state.emailText}
-                  placeholder="Email"
-                  onChange={(e) => {this.onChange(e, 'emailText')}}
+              <p>
+                <FormattedMessage
+                  id={'Forgot.sendreset'}
+                  defaultMessage={'If there is an account associated with {forgotEmail}, an email will be sent to that account with instructions on how to reset password'}
+                  values={{ forgotEmail: this.props.forgotEmail }}
                 />
-              </FormGroup>
-              <FormGroup>
-                <div className='form-offset'>
-                  <Button
-                    className='login-button'
-                    bsStyle='primary'
-                    onClick={() => this.props.forgotPasswordRequest(this.state.emailText)}>
-                    <FormattedMessage
-                      id={'Forgot.reset'}
-                      defaultMessage={"Reset"}
-                    />
-                  </Button>
-                </div>
-              </FormGroup>
+              </p>
+              <a onClick={this.props.clearForgotEmail}>
+                <FormattedMessage
+                  id={'Forgot.resetanother'}
+                  defaultMessage={'Reset a different account'}
+                />
+              </a>
             </div>
-          )
+
+            :
+            (
+              <div>
+                <FormGroup>
+                  <ControlLabel>
+                    <FormattedMessage
+                      id={'Signup.email'}
+                      defaultMessage={'Email'}
+                    />
+                  </ControlLabel>
+                  <FormControl
+                    type="email"
+                    value={this.state.emailText}
+                    placeholder="Email"
+                    onChange={(e) => { this.onChange(e, 'emailText'); }}
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <div className="form-offset">
+                    <Button
+                      className="login-button"
+                      bsStyle="primary"
+                      onClick={() => this.props.forgotPasswordRequest(this.state.emailText)}
+                    >
+                      <FormattedMessage
+                        id={'Forgot.reset'}
+                        defaultMessage={'Reset'}
+                      />
+                    </Button>
+                  </div>
+                </FormGroup>
+              </div>
+            )
         }
       </div>
-    )
+    );
   }
 }
 
-function mapStateToProps ({ auth }) {
+function mapStateToProps({ auth }) {
   return {
     isAuthenticated: auth.isAuthenticated,
     response: auth.loginResponse,
     forgotEmail: auth.forgotEmail,
-  }
+  };
 }
 
 SocialMediaLogin.defaultProps = {
@@ -503,4 +508,4 @@ Signup.propTypes = {
 
 exports.Signup = connect(mapStateToProps, { loginUser, push })(Signup);
 exports.Login = connect(mapStateToProps, { loginUser, push })(Login);
-exports.Forgot = connect(mapStateToProps, { forgotPasswordRequest, clearForgotEmail, loginUser, push })(Forgot)
+exports.Forgot = connect(mapStateToProps, { forgotPasswordRequest, clearForgotEmail, loginUser, push })(Forgot);

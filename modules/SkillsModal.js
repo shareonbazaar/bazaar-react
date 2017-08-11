@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, Modal } from 'react-bootstrap';
-
-import { loadCategories } from '../utils/actions'
 import { FormattedMessage } from 'react-intl';
+
+import { loadCategories } from '../utils/actions';
 
 
 class SkillsModal extends React.Component {
@@ -16,48 +16,52 @@ class SkillsModal extends React.Component {
   }
 
   componentDidMount() {
-    this.props.loadCategories();
+    loadCategories();
   }
 
   render() {
-    const { categories, skills, title } = this.props;
+    const { categories, skills, title, onSkillClick } = this.props;
+    const { showModal } = this.state;
     return (
       <div>
-        <Modal show={this.state.showModal} onHide={() => this.setState({showModal: false})}>
+        <Modal show={showModal} onHide={() => this.setState({ showModal: false })}>
           <Modal.Header closeButton>
             <Modal.Title>
               <FormattedMessage
                 id={'SkillsModal.title'}
                 defaultMessage={'Select {title}'}
-                values={{title: this.props.title}}
+                values={{ title }}
               />
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div>
               {
-                this.props.categories.map((cat) => {
+                // eslint-disable-next-line
+                categories.map((cat) => {
                   return (
-                    <div className='skill-select' key={cat._id}>
+                    <div className="skill-select" key={cat._id}>
                       <h4>{cat.label.en}</h4>
-                      {cat._skills.map((skill) => {
-                        return (
-                          <div 
-                            key={skill._id}
-                            onClick={() => this.props.onSkillClick(skill)}
-                            className={`skill-label ${this.props.skills.indexOf(skill._id) >= 0 ? 'selected' : ''}`}>
-                            {skill.label.en}
-                          </div>
-                        )
-                      })}
+                      { // eslint-disable-next-line
+                        cat._skills.map((skill) => {
+                          return (
+                            <div
+                              key={skill._id}
+                              onClick={() => onSkillClick(skill)}
+                              className={`skill-label ${skills.indexOf(skill._id) >= 0 ? 'selected' : ''}`}
+                            >
+                              {skill.label.en}
+                            </div>
+                          );
+                        })}
                     </div>
-                  )
+                  );
                 })
               }
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button bsStyle='primary' onClick={() => this.setState({showModal: false})}>
+            <Button bsStyle="primary" onClick={() => this.setState({ showModal: false })}>
               <FormattedMessage
                 id={'SkillsModal.done'}
                 defaultMessage={'Done'}
@@ -65,17 +69,18 @@ class SkillsModal extends React.Component {
             </Button>
           </Modal.Footer>
         </Modal>
-        <Button 
-          onClick={() => this.setState({showModal: true})}
-          bsStyle="primary">
-            <FormattedMessage
-              id={'SkillsModal.edit'}
-              defaultMessage={'Edit {title}'}
-              values={{title: this.props.title}}
-            />
+        <Button
+          onClick={() => this.setState({ showModal: true })}
+          bsStyle="primary"
+        >
+          <FormattedMessage
+            id={'SkillsModal.edit'}
+            defaultMessage={'Edit {title}'}
+            values={{ title }}
+          />
         </Button>
       </div>
-    )
+    );
   }
 }
 

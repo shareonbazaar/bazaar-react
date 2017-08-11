@@ -64,40 +64,40 @@ class Chat extends React.Component {
     );
   }
 
-  render () {
+  render() {
     const { onBack } = this.props;
-    const { messages, textValue } = this.state;
+    const { messages } = this.state;
 
     return (
-      <div className='messaging'>
-        <div className='conversation'>
+      <div className="messaging">
+        <div className="conversation">
           {messages.map((data, i) => this.renderMessage(data, i))}
         </div>
         <textarea
-          onChange={(e) => {this.setState({textValue: e.target.value})}}
+          onChange={(e) => { this.setState({ textValue: e.target.value }); }}
           value={this.state.textValue}
-          placeholder='Write message'
-          rows='4'
-          className='messageInput'>
-        </textarea>
+          placeholder="Write message"
+          rows="4"
+          className="messageInput"
+        />
         <Button onClick={onBack}>
           <FormattedMessage
             id={'Chat.back'}
-            defaultMessage={"Back"}
+            defaultMessage={'Back'}
           />
         </Button>
         <Button
-          bsStyle='primary'
-          className='sendButton'
+          bsStyle="primary"
+          className="sendButton"
           onClick={this.onSendMessage}
         >
           <FormattedMessage
             id={'Chat.send'}
-            defaultMessage={"Send Message"}
+            defaultMessage={'Send Message'}
           />
         </Button>
       </div>
-    )
+    );
   }
 }
 
