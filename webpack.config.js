@@ -1,14 +1,21 @@
 const dotenv = require('dotenv');
 const webpack = require('webpack');
+const path = require('path');
+
 dotenv.load({ path: '.env' });
 module.exports = {
-	entry: "./main.js",
+	entry: [
+		"webpack-dev-server/client?http://0.0.0.0:8080",
+		"webpack/hot/only-dev-server",
+		"./main.js",
+	],
 	output: {
-		path: 'public',
+		path: path.join(__dirname, 'public'),
 		filename: "bundle.js",
 		publicPath: '/'
 	},
 	plugins: [
+		new webpack.HotModuleReplacementPlugin(),
 		new webpack.DefinePlugin({
 			'GOOGLE_MAP_API': JSON.stringify(process.env.GOOGLE_MAP_API),
 			'FACEBOOK_ID': JSON.stringify(process.env.FACEBOOK_ID),
