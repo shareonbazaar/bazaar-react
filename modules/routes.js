@@ -1,15 +1,15 @@
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 
-import App from './App';
-import { Community, Bookmarks } from './CommunityContainer';
-import Splash from './Splash';
-import VisibleTransactionList from './VisibleTransactionList';
-import Profile from './Profile';
-import EditProfile from './EditProfile';
-import Contact from './Contact';
-import Settings from './Settings';
-import { Login, Signup, Forgot } from './Authentication';
+import App from './App/App';
+import { Community, Bookmarks } from './CommunityContainer/CommunityContainer';
+import Splash from './Splash/Splash';
+import VisibleTransactionList from './VisibleTransactionList/VisibleTransactionList';
+import Profile from './Profile/Profile';
+import EditProfile from './EditProfile/EditProfile';
+import Contact from './Contact/Contact';
+import Settings from './Settings/Settings';
+import { Login, Signup, Forgot } from './Authentication/Authentication';
 
 
 export default (store) => {
