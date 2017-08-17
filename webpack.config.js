@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const path = require('path');
 
 dotenv.load({ path: '.env' });
+
 module.exports = {
 	entry: [
 		"webpack-dev-server/client?http://0.0.0.0:8080",
@@ -20,7 +21,9 @@ module.exports = {
 			'GOOGLE_MAP_API': JSON.stringify(process.env.GOOGLE_MAP_API),
 			'FACEBOOK_ID': JSON.stringify(process.env.FACEBOOK_ID),
 			'GOOGLE_ID': JSON.stringify(process.env.GOOGLE_ID),
-		})
+		}),
+		new webpack.HotModuleReplacementPlugin(),
+    // new webpack.NoEmitOnErrorsPlugin(),
 	],
 	module: {
 		loaders: [
