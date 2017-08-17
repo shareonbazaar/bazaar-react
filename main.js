@@ -43,17 +43,30 @@ const store = createStore(
     )
 )
 
+if (module.hot) {
+  module.hot.accept();
+}
+
+class Root extends React.Component {
+    render () {
+        const { store, history } = this.props;
+        return (
+            <IntlProvider locale={language} messages={messages}>
+                <Provider store={store}>
+                    <Router routes={routes(store)} history={history}>
+                    </Router>
+                </Provider>
+            </IntlProvider>
+        )
+    }
+}
+
 // Delay render until state has loaded from localStorage
 persistStore(store, {blacklist: ['routing']}, () => {
     const history = syncHistoryWithStore(browserHistory, store);
 
     render((
-        <IntlProvider locale={language} messages={messages}>
-            <Provider store={store}>
-                <Router routes={routes(store)} history={history}>
-                </Router>
-            </Provider>
-        </IntlProvider>
+        <Root store={store} history={history} />
         ), document.getElementById('root'));
 })
 

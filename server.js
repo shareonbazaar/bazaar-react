@@ -7,8 +7,10 @@ const passport = require('passport');
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
 const webpack = require('webpack');
-const webpackConfig = require('./webpack.config');
-const compiler = webpack(webpackConfig);
+
+
+const WebpackDevServer = require('webpack-dev-server');
+const config = require('./webpack.config');
 
 // Use native promises
 mongoose.Promise = global.Promise;
@@ -64,7 +66,23 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage })
 app.use(upload.single('profilepic'));
 
-
+if (app.get('env') === 'development') {
+  new WebpackDevServer(webpack(config), {
+    publicPath: config.output.publicPath,
+    path: config.output.path,
+    hot: true,
+    historyApiFallback: true,
+    proxy: {
+      "*": "http://localhost:3000",
+    }
+  }).listen(8080, 'localhost', (err, result) => {
+    if (err) {
+      return console.log(err);
+    }
+    console.log("WebpackDevServer listening on port 8080. Open browser at:");
+    console.log("http://localhost:8080");
+  });
+}
 
 // serve our static stuff like index.css
 app.use(express.static(path.join(__dirname, 'public')))
