@@ -1,0 +1,68 @@
+{
+    "Household work": [
+        "Gardening",
+        "Babysitting",
+        "Cooking",
+        "House Keeping",
+        "Elderly Care",
+        "Dog Sitting"
+    ],
+    "Languages": [
+        "Arabic",
+        "Persian",
+        "French",
+        "Spanish",
+        "Portuguese",
+        "Turkish",
+        "German",
+        "English"
+    ],
+    "Computer Skills": [
+        "Programming",
+        "Web Design",
+        "Graphic Design",
+        "IT Support"
+    ],
+    "Music": [
+        "Singing Lessons",
+        "Other Musical Instruments",
+        "Guitar",
+        "Piano",
+        "Drums"
+    ],
+    "Arts and Crafts": [
+        "Photography",
+        "Filming",
+        "Textile Work",
+        "Crafting",
+        "Woodwork",
+        "Jewelry Design",
+        "Painting",
+        "Carpentry"
+    ],
+    "Sports": [
+        "Dancing",
+        "Boxing",
+        "Martial Arts",
+        "Football",
+        "Tennis",
+        "Table Tennis",
+        "Volleyball",
+        "Golf"
+    ],
+    "Board Games": [
+        "Chess",
+        "Backgammon",
+        "Bowling",
+        "Billard",
+        "Other Board Games"
+    ],
+    "Repair Services": [
+        "Fixing Bikes",
+        "Fixing Cars",
+        "Fixing Electric Devices",
+        "House Painting",
+        "Sewing",
+        "Fixing Furniture"
+    ]
+}
