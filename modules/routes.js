@@ -9,8 +9,8 @@ import Profile from './Profile/Profile';
 import EditProfile from './EditProfile/EditProfile';
 import Contact from './Contact/Contact';
 import Settings from './Settings/Settings';
-import { Login, Signup, Forgot } from './Authentication/Authentication';
-
+import { Login, Forgot } from './Authentication/Authentication';
+import Signup from './Authentication/Signup';
 
 export default (store) => {
   // validate authentication for private routes

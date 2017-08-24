@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for modules/SideBar/SideBar.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">All files</a> / <a href="index.html">modules/SideBar</a> SideBar.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">42.86% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>3/7</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/16</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/3</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">42.86% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>3/7</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
+import PropTypes from 'prop-types';
+import { defineMessages, injectIntl } from 'react-intl';
+&nbsp;
+import { connect } from 'react-redux';
+import SideBarLink from '../SideBarLink/SideBarLink';
+import { requestLogout } from '../../utils/actions';
+&nbsp;
+&nbsp;
+const messages = defineMessages({
+  bookmarks: {
+    id: 'SideBar.bookmarks',
+    defaultMessage: 'Bookmarks',
+  },
+  profile: {
+    id: 'SideBar.profile',
+    defaultMessage: 'Profile',
+  },
+  settings: {
+    id: 'SideBar.settings',
+    defaultMessage: 'Settings',
+  },
+  contact: {
+    id: 'SideBar.contact',
+    defaultMessage: 'Contact',
+  },
+  login: {
+    id: 'SideBar.login',
+    defaultMessage: 'Login',
+  },
+  logout: {
+    id: 'SideBar.logout',
+    defaultMessage: 'Logout',
+  },
+});
+&nbsp;
+&nbsp;
+//eslint-disable-next-line
+class SideBar extends React.Component {
+<span class="fstat-no" title="function not covered" >  re</span>nder() {
+    const { user, isAuthenticated, toggled } = <span class="cstat-no" title="statement not covered" >this.props;</span>
+    const { formatMessage } = <span class="cstat-no" title="statement not covered" >this.props.intl;</span>
+<span class="cstat-no" title="statement not covered" >    return (</span>
+      &lt;div className={`sidebar-wrapper ${toggled ? 'toggled' : ''}`}&gt;
+        &lt;ul className="sidebar-nav"&gt;
+          {
+            isAuthenticated &amp;&amp;
+            &lt;SideBarLink
+              badgeNum={user.unreadTransactions.length &gt; 0 ? user.unreadTransactions.length : null}
+              toLink="/transactions"
+              imageSrc="/images/chat.png"
+              text={'Wallet'}
+            /&gt;
+          }
+          {isAuthenticated &amp;&amp; &lt;SideBarLink toLink="/bookmarks" imageSrc="/images/bookmark_icon.png" text={formatMessage(messages.bookmarks)} /&gt;}
+          {isAuthenticated &amp;&amp; &lt;SideBarLink toLink={`/profile/${user._id}`} imageSrc="/images/profile.png" text={formatMessage(messages.profile)} /&gt;}
+          {isAuthenticated &amp;&amp; &lt;SideBarLink toLink="/settings/" imageSrc="/images/settings.png" text={formatMessage(messages.settings)} /&gt;}
+          &lt;SideBarLink toLink="/contact" imageSrc="/images/help.png" text={formatMessage(messages.contact)} /&gt;
+          {!isAuthenticated &amp;&amp; &lt;SideBarLink toLink="/login" imageSrc="/images/logout.png" text={formatMessage(messages.login)} /&gt;}
+          {isAuthenticated &amp;&amp; &lt;SideBarLink onClick={this.props.requestLogout} toLink="/" imageSrc="/images/logout.png" text={formatMessage(messages.logout)} /&gt;}
+        &lt;/ul&gt;
+      &lt;/div&gt;
+    );
+  }
+}
+SideBar.propTypes = {
+  isAuthenticated: PropTypes.bool,
+  user: PropTypes.object,
+  requestLogout: PropTypes.func,
+  toggled: PropTypes.bool,
+  intl: PropTypes.object,
+};
+&nbsp;
+SideBar.defaultProps = {
+  isAuthenticated: false,
+  user: null,
+  requestLogout: <span class="fstat-no" title="function not covered" >()</span> =&gt; {},
+  toggled: false,
+  intl: null,
+};
+&nbsp;
+function <span class="fstat-no" title="function not covered" >mapStateToProps(</span>{ auth }) {
+<span class="cstat-no" title="statement not covered" >  return {</span>
+    user: auth.user,
+    isAuthenticated: auth.isAuthenticated,
+  };
+}
+&nbsp;
+export default connect(mapStateToProps, { requestLogout })(injectIntl(SideBar));
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Tue Aug 22 2017 16:35:58 GMT+0200 (CEST)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>
