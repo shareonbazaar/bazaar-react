@@ -102,7 +102,7 @@ Authentic
   }
 
   render() {
-    const { firstName, lastName, emailText, password, confirmPassword } = this.state;
+    const { firstName, lastName, emailText, password, confirmPassword, hasClickedSignup } = this.state;
     const firstNameValid = firstName.length > 0;
     const lastNameValid = lastName.length > 0;
     const emailValid = validator.validate(emailText);
@@ -143,7 +143,7 @@ Authentic
                 </Alert>
               }
               <FormGroup
-                validationState={(this.state.hasClickedSignup && !firstNameValid) ? 'error' : null}
+                validationState={(hasClickedSignup && !firstNameValid) ? 'error' : null}
               >
                 <ControlLabel>
                   <FormattedMessage
@@ -153,13 +153,13 @@ Authentic
                 </ControlLabel>
                 <FormControl
                   type="text"
-                  value={this.state.firstName}
+                  value={firstName}
                   placeholder="John"
                   onChange={(e) => { this.onChange(e, 'firstName'); }}
                 />
               </FormGroup>
               <FormGroup
-                validationState={(this.state.hasClickedSignup && !lastNameValid) ? 'error' : null}
+                validationState={(hasClickedSignup && !lastNameValid) ? 'error' : null}
               >
                 <ControlLabel>
                   <FormattedMessage
@@ -169,13 +169,13 @@ Authentic
                 </ControlLabel>
                 <FormControl
                   type="text"
-                  value={this.state.lastName}
+                  value={lastName}
                   placeholder="Doe"
                   onChange={(e) => { this.onChange(e, 'lastName'); }}
                 />
               </FormGroup>
               <FormGroup
-                validationState={(this.state.hasClickedSignup && !emailValid) ? 'error' : null}
+                validationState={(hasClickedSignup && !emailValid) ? 'error' : null}
               >
                 <ControlLabel>
                   <FormattedMessage
@@ -185,7 +185,7 @@ Authentic
                 </ControlLabel>
                 <FormControl
                   type="email"
-                  value={this.state.emailText}
+                  value={emailText}
                   placeholder="Email"
                   onChange={(e) => { this.onChange(e, 'emailText'); }}
                 />
@@ -199,13 +199,13 @@ Authentic
                 </ControlLabel>
                 <FormControl
                   type="password"
-                  value={this.state.password}
+                  value={password}
                   placeholder="Password"
                   onChange={(e) => { this.onChange(e, 'password'); }}
                 />
               </FormGroup>
               <FormGroup
-                validationState={(this.state.hasClickedSignup && !passwordsValid) ? 'error' : null}
+                validationState={(hasClickedSignup && !passwordsValid) ? 'error' : null}
               >
                 <ControlLabel>
                   <FormattedMessage
@@ -215,7 +215,7 @@ Authentic
                 </ControlLabel>
                 <FormControl
                   type="password"
-                  value={this.state.confirmPassword}
+                  value={confirmPassword}
                   placeholder="Password"
                   onChange={(e) => { this.onChange(e, 'confirmPassword'); }}
                 />
@@ -317,8 +317,8 @@ class Login extends Signup {
                 onClick={() => this.props.loginUser({
                   endpoint: '/api/login',
                   data: {
-                    email: this.state.emailText,
-                    password: this.state.password,
+                    email: emailText,
+                    password,
                   }
                 })}
               >
@@ -383,12 +383,14 @@ class Forgot extends Signup {
   }
 
   render() {
-    if (this.props.params.id) {
+    const { emailText } = this.state;
+    const { params, response, forgotEmail } = this.props;
+    if (params.id) {
       return (
         <div className="content-page forgot-page">
-          {this.props.response ?
+          {response ?
             <Alert bsStyle="danger">
-              <p>{this.props.response.message}</p>
+              <p>{response.message}</p>
             </Alert>
             :
             <div>
@@ -412,14 +414,13 @@ class Forgot extends Signup {
           </h3>
         </div>
         {
-          this.props.forgotEmail ?
-
+          forgotEmail ?
             <div>
               <p>
                 <FormattedMessage
                   id={'Forgot.sendreset'}
                   defaultMessage={'If there is an account associated with {forgotEmail}, an email will be sent to that account with instructions on how to reset password'}
-                  values={{ forgotEmail: this.props.forgotEmail }}
+                  values={{ forgotEmail }}
                 />
               </p>
               <a onClick={this.props.clearForgotEmail}>
@@ -442,7 +443,7 @@ class Forgot extends Signup {
                   </ControlLabel>
                   <FormControl
                     type="email"
-                    value={this.state.emailText}
+                    value={emailText}
                     placeholder="Email"
                     onChange={(e) => { this.onChange(e, 'emailText'); }}
                   />
@@ -452,7 +453,7 @@ class Forgot extends Signup {
                     <Button
                       className="login-button"
                       bsStyle="primary"
-                      onClick={() => this.props.forgotPasswordRequest(this.state.emailText)}
+                      onClick={() => this.props.forgotPasswordRequest(emailText)}
                     >
                       <FormattedMessage
                         id={'Forgot.reset'}

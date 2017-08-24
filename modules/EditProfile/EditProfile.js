@@ -6,7 +6,30 @@ import { connect } from 'react-redux';
 import CircularImage from '../CircularImage/CircularImage';
 import SkillsModal from '../SkillsModal/SkillsModal';
 import { updateProfile, clearProfileAlert } from '../../utils/actions';
+import Radio from './Radio';
 
+function UploadPhoto(props) {
+  const { className, imageUrl, onImageChange } = props;
+  return (
+    <div className={className}>
+      <CircularImage imageUrl={imageUrl} />
+      <label className="upload-message" htmlFor="fileInput"> Update photo</label>
+      <input id="fileInput" style={{ display: 'none' }} type="file" onChange={onImageChange} />
+    </div>
+  );
+}
+
+UploadPhoto.propTypes = {
+  className: PropTypes.string,
+  imageUrl: PropTypes.string,
+  onImageChange: PropTypes.func,
+};
+
+UploadPhoto.defaultProps = {
+  className: '',
+  imageUrl: '',
+  onImageChange: () => {},
+};
 
 const messages = defineMessages({
   male: {
@@ -31,51 +54,6 @@ const messages = defineMessages({
   },
 });
 
-function Radio(props) {
-  const { name, selected, label, onClick } = props;
-  const klass = `radio ${name === selected ? 'selected' : ''}`;
-  return (
-    <div onClick={onClick} name={name} className={klass}>
-      <span>{label}</span>
-    </div>
-  );
-}
-Radio.propTypes = {
-  name: PropTypes.string,
-  selected: PropTypes.string,
-  label: PropTypes.string,
-  onClick: PropTypes.func,
-};
-
-Radio.defaultProps = {
-  name: '',
-  selected: '',
-  label: '',
-  onClick: () => {},
-};
-
-function UploadPhoto(props) {
-  const { className, imageUrl, onImageChange } = props;
-  return (
-    <div className={className}>
-      <CircularImage imageUrl={imageUrl} />
-      <label className="upload-message" htmlFor="fileInput"> Update photo</label>
-      <input id="fileInput" style={{ display: 'none' }} type="file" onChange={onImageChange} />
-    </div>
-  );
-}
-
-UploadPhoto.propTypes = {
-  className: PropTypes.string,
-  imageUrl: PropTypes.string,
-  onImageChange: PropTypes.func,
-};
-
-UploadPhoto.defaultProps = {
-  className: '',
-  imageUrl: '',
-  onImageChange: () => {},
-};
 
 function SkillLabel(props) {
   const { label } = props;

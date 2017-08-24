@@ -13,10 +13,12 @@ export default class AcceptanceModal extends React.Component {
   }
 
   render() {
+    const { showModal, message } = this.state;
+    const { skill } = this.props;
     return (
       <div>
         <Button bsStyle="primary" onClick={() => this.setState({ showModal: true })}>Accept</Button>
-        <Modal className="acceptModal" show={this.state.showModal} onHide={() => this.setState({ showModal: false })}>
+        <Modal className="acceptModal" show={showModal} onHide={() => this.setState({ showModal: false })}>
           <Modal.Header closeButton>
             <Modal.Title>
               <FormattedMessage
@@ -37,7 +39,7 @@ export default class AcceptanceModal extends React.Component {
                 <FormattedMessage
                   id={'AcceptanceModal.getready'}
                   defaultMessage={'Get ready for {skill}'}
-                  values={{ skill: this.props.skill }}
+                  values={{ skill }}
                 />
               </div>
             </div>
@@ -51,7 +53,7 @@ export default class AcceptanceModal extends React.Component {
                 </ControlLabel>
                 <FormControl
                   componentClass="textarea"
-                  value={this.state.message}
+                  value={message}
                   placeholder="Enter text"
                   onChange={e => this.setState({ message: e.target.value })}
                 />
@@ -67,7 +69,7 @@ export default class AcceptanceModal extends React.Component {
               />
             </Button>
             <Button
-              onClick={() => { this.setState({ showModal: false }); this.props.onConfirmation(this.state.message); }}
+              onClick={() => { this.setState({ showModal: false }); this.props.onConfirmation(message); }}
               bsStyle="primary"
             >
               <FormattedMessage
