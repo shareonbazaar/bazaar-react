@@ -16,12 +16,11 @@ class SkillsModal extends React.Component {
   }
 
   componentDidMount() {
-    loadCategories();
+    this.props.loadCategories();
   }
 
   render() {
     const { categories, skills, title, onSkillClick } = this.props;
-    console.log(skills);
     const { showModal } = this.state;
     return (
       <div>

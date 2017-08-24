@@ -20,6 +20,8 @@ class App extends React.Component {
   }
 
   render() {
+    const { location, isAuthenticated, children } = this.props;
+    const { openSideBar } = this.state;
     return (
       <div className="app">
         <Helmet>
@@ -31,12 +33,12 @@ class App extends React.Component {
             <span className="brand-title">Bazaar</span>
           </IndexLink>
           {
-            this.props.location.pathname === '/'
-            && this.props.isAuthenticated
+            location.pathname === '/'
+            && isAuthenticated
             && <QueryBox />
           }
           <button
-            onClick={() => this.setState({ openSideBar: !this.state.openSideBar })}
+            onClick={() => this.setState({ openSideBar: !openSideBar })}
             id="menu-toggle"
             type="button"
             className="navbar-toggle"
@@ -47,8 +49,8 @@ class App extends React.Component {
             <span className="icon-bar" />
           </button>
         </Navbar>
-        <SideBar toggled={this.state.openSideBar} />
-        {this.props.children}
+        <SideBar toggled={openSideBar} />
+        {children}
       </div>
     );
   }

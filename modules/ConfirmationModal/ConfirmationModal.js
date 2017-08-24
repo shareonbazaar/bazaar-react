@@ -10,21 +10,28 @@ export default class ConfirmationModal extends React.Component {
       showModal: false,
     };
   }
+  hideModal() {
+    this.setState({ showModal: false });
+  }
+
+  openModal() {
+    this.setState({ showModal: true });
+  }
 
   render() {
     const { buttonStyle, buttonText, title, cancelStyle, confirmStyle } = this.props;
-
+    const { showModal } = this.state;
     return (
       <div>
         <Button
           bsStyle={buttonStyle}
-          onClick={() => this.setState({ showModal: true })}
+          onClick={() => this.openModal()}
         >
           {buttonText}
         </Button>
         <Modal
-          show={this.state.showModal}
-          onHide={() => this.setState({ showModal: false })}
+          show={showModal}
+          onHide={() => this.hideModal()}
         >
           <Modal.Header closeButton>
             <Modal.Title>{title}</Modal.Title>

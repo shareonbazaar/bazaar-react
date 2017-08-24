@@ -38,7 +38,6 @@ export default class CardGrid extends React.Component {
     if (!users || isFetching) {
       return (<div>Loading...</div>);
     }
-
     return (
       <div className="community-page">
         <Masonry className="user-list" options={masonryOptions}>
