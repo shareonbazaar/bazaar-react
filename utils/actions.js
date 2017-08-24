@@ -31,6 +31,11 @@ export const DELETE_ACCOUNT_REQUEST = 'DELETE_ACCOUNT_REQUEST'
 export const DELETE_ACCOUNT_CONFIRMED = 'DELETE_ACCOUNT_CONFIRMED'
 export const FORGOT_REQUEST = 'FORGOT_REQUEST'
 export const CLEAR_FORGOT_EMAIL = 'CLEAR_FORGOT_EMAIL'
+export const STAGE_SELECTED = 'STAGE_SELECTED'
+export const SKILL_SELECTED = 'SKILL_SELECTED'
+export const SKILL_REMOVED = 'SKILL_REMOVED'
+export const ABOUT_ME_CHANGE = 'ABOUT_ME_CHANGE'
+export const ON_START_CLICK = 'ON_START_CLICK'
 
 function callApi (endpoint, method='GET', data={}) {
     var config = {
@@ -54,6 +59,41 @@ export const setVisibilityFilter = (filter) => {
   }
 }
 
+export function selectStage (index) {
+    return {
+        type: STAGE_SELECTED,
+        index,
+    }
+}
+
+export function selectSkill (skill, isInterest) {
+    return {
+        type: SKILL_SELECTED,
+        skill,
+        isInterest,
+    }
+}
+
+export function removeSkill (skill, isInterest) {
+    return {
+        type: SKILL_REMOVED,
+        skill,
+        isInterest,
+    }
+}
+
+export function aboutMeChange (text) {
+    return {
+        type: ABOUT_ME_CHANGE,
+        text,
+    }
+}
+
+export function onStartClick () {
+    return {
+        type: ON_START_CLICK,
+    }
+}
 
 // FIXME: Is this correct?? I'm using an async action
 // but not actually doing anything async like a network request

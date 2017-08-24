@@ -9,9 +9,12 @@ import Profile from './Profile/Profile';
 import EditProfile from './EditProfile/EditProfile';
 import Contact from './Contact/Contact';
 import Settings from './Settings/Settings';
+import Terms from './Terms/Terms';
+
 import Login from './Authentication/Login';
 import Signup from './Authentication/Signup';
 import Forgot from './Authentication/Forgot';
+import Onboarding from './Onboarding/Container';
 
 
 export default (store) => {
@@ -49,8 +52,10 @@ export default (store) => {
       <Route path="profile/:id" component={Profile} onEnter={requireAuth} />
       <Route path="editprofile" component={EditProfile} onEnter={requireAuth} />
       <Route path="contact" component={Contact} />
+      <Route path="terms" component={Terms} />
       <Route path="bookmarks" component={Bookmarks} />
       <Route path="settings" component={Settings} onEnter={requireAuth} />
+      <Route path="onboarding" component={Onboarding} />
     </Route>
   );
 };

@@ -11,6 +11,7 @@ function SocialMediaLogin(props) {
     <FormGroup>
       <div className={props.className}>
         <FacebookLogin
+          isDisabled={props.disabled}
           appId={FACEBOOK_ID}
           autoLoad={false}
           fields="name,email,picture"
@@ -24,10 +25,12 @@ function SocialMediaLogin(props) {
           />
         </FacebookLogin>
         <GoogleLogin
+          disabled={props.disabled}
           clientId={GOOGLE_ID}
           buttonText="Login with Google"
           onSuccess={props.responseGoogle}
           onFailure={props.responseGoogle}
+          disabledStyle={{}}
           fetchBasicProfile
           className="social-media-buttons google-login"
         >
@@ -47,12 +50,14 @@ SocialMediaLogin.defaultProps = {
   className: '',
   responseFacebook: () => {},
   responseGoogle: () => {},
+  disabled: false,
 };
 
 SocialMediaLogin.propTypes = {
   className: PropTypes.string,
   responseFacebook: PropTypes.func,
   responseGoogle: PropTypes.func,
+  disabled: PropTypes.bool,
 };
 
 export default SocialMediaLogin;

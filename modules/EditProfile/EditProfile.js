@@ -112,7 +112,7 @@ class EditProfile extends React.Component {
       form.append('profilepic', file);
     }
     this.props.updateProfile(form);
-    this.props.push(`/profile/${loggedInUser._id}`);
+    this.props.push('/');
   }
   renderHeader() {
     return (

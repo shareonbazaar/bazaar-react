@@ -13,7 +13,9 @@ import {
   CLEAR_PROFILE_ALERT,
   CONTACT_SUBMIT_CONFIRMED, CLEAR_CONTACT_ALERT,
   DELETE_ACCOUNT_REQUEST, DELETE_ACCOUNT_CONFIRMED,
-  FORGOT_REQUEST, CLEAR_FORGOT_EMAIL
+  FORGOT_REQUEST, CLEAR_FORGOT_EMAIL,
+  STAGE_SELECTED, SKILL_SELECTED, INTEREST_SELECTED, ABOUT_ME_CHANGE, ON_START_CLICK,
+  SKILL_REMOVED
 } from './actions'
 
 
@@ -220,6 +222,65 @@ function contact (state = {
     }
 }
 
+function onboarding (state = {
+    stage: 0,
+    title: '',
+    skills: [],
+    interests: [],
+    aboutMeText: '',
+    hasStarted: false,
+    }, action) {
+    switch (action.type) {
+        case STAGE_SELECTED:
+            const { index } = action;
+            const { skills, interests } = state;
+            // Only allow user to progress if she has chosen at least two skills/interests
+            if ((index === 3 && skills.length < 2)
+                  || (index === 2 && interests.length < 2)) {
+                return state;
+            } else {
+                return Object.assign({}, state, {
+                    stage: action.index,
+                });
+            }
+        case SKILL_SELECTED:
+            if (action.isInterest) {
+              if (state.interests.map(s => s._id).indexOf(action.skill._id) < 0) {
+                return Object.assign({}, state, {
+                  interests: state.interests.concat([action.skill]),
+                });
+              }
+            } else {
+              if (state.skills.map(s => s._id).indexOf(action.skill._id) < 0) {
+                return Object.assign({}, state, {
+                  skills: state.skills.concat([action.skill]),
+                });
+              }
+            }
+            return state;
+        case SKILL_REMOVED:
+            if (action.isInterest) {
+                return Object.assign({}, state, {
+                    interests: state.interests.filter(s => s._id !== action.skill._id),
+                });
+            } else {
+                return Object.assign({}, state, {
+                    skills: state.skills.filter(s => s._id !== action.skill._id),
+                });
+            }
+        case ABOUT_ME_CHANGE:
+            return Object.assign({}, state, {
+                aboutMeText: action.text,
+            });
+        case ON_START_CLICK:
+            return Object.assign({}, state, {
+                hasStarted: true,
+            });
+        default:
+            return state;
+    }
+}
+
 const appReducer = combineReducers({
     routing: routerReducer,
     auth,
@@ -229,6 +290,7 @@ const appReducer = combineReducers({
     users,
     categories,
     contact,
+    onboarding,
 })
 
 export default (state, action) => {

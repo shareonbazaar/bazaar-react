@@ -70,7 +70,7 @@ class Login extends React.Component {
             id={'Signup.noaccount'}
             defaultMessage={"Don't have an account?"}
           />
-          <Link className="sign-up-link" to="/signup">
+          <Link className="sign-up-link" to="/onboarding">
             <FormattedMessage
               id={'Signup.signup'}
               defaultMessage={'Sign up'}

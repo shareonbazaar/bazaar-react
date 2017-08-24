@@ -88,6 +88,7 @@ const handleLogin = (req, res, payload, mapPayloadToUser) => {
             const newUser = new User(Object.assign({}, mapPayloadToUser(payload), {
               _skills: req.body._skills,
               _interests: req.body._interests,
+              'profile.status': req.body['profile.status'],
             }));
             newUser.save()
               .then(savedUser => contact.sendWelcomeEmail(savedUser, req.headers.host))
