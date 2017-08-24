@@ -16,7 +16,7 @@ class SkillsModal extends React.Component {
   }
 
   componentDidMount() {
-    loadCategories();
+    this.props.loadCategories();
   }
 
   render() {
