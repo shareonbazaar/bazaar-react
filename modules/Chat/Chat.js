@@ -66,7 +66,7 @@ class Chat extends React.Component {
 
   render() {
     const { onBack } = this.props;
-    const { messages } = this.state;
+    const { messages, textValue } = this.state;
 
     return (
       <div className="messaging">
@@ -75,7 +75,7 @@ class Chat extends React.Component {
         </div>
         <textarea
           onChange={(e) => { this.setState({ textValue: e.target.value }); }}
-          value={this.state.textValue}
+          value={textValue}
           placeholder="Write message"
           rows="4"
           className="messageInput"
