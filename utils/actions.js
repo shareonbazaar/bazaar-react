@@ -295,7 +295,7 @@ export function loginUser (creds) {
                 // dispatch the error condition
                 dispatch({
                     type: LOGIN_FAILURE,
-                    message: error,
+                    message: error.toString(),
                 })
                 return Promise.reject(user)
             } else {
