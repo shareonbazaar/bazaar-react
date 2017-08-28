@@ -12,6 +12,9 @@ node_modules
 # Translation build files
 build/*
 
+# Test coverage files
+coverage/*
+
 # yarn metadata
 *.lock
 
