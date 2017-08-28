@@ -22,8 +22,6 @@ module.exports = {
 			'FACEBOOK_ID': JSON.stringify(process.env.FACEBOOK_ID),
 			'GOOGLE_ID': JSON.stringify(process.env.GOOGLE_ID),
 		}),
-		new webpack.HotModuleReplacementPlugin(),
-    // new webpack.NoEmitOnErrorsPlugin(),
 	],
 	module: {
 		loaders: [
