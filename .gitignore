@@ -15,6 +15,11 @@ build/*
 # Test coverage files
 coverage/*
 
+#Public folder images
+public/*.jpg
+public/*.ttf
+public/*.svg
+
 # yarn metadata
 *.lock
 
