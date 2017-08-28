@@ -9,7 +9,9 @@ import Profile from './Profile/Profile';
 import EditProfile from './EditProfile/EditProfile';
 import Contact from './Contact/Contact';
 import Settings from './Settings/Settings';
-import { Login, Signup, Forgot } from './Authentication/Authentication';
+import Login from './Authentication/Login';
+import Signup from './Authentication/Signup';
+import Forgot from './Authentication/Forgot';
 
 
 export default (store) => {
