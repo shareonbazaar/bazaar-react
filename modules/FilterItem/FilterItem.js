@@ -12,7 +12,7 @@ class FilterItem extends React.Component {
     const exchangeType = 'exchange-type';
     return (
       <div
-        onClick={() => setVisibilityFilter(filter)}
+        onClick={() => this.props.setVisibilityFilter(filter)}
         className={exchangeType + (active ? ' selected' : '')}
       >
         {children}

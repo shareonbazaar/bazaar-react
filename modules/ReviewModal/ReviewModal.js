@@ -141,17 +141,13 @@ class ReviewModal extends React.Component {
 ReviewModal.propTypes = {
   transaction: PropTypes.object,
   onSubmit: PropTypes.func,
-  intl: {
-    formatMessage: PropTypes.func,
-  },
+  intl: PropTypes.object,
 };
 
 ReviewModal.defaultProps = {
   transaction: {},
   onSubmit: () => {},
-  intl: {
-    formatMessage: () => {},
-  }
+  intl: {}
 };
 
 export default injectIntl(ReviewModal);

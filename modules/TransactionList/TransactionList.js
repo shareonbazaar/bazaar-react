@@ -7,10 +7,6 @@ import FilterBar from '../FilterBar/FilterBar';
 import Loader from '../Loader/Loader';
 
 class TransactionList extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  // }
-
   componentDidMount() {
     this.props.loadTransactions();
 
@@ -63,7 +59,6 @@ TransactionList.defaultProps = {
   useAnimation: false,
   transactions: [],
   loadTransactions: () => {},
-  loadProfile: () => {},
   updateProfile: () => {},
 };
 
@@ -73,7 +68,6 @@ TransactionList.propTypes = {
   useAnimation: PropTypes.bool,
   transactions: PropTypes.array,
   loadTransactions: PropTypes.func,
-  loadProfile: PropTypes.func,
   updateProfile: PropTypes.func,
 };
 

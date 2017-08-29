@@ -180,7 +180,7 @@ class EditProfile extends React.Component {
           {response &&
             <Alert
               bsStyle={`${response.type === 'error' ? 'danger' : 'success'}`}
-              onDismiss={clearProfileAlert}
+              onDismiss={this.props.clearProfileAlert}
             >
               <p>{response.message}</p>
             </Alert>

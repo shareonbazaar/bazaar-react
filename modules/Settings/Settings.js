@@ -52,7 +52,7 @@ class Settings extends React.Component {
       if (passwordValid) {
         const form = new FormData();
         form.append('password', password);
-        updateProfile(form);
+        this.props.updateProfile(form);
       }
     };
     const onEmailsChange = () => {
@@ -60,7 +60,7 @@ class Settings extends React.Component {
       form.append('acceptsEmails.newExchanges', acceptsEmails.newExchanges);
       form.append('acceptsEmails.updateExchanges', acceptsEmails.updateExchanges);
       form.append('acceptsEmails.newMessages', acceptsEmails.newMessages);
-      updateProfile(form);
+      this.props.updateProfile(form);
     };
 
     return (
@@ -77,7 +77,7 @@ class Settings extends React.Component {
           {this.props.response &&
             <Alert
               bsStyle={`${response.type === 'error' ? 'danger' : 'success'}`}
-              onDismiss={clearProfileAlert}
+              onDismiss={this.props.clearProfileAlert}
             >
               <p>{response.message}</p>
             </Alert>
@@ -185,7 +185,7 @@ class Settings extends React.Component {
           />
         </p>
         <ConfirmationModal
-          onConfirmation={deleteAccount}
+          onConfirmation={this.props.deleteAccount}
           title={formatMessage(messages.reallydelete)}
           buttonText={formatMessage(messages.deleteaccount)}
           cancelStyle="default"
