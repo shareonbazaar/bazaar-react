@@ -41,6 +41,10 @@ class Settings extends React.Component {
     });
   }
 
+  componentWillMount() {
+    this.props.clearProfileAlert();
+  }
+
   render() {
     const { acceptsEmails, password, confirmPassword, hasClickedSubmit } = this.state;
     const { response } = this.props;
