@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
 import { StatusType } from '../../models/Enums';
-import { submitReview, updateTransaction, confirmTransaction } from '../../utils/actions';
+import { submitReview, confirmTransaction } from '../../utils/actions';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import ReviewModal from '../ReviewModal/ReviewModal';
 import Review from '../Review/Review';
@@ -28,7 +28,6 @@ const pendingReviewMessage = 'This exchange is pending confirmation from the oth
 class Complete extends React.Component {
   render() {
     const { formatMessage } = this.props.intl;
-    // const { partner, submitReview, transaction, user, userIsOwner, confirmTransaction } = this.props;
     const { partner, transaction, user } = this.props;
     if (transaction.status === StatusType.COMPLETE) {
       // eslint-disable-next-line
@@ -43,7 +42,7 @@ class Complete extends React.Component {
               defaultMessage={writeReviewMessage}
             />
             <ReviewModal
-              onSubmit={submitReview}
+              onSubmit={this.props.submitReview}
               transaction={transaction}
             />
           </div>
@@ -80,7 +79,7 @@ class Complete extends React.Component {
             defaultMessage={markedExchangeCompleteMessage}
           />
           <ConfirmationModal
-            onConfirmation={() => confirmTransaction({
+            onConfirmation={() => this.props.confirmTransaction({
               t_id: transaction._id,
             })}
             title={formatMessage(messages.confirmQuestion)}
@@ -107,11 +106,8 @@ class Complete extends React.Component {
 Complete.propTypes = {
   partner: PropTypes.object,
   submitReview: PropTypes.func,
-  updateTransaction: PropTypes.func,
   confirmTransaction: PropTypes.func,
-  intl: {
-    formatMessage: PropTypes.func,
-  },
+  intl: PropTypes.object,
   transaction: PropTypes.object,
   user: PropTypes.object,
   userIsOwner: PropTypes.bool,
@@ -120,15 +116,12 @@ Complete.propTypes = {
 Complete.defaultProps = {
   partner: {},
   submitReview: () => {},
-  updateTransaction: () => {},
   confirmTransaction: () => {},
-  intl: {
-    formatMessage: () => {},
-  },
+  intl: {},
   transaction: {},
   user: {},
   userIsOwner: false,
 };
 
 
-export default connect(null, { updateTransaction, submitReview, confirmTransaction })(injectIntl(Complete));
+export default connect(null, { submitReview, confirmTransaction })(injectIntl(Complete));

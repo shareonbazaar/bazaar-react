@@ -55,7 +55,7 @@ const ProposedButtons = connect(null, { updateTransaction })(props => {
         <Col mdOffset={3} md={6}>
           <Button
             bsStyle="danger"
-            onClick={() => updateTransaction({
+            onClick={() => props.updateTransaction({
               t_id: content._id,
               transaction: { status: StatusType.CANCELLED },
             })}
@@ -280,17 +280,13 @@ class Transaction extends React.Component {
 Transaction.propTypes = {
   content: PropTypes.object,
   loggedInUser: PropTypes.object,
-  intl: {
-    formatMessage: PropTypes.func,
-  },
+  intl: PropTypes.object,
 };
 
 Transaction.defaultProps = {
   content: {},
   loggedInUser: {},
-  intl: {
-    formatMessage: () => {},
-  },
+  intl: {},
 };
 
 export default (injectIntl(Transaction));

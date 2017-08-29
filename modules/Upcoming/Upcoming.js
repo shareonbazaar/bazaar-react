@@ -95,7 +95,7 @@ function TimePicker(props) {
 TimePicker.propTypes = {
   onTimeSelected: PropTypes.func,
   editMode: PropTypes.bool,
-  time: PropTypes.bool,
+  time: PropTypes.string,
 };
 
 const BERLIN_LNG = 13.42;
@@ -169,7 +169,7 @@ class Upcoming extends React.Component {
 
   onConfirmation() {
     const { content } = this.props;
-    confirmTransaction({
+    this.props.confirmTransaction({
       t_id: content._id,
     });
   }
@@ -186,8 +186,8 @@ class Upcoming extends React.Component {
           <Col sm={6}>
             <div style={{ height: '200px' }}>
               <GoogleMapReact
-                defaultCenter={this.defaultProps.center}
-                defaultZoom={this.defaultProps.zoom}
+                defaultCenter={{ lat: BERLIN_LAT, lng: BERLIN_LNG }}
+                defaultZoom={DEFAULT_ZOOM}
                 center={markerLocation.coords}
                 zoom={zoom}
                 bootstrapURLKeys={{ key: GOOGLE_MAP_API }}
@@ -267,15 +267,12 @@ Upcoming.propTypes = {
   onTimeSelected: PropTypes.func,
   onChatClick: PropTypes.func,
   content: PropTypes.object,
-  intl: {
-    formatMessage: PropTypes.func,
-  }
+  intl: PropTypes.object,
 };
 
 Upcoming.defaultProps = {
-  center: { lat: BERLIN_LAT, lng: BERLIN_LNG },
-  zoom: DEFAULT_ZOOM,
   updateTransaction: () => {},
+  collapsed: true,
   onTimeSelected: () => {},
   onChatClick: () => {},
   content: {},

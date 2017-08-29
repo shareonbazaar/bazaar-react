@@ -47,20 +47,21 @@ class Settings extends React.Component {
     const { formatMessage } = this.props.intl;
     const passwordValid = (password.length > 0 && password === confirmPassword);
 
-    const onPasswordChange = () => {
+    const onPasswordChange = (e) => {
       this.setState({ hasClickedSubmit: true });
       if (passwordValid) {
         const form = new FormData();
         form.append('password', password);
-        updateProfile(form);
+        this.props.updateProfile(form);
       }
+      e.preventDefault();
     };
     const onEmailsChange = () => {
       const form = new FormData();
       form.append('acceptsEmails.newExchanges', acceptsEmails.newExchanges);
       form.append('acceptsEmails.updateExchanges', acceptsEmails.updateExchanges);
       form.append('acceptsEmails.newMessages', acceptsEmails.newMessages);
-      updateProfile(form);
+      this.props.updateProfile(form);
     };
 
     return (
@@ -77,48 +78,50 @@ class Settings extends React.Component {
           {this.props.response &&
             <Alert
               bsStyle={`${response.type === 'error' ? 'danger' : 'success'}`}
-              onDismiss={clearProfileAlert}
+              onDismiss={this.props.clearProfileAlert}
             >
               <p>{response.message}</p>
             </Alert>
           }
-          <FormGroup>
-            <ControlLabel>
-              <FormattedMessage
-                id={'Settings.newpassword'}
-                defaultMessage={'New Password'}
-              />
-            </ControlLabel>
-            <FormControl
-              type="password"
-              value={password}
-              onChange={(e) => { this.onChange(e, 'password'); }}
-            />
-          </FormGroup>
-          <FormGroup validationState={(hasClickedSubmit && !passwordValid) ? 'error' : null}>
-            <ControlLabel>
-              <FormattedMessage
-                id={'Settings.confirmpassword'}
-                defaultMessage={'Confirm Password'}
-              />
-            </ControlLabel>
-            <FormControl
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => { this.onChange(e, 'confirmPassword'); }}
-            />
-          </FormGroup>
-          <hr />
-          <FormGroup>
-            <div className="save-button">
-              <Button onClick={onPasswordChange} bsStyle="primary">
+          <form onSubmit={onPasswordChange}>
+            <FormGroup>
+              <ControlLabel>
                 <FormattedMessage
-                  id={'Settings.changepassword'}
-                  defaultMessage={'Change Password'}
+                  id={'Settings.newpassword'}
+                  defaultMessage={'New Password'}
                 />
-              </Button>
-            </div>
-          </FormGroup>
+              </ControlLabel>
+              <FormControl
+                type="password"
+                value={password}
+                onChange={(e) => { this.onChange(e, 'password'); }}
+              />
+            </FormGroup>
+            <FormGroup validationState={(hasClickedSubmit && !passwordValid) ? 'error' : null}>
+              <ControlLabel>
+                <FormattedMessage
+                  id={'Settings.confirmpassword'}
+                  defaultMessage={'Confirm Password'}
+                />
+              </ControlLabel>
+              <FormControl
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => { this.onChange(e, 'confirmPassword'); }}
+              />
+            </FormGroup>
+            <hr />
+            <FormGroup>
+              <div className="save-button">
+                <Button type="submit" bsStyle="primary">
+                  <FormattedMessage
+                    id={'Settings.changepassword'}
+                    defaultMessage={'Change Password'}
+                  />
+                </Button>
+              </div>
+            </FormGroup>
+          </form>
         </div>
         <div className="page-header">
           <h3>
@@ -185,7 +188,7 @@ class Settings extends React.Component {
           />
         </p>
         <ConfirmationModal
-          onConfirmation={deleteAccount}
+          onConfirmation={this.props.deleteAccount}
           title={formatMessage(messages.reallydelete)}
           buttonText={formatMessage(messages.deleteaccount)}
           cancelStyle="default"
