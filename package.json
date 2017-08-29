@@ -64,7 +64,9 @@
     "requestify": "^0.2.5",
     "socket.io": "^1.7.3",
     "socket.io-client": "^1.7.3",
-    "socketio-jwt": "^4.5.0"
+    "socketio-jwt": "^4.5.0",
+    "webpack": "^1.12.13",
+    "webpack-dev-server": "^1.14.1"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
