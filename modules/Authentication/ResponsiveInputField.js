@@ -12,9 +12,10 @@ export default function ResponsiveInputField(props) {
     messageText,
     className,
     children,
+    shouldChildRender,
     ...rest,
   } = props;
-  if (children) {
+  if (children && !shouldChildRender) {
     return (
       <FormGroup>
         {children}
@@ -28,13 +29,16 @@ export default function ResponsiveInputField(props) {
       <ControlLabel className={className}>
         {messageText}
       </ControlLabel>
-      <FormControl
-        type={formControlType}
-        value={formControlValue}
-        placeholder={formControlPlaceHolder}
-        onChange={formControlOnChange}
-        {...rest}
-      />
+      {shouldChildRender ?
+        children :
+        (<FormControl
+          type={formControlType}
+          value={formControlValue}
+          placeholder={formControlPlaceHolder}
+          onChange={formControlOnChange}
+          {...rest}
+        />)
+      }
     </FormGroup>
   );
 }
@@ -46,6 +50,7 @@ ResponsiveInputField.propTypes = {
   formControlOnChange: PropTypes.func,
   formGroupIsValid: PropTypes.bool,
   children: PropTypes.node,
+  shouldChildRender: PropTypes.bool,
   messageText: PropTypes.string,
   className: PropTypes.string,
 };
@@ -57,6 +62,7 @@ ResponsiveInputField.defaultProps = {
   formControlOnChange: () => {},
   formGroupIsValid: false,
   children: null,
+  shouldChildRender: false,
   messageText: '',
   className: '',
 };

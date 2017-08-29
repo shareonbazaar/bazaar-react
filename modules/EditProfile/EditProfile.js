@@ -1,70 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
-import { Button, FormGroup, FormControl, ControlLabel, Alert } from 'react-bootstrap';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { Button, FormGroup, Alert } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import CircularImage from '../CircularImage/CircularImage';
 import SkillsModal from '../SkillsModal/SkillsModal';
 import { updateProfile, clearProfileAlert } from '../../utils/actions';
 import Radio from './Radio';
-
-function UploadPhoto(props) {
-  const { className, imageUrl, onImageChange } = props;
-  return (
-    <div className={className}>
-      <CircularImage imageUrl={imageUrl} />
-      <label className="upload-message" htmlFor="fileInput"> Update photo</label>
-      <input id="fileInput" style={{ display: 'none' }} type="file" onChange={onImageChange} />
-    </div>
-  );
-}
-
-UploadPhoto.propTypes = {
-  className: PropTypes.string,
-  imageUrl: PropTypes.string,
-  onImageChange: PropTypes.func,
-};
-
-UploadPhoto.defaultProps = {
-  className: '',
-  imageUrl: '',
-  onImageChange: () => {},
-};
-
-const messages = defineMessages({
-  male: {
-    id: 'EditProfile.male',
-    defaultMessage: 'Male',
-  },
-  female: {
-    id: 'EditProfile.female',
-    defaultMessage: 'Female',
-  },
-  other: {
-    id: 'EditProfile.other',
-    defaultMessage: 'Other',
-  },
-  local: {
-    id: 'EditProfile.local',
-    defaultMessage: 'Local',
-  },
-  newcomer: {
-    id: 'EditProfile.newcomer',
-    defaultMessage: 'Newcomer',
-  },
-});
-
-
-function SkillLabel(props) {
-  const { label } = props;
-  return <div className="skill-label">{label}</div>;
-}
-SkillLabel.propTypes = {
-  label: PropTypes.string,
-};
-SkillLabel.defaultProps = {
-  label: '',
-};
+import UploadPhoto from './UploadPhoto';
+import SkillLabel from './SkillLabel';
+import { editProfileMessages } from './messages';
+import ResponsiveInputField from '../Authentication/ResponsiveInputField';
 
 class EditProfile extends React.Component {
   constructor(props) {
@@ -88,6 +33,10 @@ class EditProfile extends React.Component {
     this.onChange = this.onChange.bind(this);
     this.onImageChange = this.onImageChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  componentWillMount() {
+    this.props.clearProfileAlert();
   }
 
   onChange(e, field) {
@@ -161,70 +110,70 @@ class EditProfile extends React.Component {
     }
     this.props.updateProfile(form);
   }
+  renderHeader() {
+    return (
+      <div className="page-header">
+        <h3>
+          <FormattedMessage
+            id={'EditProfile.title'}
+            defaultMessage={'Edit your profile'}
+          />
+        </h3>
+      </div>
+    );
+  }
 
+  renderAlert() {
+    const { response } = this.props;
+    return (
+      <Alert
+        bsStyle={`${response.type === 'error' ? 'danger' : 'success'}`}
+        onDismiss={this.props.clearProfileAlert}
+      >
+        <p>{response.message}</p>
+      </Alert>
+    );
+  }
   render() {
     const { name, gender, email, picture, hometown, location, status, aboutMe, skills, interests } = this.state;
-    const { response, intl } = this.props;
-    const { formatMessage } = intl;
+    const { response } = this.props;
+    const { formatMessage } = this.props.intl;
     return (
       <div className="content-page edit-profile-page">
-        <div className="page-header">
-          <h3>
-            <FormattedMessage
-              id={'EditProfile.title'}
-              defaultMessage={'Edit your profile'}
-            />
-          </h3>
-        </div>
+        {this.renderHeader()}
         <div>
-          {response &&
-            <Alert
-              bsStyle={`${response.type === 'error' ? 'danger' : 'success'}`}
-              onDismiss={this.props.clearProfileAlert}
-            >
-              <p>{response.message}</p>
-            </Alert>
-          }
-          <FormGroup>
-            <ControlLabel className="label-top">
-              <FormattedMessage
-                id={'EditProfile.pic'}
-                defaultMessage={'Profile picture'}
-              />
-            </ControlLabel>
+          {response && this.renderAlert()}
+          <ResponsiveInputField
+            shouldChildRender
+            className="label-top"
+            messageText={formatMessage(editProfileMessages.pic)}
+          >
             <UploadPhoto className="user-activities" imageUrl={picture} onImageChange={this.onImageChange} />
-          </FormGroup>
-          <FormGroup>
-            <ControlLabel>
-              <FormattedMessage
-                id={'Signup.email'}
-                defaultMessage={'Email'}
-              />
-            </ControlLabel>
-            <FormControl type="email" value={email} placeholder="Email" onChange={(e) => { this.onChange(e, 'email'); }} />
-          </FormGroup>
-          <FormGroup>
-            <ControlLabel>
-              <FormattedMessage
-                id={'EditProfile.name'}
-                defaultMessage={'Name'}
-              />
-            </ControlLabel>
-            <FormControl type="name" value={name} placeholder="John Doe" onChange={(e) => { this.onChange(e, 'name'); }} />
-          </FormGroup>
-          <FormGroup>
-            <ControlLabel>
-              <FormattedMessage
-                id={'EditProfile.gender'}
-                defaultMessage={'Gender'}
-              />
-            </ControlLabel>
+          </ResponsiveInputField>
+          <ResponsiveInputField
+            formControlValue={email}
+            formControlType="email"
+            formControlPlaceHolder="Email"
+            formControlOnChange={(e) => { this.onChange(e, 'email'); }}
+            messageText={formatMessage(editProfileMessages.email)}
+          />
+          <ResponsiveInputField
+            formControlValue={name}
+            formControlType="name"
+            formControlPlaceHolder="John Doe"
+            formControlOnChange={(e) => { this.onChange(e, 'name'); }}
+            messageText={formatMessage(editProfileMessages.name)}
+          />
+          <ResponsiveInputField
+            shouldChildRender
+            messageText={formatMessage(editProfileMessages.gender)}
+          >
             <div className="radio-block">
               {
                 [
-                  { name: 'male', label: formatMessage(messages.male) },
-                  { name: 'female', label: formatMessage(messages.female) },
-                  { name: 'other', label: formatMessage(messages.other) }
+                  { name: 'male', label: formatMessage(editProfileMessages.male) },
+                  { name: 'female', label: formatMessage(editProfileMessages.female) },
+                  { name: 'other', label: formatMessage(editProfileMessages.other) }
                 ].map((props, i) => (
                   <Radio
                     key={i}
@@ -236,47 +185,30 @@ class EditProfile extends React.Component {
                 ))
               }
             </div>
-          </FormGroup>
-          <FormGroup>
-            <ControlLabel>
-              <FormattedMessage
-                id={'EditProfile.location'}
-                defaultMessage={'Location'}
-              />
-            </ControlLabel>
-            <FormControl
-              type="name"
-              value={location}
-              placeholder="Location"
-              onChange={(e) => { this.onChange(e, 'location'); }}
-            />
-          </FormGroup>
-          <FormGroup>
-            <ControlLabel>
-              <FormattedMessage
-                id={'EditProfile.hometown'}
-                defaultMessage={'Hometown'}
-              />
-            </ControlLabel>
-            <FormControl
-              type="name"
-              value={hometown}
-              placeholder="Hometown"
-              onChange={(e) => { this.onChange(e, 'hometown'); }}
-            />
-          </FormGroup>
-          <FormGroup>
-            <ControlLabel>
-              <FormattedMessage
-                id={'EditProfile.status'}
-                defaultMessage={'Status'}
-              />
-            </ControlLabel>
+          </ResponsiveInputField>
+          <ResponsiveInputField
+            formControlValue={location}
+            formControlType="name"
+            formControlPlaceHolder="Location"
+            formControlOnChange={(e) => { this.onChange(e, 'location'); }}
+            messageText={formatMessage(editProfileMessages.location)}
+          />
+          <ResponsiveInputField
+            formControlValue={hometown}
+            formControlType="name"
+            formControlPlaceHolder="Hometown"
+            formControlOnChange={(e) => { this.onChange(e, 'hometown'); }}
+            messageText={formatMessage(editProfileMessages.hometown)}
+          />
+          <ResponsiveInputField
+            shouldChildRender
+            messageText={formatMessage(editProfileMessages.status)}
+          >
             <div className="radio-block">
               {
                 [
-                  { name: 'local', label: formatMessage(messages.local) },
-                  { name: 'newcomer', label: formatMessage(messages.newcomer) }
+                  { name: 'local', label: formatMessage(editProfileMessages.local) },
+                  { name: 'newcomer', label: formatMessage(editProfileMessages.newcomer) }
                 ].map((props, i) => (
                   <Radio
                     key={i}
@@ -288,28 +220,21 @@ class EditProfile extends React.Component {
                 ))
               }
             </div>
-          </FormGroup>
-          <FormGroup>
-            <ControlLabel className="label-top">
-              <FormattedMessage
-                id={'EditProfile.aboutme'}
-                defaultMessage={'About Me'}
-              />
-            </ControlLabel>
-            <FormControl
-              componentClass="textarea"
-              value={aboutMe}
-              placeholder="Enter text"
-              onChange={(e) => { this.onChange(e, 'aboutMe'); }}
-            />
-          </FormGroup>
-          <FormGroup>
-            <ControlLabel className="label-top">
-              <FormattedMessage
-                id={'EditProfile.skills'}
-                defaultMessage={'Skills'}
-              />
-            </ControlLabel>
+          </ResponsiveInputField>
+          <ResponsiveInputField
+            formControlValue={aboutMe}
+            formControlOnChange={(e) => { this.onChange(e, 'aboutMe'); }}
+            className="label-top"
+            messageText={formatMessage(editProfileMessages.aboutMe)}
+            componentClass="textarea"
+            rows={3}
+            style={{ height: 100 }}
+          />
+          <ResponsiveInputField
+            shouldChildRender
+            className="label-top"
+            messageText={formatMessage(editProfileMessages.skills)}
+          >
             <div className="user-activities">
               <ul>
                 {
@@ -325,14 +250,12 @@ class EditProfile extends React.Component {
                 onSkillClick={(skill) => { this.onArrayChange('skills', skill); }}
               />
             </div>
-          </FormGroup>
-          <FormGroup>
-            <ControlLabel className="label-top">
-              <FormattedMessage
-                id={'EditProfile.interests'}
-                defaultMessage={'Interests'}
-              />
-            </ControlLabel>
+          </ResponsiveInputField>
+          <ResponsiveInputField
+            shouldChildRender
+            className="label-top"
+            messageText={formatMessage(editProfileMessages.interests)}
+          >
             <div className="user-activities">
               <ul>
                 {
@@ -353,7 +276,7 @@ class EditProfile extends React.Component {
                 onSkillClick={(skill) => { this.onArrayChange('interests', skill); }}
               />
             </div>
-          </FormGroup>
+          </ResponsiveInputField>
           <hr />
           <FormGroup>
             <div className="save-button">
@@ -382,6 +305,7 @@ EditProfile.propTypes = {
   loggedInUser: PropTypes.object,
   submitChanges: PropTypes.func,
   updateProfile: PropTypes.func,
+  clearProfileAlert: PropTypes.func,
   response: PropTypes.object,
   intl: PropTypes.object,
 };
@@ -389,6 +313,7 @@ EditProfile.defaultProps = {
   loggedInUser: null,
   submitChanges: () => {},
   updateProfile: () => {},
+  clearProfileAlert: () => {},
   response: null,
   intl: null,
 };
