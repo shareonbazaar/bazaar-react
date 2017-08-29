@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Button, FormGroup, FormControl, ControlLabel, Alert } from 'react-bootstrap';
+import { Button, Alert } from 'react-bootstrap';
 import validator from 'email-validator';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import { submitContact, clearContactAlert } from '../../utils/actions';
-
+import ResponsiveInputField from '../Authentication/ResponsiveInputField';
+import { contactMessages } from './messages';
 
 class Contact extends React.Component {
   constructor(props) {
@@ -25,97 +26,91 @@ class Contact extends React.Component {
       [field]: e.target.value,
     });
   }
-
+  renderHeader() {
+    return (
+      <div className="page-header">
+        <h3>
+          <FormattedMessage
+            id={'Contact.header'}
+            defaultMessage={'Contact Form'}
+          />
+        </h3>
+      </div>
+    );
+  }
+  renderSubmitButton(onSubmitClicked) {
+    return (
+      <div className="save-button">
+        <Button
+          onClick={onSubmitClicked}
+          bsStyle="primary"
+        >
+          <FormattedMessage
+            id={'Contact.submit'}
+            defaultMessage={'Submit'}
+          />
+        </Button>
+      </div>
+    );
+  }
   render() {
     const { name, email, message, hasClickedSubmit } = this.state;
     const nameValid = name.length > 0;
     const emailValid = validator.validate(email);
     const messageValid = message.length > 0;
-    // const { response, clearContactAlert, submitContact } = this.props;
     const { response } = this.props;
+    const { formatMessage } = this.props.intl;
     const onSubmitClicked = () => {
       this.setState({ hasClickedSubmit: true });
       if (nameValid && emailValid && messageValid) {
-        submitContact(this.state);
+        this.props.submitContact(this.state);
       }
     };
 
     return (
       <div className="content-page contact-page">
-        <div className="page-header">
-          <h3>
-            <FormattedMessage
-              id={'Contact.header'}
-              defaultMessage={'Contact Form'}
-            />
-          </h3>
-        </div>
+        {this.renderHeader()}
         <div>
           {response &&
             <Alert
               bsStyle={`${response.type === 'error' ? 'danger' : 'success'}`}
-              onDismiss={clearContactAlert}
+              onDismiss={this.props.clearContactAlert}
             >
               <p>{response.message}</p>
             </Alert>
           }
-          <FormGroup validationState={(hasClickedSubmit && !nameValid) ? 'error' : null}>
-            <ControlLabel>
-              <FormattedMessage
-                id={'Contact.name'}
-                defaultMessage={'Your Name'}
-              />
-            </ControlLabel>
-            <FormControl
-              type="name"
-              value={name}
-              placeholder="John Doe"
-              onChange={(e) => { this.onChange(e, 'name'); }}
-            />
-          </FormGroup>
-          <FormGroup validationState={(hasClickedSubmit && !emailValid) ? 'error' : null}>
-            <ControlLabel>
-              <FormattedMessage
-                id={'Contact.email'}
-                defaultMessage={'Your Email'}
-              />
-            </ControlLabel>
-            <FormControl
-              type="email"
-              value={email}
-              placeholder="Email"
-              onChange={(e) => { this.onChange(e, 'email'); }}
-            />
-          </FormGroup>
-          <FormGroup validationState={(hasClickedSubmit && !messageValid) ? 'error' : null}>
-            <ControlLabel className="label-top">
-              <FormattedMessage
-                id={'Contact.message'}
-                defaultMessage={'Your Message'}
-              />
-            </ControlLabel>
-            <FormControl
-              componentClass="textarea"
-              rows={7}
-              value={message}
-              placeholder="Enter text"
-              onChange={(e) => { this.onChange(e, 'message'); }}
-            />
-          </FormGroup>
+          <ResponsiveInputField
+            formGroupIsValid={(hasClickedSubmit && !nameValid)}
+            formControlType="name"
+            formControlValue={name}
+            formControlPlaceHolder="John Doe"
+            formControlOnChange={(e) => { this.onChange(e, 'name'); }}
+            messageText={formatMessage(contactMessages.name)}
+          />
+          <ResponsiveInputField
+            formGroupIsValid={(hasClickedSubmit && !emailValid)}
+            formControlType="email"
+            formControlValue={email}
+            formControlPlaceHolder="Email"
+            formControlOnChange={(e) => { this.onChange(e, 'email'); }}
+            messageText={formatMessage(contactMessages.email)}
+          />
+          <ResponsiveInputField
+            className="label-top"
+            formGroupIsValid={(hasClickedSubmit && !messageValid)}
+            formControlType="textarea"
+            formControlValue={message}
+            formControlPlaceHolder="Enter text"
+            formControlOnChange={(e) => { this.onChange(e, 'message'); }}
+            messageText={formatMessage(contactMessages.message)}
+            componentClass="textarea"
+            rows={7}
+            style={{ height: 160 }}
+          />
           <hr />
-          <FormGroup>
-            <div className="save-button">
-              <Button
-                onClick={onSubmitClicked}
-                bsStyle="primary"
-              >
-                <FormattedMessage
-                  id={'Contact.submit'}
-                  defaultMessage={'Submit'}
-                />
-              </Button>
-            </div>
-          </FormGroup>
+          <ResponsiveInputField>
+            {this.renderSubmitButton(onSubmitClicked)}
+          </ResponsiveInputField>
         </div>
       </div>
     );
@@ -126,15 +121,17 @@ Contact.propTypes = {
   response: PropTypes.object,
   clearContactAlert: PropTypes.func,
   submitContact: PropTypes.func,
+  intl: PropTypes.object,
 };
-
 Contact.defaultProps = {
   response: {},
   clearContactAlert: () => {},
   submitContact: () => {},
+  intl: null,
 };
+
 const mapStateToProps = ({ contact }) => ({
   response: contact.response,
 });
 
-export default connect(mapStateToProps, { submitContact, clearContactAlert })(Contact);
+export default connect(mapStateToProps, { submitContact, clearContactAlert })(injectIntl(Contact));
