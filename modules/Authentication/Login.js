@@ -39,15 +39,9 @@ class Login extends React.Component {
     return (
       <div className="form-offset">
         <Button
+          type="submit"
           className="login-button"
           bsStyle="primary"
-          onClick={() => this.props.loginUser({
-            endpoint: '/api/login',
-            data: {
-              email: emailText,
-              password,
-            }
-          })}
         >
           <FormattedMessage
             id={'Signup.login'}
@@ -94,7 +88,17 @@ class Login extends React.Component {
           <title>Login</title>
         </Helmet>
         <div className="page-header"><h3>Login</h3></div>
-        <div>
+        <form onSubmit={(e) => {
+          this.props.loginUser({
+            endpoint: '/api/login',
+            data: {
+              email: emailText,
+              password,
+            }
+          });
+          e.preventDefault();
+        }}
+        >
           {response &&
             <Alert bsStyle="danger">
               <p>{response.message}</p>
@@ -127,7 +131,7 @@ class Login extends React.Component {
             responseGoogle={this.responseGoogle}
             responseFacebook={this.responseFacebook}
           />
-        </div>
+        </form>
       </div>
     );
   }

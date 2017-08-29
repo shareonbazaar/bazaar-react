@@ -38,12 +38,12 @@ class Contact extends React.Component {
       </div>
     );
   }
-  renderSubmitButton(onSubmitClicked) {
+  renderSubmitButton() {
     return (
       <div className="save-button">
         <Button
-          onClick={onSubmitClicked}
           bsStyle="primary"
+          type="submit"
         >
           <FormattedMessage
             id={'Contact.submit'}
@@ -60,17 +60,18 @@ class Contact extends React.Component {
     const messageValid = message.length > 0;
     const { response } = this.props;
     const { formatMessage } = this.props.intl;
-    const onSubmitClicked = () => {
+    const onSubmitClicked = (e) => {
       this.setState({ hasClickedSubmit: true });
       if (nameValid && emailValid && messageValid) {
         this.props.submitContact(this.state);
       }
+      e.preventDefault();
     };
 
     return (
       <div className="content-page contact-page">
         {this.renderHeader()}
-        <div>
+        <form onSubmit={onSubmitClicked}>
           {response &&
             <Alert
               bsStyle={`${response.type === 'error' ? 'danger' : 'success'}`}
@@ -109,9 +110,9 @@ class Contact extends React.Component {
           />
           <hr />
           <ResponsiveInputField>
-            {this.renderSubmitButton(onSubmitClicked)}
+            {this.renderSubmitButton()}
           </ResponsiveInputField>
-        </div>
+        </form>
       </div>
     );
   }

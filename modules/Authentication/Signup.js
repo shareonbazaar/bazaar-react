@@ -93,13 +93,13 @@ Authentic
       </div>
     );
   }
-  renderSignupButton(onSignupClicked) {
+  renderSignupButton() {
     return (
       <div className="form-offset">
         <Button
           className="login-button"
           bsStyle="primary"
-          onClick={onSignupClicked}
+          type="submit"
         >
           <FormattedMessage
             id={'Signup.signup'}
@@ -124,7 +124,7 @@ Authentic
     const emailValid = validator.validate(emailText);
     const passwordsValid = (password.length > 0 && password === confirmPassword);
     const { formatMessage } = this.props.intl;
-    const onSignupClicked = () => {
+    const onSignupClicked = (e) => {
       this.setState({ hasClickedSignup: true });
       if (firstNameValid && lastNameValid && emailValid && passwordsValid) {
         this.props.loginUser({
@@ -138,6 +138,7 @@ Authentic
           }
         });
       }
+      e.preventDefault();
     };
 
     return (
@@ -151,51 +152,53 @@ Authentic
                   <p>{response.message}</p>
                 </Alert>
               }
-              <ResponsiveInputField
-                formGroupIsValid={(hasClickedSignup && !firstNameValid)}
-                formControlType="text"
-                formControlValue={firstName}
-                formControlPlaceHolder="John"
-                formControlOnChange={(e) => { this.onChange(e, 'firstName'); }}
-                messageText={formatMessage(signupMessages.firstName)}
-              />
-              <ResponsiveInputField
-                formGroupIsValid={(hasClickedSignup && !lastNameValid)}
-                formControlType="text"
-                formControlValue={lastName}
-                formControlPlaceHolder="Doe"
-                formControlOnChange={(e) => { this.onChange(e, 'lastName'); }}
-                messageText={formatMessage(signupMessages.lastName)}
-              />
-              <ResponsiveInputField
-                formGroupIsValid={(hasClickedSignup && !emailValid)}
-                formControlType="email"
-                formControlValue={emailText}
-                formControlPlaceHolder="Email"
-                formControlOnChange={(e) => { this.onChange(e, 'emailText'); }}
-                messageText={formatMessage(signupMessages.email)}
-              />
-              <ResponsiveInputField
-                formControlType="password"
-                formControlValue={password}
-                formControlPlaceHolder="Password"
-                formControlOnChange={(e) => { this.onChange(e, 'password'); }}
-                messageText={formatMessage(signupMessages.password)}
-              />
-              <ResponsiveInputField
-                formGroupIsValid={(hasClickedSignup && !passwordsValid)}
-                formControlType="password"
-                formControlValue={confirmPassword}
-                formControlPlaceHolder="Password"
-                formControlOnChange={(e) => { this.onChange(e, 'confirmPassword'); }}
-                messageText={formatMessage(signupMessages.confirmPassword)}
-              />
-              <ResponsiveInputField>
-                {this.renderSignupButton(onSignupClicked)}
-              </ResponsiveInputField>
-              <ResponsiveInputField>
-                {this.renderLoginButton()}
-              </ResponsiveInputField>
+              <form onSubmit={onSignupClicked}>
+                <ResponsiveInputField
+                  formGroupIsValid={(hasClickedSignup && !firstNameValid)}
+                  formControlType="text"
+                  formControlValue={firstName}
+                  formControlPlaceHolder="John"
+                  formControlOnChange={(e) => { this.onChange(e, 'firstName'); }}
+                  messageText={formatMessage(signupMessages.firstName)}
+                />
+                <ResponsiveInputField
+                  formGroupIsValid={(hasClickedSignup && !lastNameValid)}
+                  formControlType="text"
+                  formControlValue={lastName}
+                  formControlPlaceHolder="Doe"
+                  formControlOnChange={(e) => { this.onChange(e, 'lastName'); }}
+                  messageText={formatMessage(signupMessages.lastName)}
+                />
+                <ResponsiveInputField
+                  formGroupIsValid={(hasClickedSignup && !emailValid)}
+                  formControlType="email"
+                  formControlValue={emailText}
+                  formControlPlaceHolder="Email"
+                  formControlOnChange={(e) => { this.onChange(e, 'emailText'); }}
+                  messageText={formatMessage(signupMessages.email)}
+                />
+                <ResponsiveInputField
+                  formControlType="password"
+                  formControlValue={password}
+                  formControlPlaceHolder="Password"
+                  formControlOnChange={(e) => { this.onChange(e, 'password'); }}
+                  messageText={formatMessage(signupMessages.password)}
+                />
+                <ResponsiveInputField
+                  formGroupIsValid={(hasClickedSignup && !passwordsValid)}
+                  formControlType="password"
+                  formControlValue={confirmPassword}
+                  formControlPlaceHolder="Password"
+                  formControlOnChange={(e) => { this.onChange(e, 'confirmPassword'); }}
+                  messageText={formatMessage(signupMessages.confirmPassword)}
+                />
+                <ResponsiveInputField>
+                  {this.renderSignupButton()}
+                </ResponsiveInputField>
+                <ResponsiveInputField>
+                  {this.renderLoginButton()}
+                </ResponsiveInputField>
+              </form>
             </Col>
             <Col md={5}>
               <SocialMediaLogin
