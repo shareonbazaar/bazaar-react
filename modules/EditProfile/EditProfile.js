@@ -144,7 +144,7 @@ class EditProfile extends React.Component {
         <div>
           {response && this.renderAlert()}
           <ResponsiveInputField
-            shouldChildRender
+            renderChildren
             className="label-top"
             messageText={formatMessage(editProfileMessages.pic)}
           >
@@ -165,7 +165,7 @@ class EditProfile extends React.Component {
             messageText={formatMessage(editProfileMessages.name)}
           />
           <ResponsiveInputField
-            shouldChildRender
+            renderChildren
             messageText={formatMessage(editProfileMessages.gender)}
           >
             <div className="radio-block">
@@ -201,7 +201,7 @@ class EditProfile extends React.Component {
             messageText={formatMessage(editProfileMessages.hometown)}
           />
           <ResponsiveInputField
-            shouldChildRender
+            renderChildren
             messageText={formatMessage(editProfileMessages.status)}
           >
             <div className="radio-block">
@@ -231,7 +231,7 @@ class EditProfile extends React.Component {
             style={{ height: 100 }}
           />
           <ResponsiveInputField
-            shouldChildRender
+            renderChildren
             className="label-top"
             messageText={formatMessage(editProfileMessages.skills)}
           >
@@ -252,7 +252,7 @@ class EditProfile extends React.Component {
             </div>
           </ResponsiveInputField>
           <ResponsiveInputField
-            shouldChildRender
+            renderChildren
             className="label-top"
             messageText={formatMessage(editProfileMessages.interests)}
           >

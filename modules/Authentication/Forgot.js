@@ -26,38 +26,96 @@ class Forgot extends React.Component {
       });
     }
   }
-
   componentWillReceiveProps(newProps) {
     if (newProps.isAuthenticated) {
       this.props.push('/settings');
     }
   }
+
   onChange(e, field) {
     this.setState({
       [field]: e.target.value,
     });
   }
 
-  render() {
+  renderAlert() {
+    const { response } = this.props;
+    return (
+      <div className="content-page forgot-page">
+        {response ?
+          <Alert bsStyle="danger">
+            <p>{response.message}</p>
+          </Alert>
+          :
+          <div>
+            <FormattedMessage
+              id={'Signup.validatetoken'}
+              defaultMessage={'Validating token...'}
+            />
+          </div>
+        }
+      </div>
+    );
+  }
+  renderSuccess() {
+    const { forgotEmail } = this.props;
+    return (
+      <div>
+        <p>
+          <FormattedMessage
+            id={'Forgot.sendreset'}
+            defaultMessage={'If there is an account associated with {forgotEmail}, an email will be sent to that account with instructions on how to reset password'}
+            values={{ forgotEmail }}
+          />
+        </p>
+        <a onClick={this.props.clearForgotEmail}>
+          <FormattedMessage
+            id={'Forgot.resetanother'}
+            defaultMessage={'Reset a different account'}
+          />
+        </a>
+      </div>
+    );
+  }
+  renderTextField() {
     const { emailText } = this.state;
-    const { params, response, forgotEmail } = this.props;
-    if (params.id) {
-      return (
-        <div className="content-page forgot-page">
-          {response ?
-            <Alert bsStyle="danger">
-              <p>{response.message}</p>
-            </Alert>
-            :
-            <div>
+    return (
+      <div>
+        <FormGroup>
+          <ControlLabel>
+            <FormattedMessage
+              id={'Signup.email'}
+              defaultMessage={'Email'}
+            />
+          </ControlLabel>
+          <FormControl
+            type="email"
+            value={emailText}
+            placeholder="Email"
+            onChange={(e) => { this.onChange(e, 'emailText'); }}
+          />
+        </FormGroup>
+        <FormGroup>
+          <div className="form-offset">
+            <Button
+              className="login-button"
+              bsStyle="primary"
+              onClick={() => this.props.forgotPasswordRequest(emailText)}
+            >
               <FormattedMessage
-                id={'Signup.validatetoken'}
-                defaultMessage={'Validating token...'}
+                id={'Forgot.reset'}
+                defaultMessage={'Reset'}
               />
-            </div>
-          }
-        </div>
-      );
+            </Button>
+          </div>
+        </FormGroup>
+      </div>
+    );
+  }
+  render() {
+    const { params, forgotEmail } = this.props;
+    if (params.id) {
+      this.renderAlert();
     }
     return (
       <div className="content-page forgot-page">
@@ -69,58 +127,7 @@ class Forgot extends React.Component {
             />
           </h3>
         </div>
-        {
-          forgotEmail ?
-            <div>
-              <p>
-                <FormattedMessage
-                  id={'Forgot.sendreset'}
-                  defaultMessage={'If there is an account associated with {forgotEmail}, an email will be sent to that account with instructions on how to reset password'}
-                  values={{ forgotEmail }}
-                />
-              </p>
-              <a onClick={this.props.clearForgotEmail}>
-                <FormattedMessage
-                  id={'Forgot.resetanother'}
-                  defaultMessage={'Reset a different account'}
-                />
-              </a>
-            </div>
-
-            :
-            (
-              <div>
-                <FormGroup>
-                  <ControlLabel>
-                    <FormattedMessage
-                      id={'Signup.email'}
-                      defaultMessage={'Email'}
-                    />
-                  </ControlLabel>
-                  <FormControl
-                    type="email"
-                    value={emailText}
-                    placeholder="Email"
-                    onChange={(e) => { this.onChange(e, 'emailText'); }}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <div className="form-offset">
-                    <Button
-                      className="login-button"
-                      bsStyle="primary"
-                      onClick={() => this.props.forgotPasswordRequest(emailText)}
-                    >
-                      <FormattedMessage
-                        id={'Forgot.reset'}
-                        defaultMessage={'Reset'}
-                      />
-                    </Button>
-                  </div>
-                </FormGroup>
-              </div>
-            )
-        }
+        {forgotEmail ? this.renderSuccess() : this.renderTextField()}
       </div>
     );
   }

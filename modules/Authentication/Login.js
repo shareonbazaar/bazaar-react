@@ -35,46 +35,49 @@ class Login extends React.Component {
   }
 
   renderLoginButton() {
-    const { emailText, password } = this.state;
     return (
-      <div className="form-offset">
-        <Button
-          type="submit"
-          className="login-button"
-          bsStyle="primary"
-        >
-          <FormattedMessage
-            id={'Signup.login'}
-            defaultMessage={'Login'}
-          />
-        </Button>
-        <Link
-          className="forgot-link"
-          to="/forgot"
-        >
-          <FormattedMessage
-            id={'Signup.forgotpassword'}
-            defaultMessage={'Forgot password?'}
-          />
-        </Link>
-      </div>
+      <FormGroup>
+        <div className="form-offset">
+          <Button
+            type="submit"
+            className="login-button"
+            bsStyle="primary"
+          >
+            <FormattedMessage
+              id={'Signup.login'}
+              defaultMessage={'Login'}
+            />
+          </Button>
+          <Link
+            className="forgot-link"
+            to="/forgot"
+          >
+            <FormattedMessage
+              id={'Signup.forgotpassword'}
+              defaultMessage={'Forgot password?'}
+            />
+          </Link>
+        </div>
+      </FormGroup>
     );
   }
 
   renderSignupButton() {
     return (
-      <div className="form-offset">
-        <FormattedMessage
-          id={'Signup.noaccount'}
-          defaultMessage={"Don't have an account?"}
-        />
-        <Link className="sign-up-link" to="/signup">
+      <FormGroup>
+        <div className="form-offset">
           <FormattedMessage
-            id={'Signup.signup'}
-            defaultMessage={'Sign up'}
+            id={'Signup.noaccount'}
+            defaultMessage={"Don't have an account?"}
           />
-        </Link>
-      </div>
+          <Link className="sign-up-link" to="/signup">
+            <FormattedMessage
+              id={'Signup.signup'}
+              defaultMessage={'Sign up'}
+            />
+          </Link>
+        </div>
+      </FormGroup>
     );
   }
 
@@ -118,14 +121,8 @@ class Login extends React.Component {
             formControlOnChange={(e) => { this.onChange(e, 'password'); }}
             messageText={formatMessage(loginMessages.signupPassword)}
           />
-          <ResponsiveInputField>
-            {this.renderLoginButton()}
-          </ResponsiveInputField>
-          <FormGroup>
-            <ResponsiveInputField>
-              {this.renderSignupButton()}
-            </ResponsiveInputField>
-          </FormGroup>
+          {this.renderLoginButton()}
+          {this.renderSignupButton()}
           <SocialMediaLogin
             className="form-offset"
             responseGoogle={this.responseGoogle}
