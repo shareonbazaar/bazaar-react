@@ -196,12 +196,8 @@ Authentic
                   formControlOnChange={(e) => { this.onChange(e, 'confirmPassword'); }}
                   messageText={formatMessage(signupMessages.confirmPassword)}
                 />
-                <ResponsiveInputField>
-                  {this.renderSignupButton()}
-                </ResponsiveInputField>
-                <ResponsiveInputField>
-                  {this.renderLoginButton()}
-                </ResponsiveInputField>
+                {this.renderSignupButton()}
+                {this.renderLoginButton()}
               </form>
             </Col>
             <Col md={5}>
