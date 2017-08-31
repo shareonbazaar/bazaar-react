@@ -174,9 +174,9 @@ class EditProfile extends React.Component {
                   { name: 'male', label: formatMessage(editProfileMessages.male) },
                   { name: 'female', label: formatMessage(editProfileMessages.female) },
                   { name: 'other', label: formatMessage(editProfileMessages.other) }
-                ].map((props, i) => (
+                ].map(props => (
                   <Radio
-                    key={i}
+                    key={props.name}
                     selected={gender}
                     name={props.name}
                     onClick={() => this.setState({ gender: props.name })}
@@ -209,9 +209,9 @@ class EditProfile extends React.Component {
                 [
                   { name: 'local', label: formatMessage(editProfileMessages.local) },
                   { name: 'newcomer', label: formatMessage(editProfileMessages.newcomer) }
-                ].map((props, i) => (
+                ].map(props => (
                   <Radio
-                    key={i}
+                    key={props.name}
                     selected={status}
                     name={props.name}
                     onClick={() => this.setState({ status: props.name })}
