@@ -25,7 +25,6 @@ const mapStateToProps = (state) => {
     isFetching: state.transactions.isFetching,
     loggedInUser: state.auth.user,
     useAnimation: state.transactions.useAnimation,
-    toReview: state.transactions.toReview,
   };
 };
 
