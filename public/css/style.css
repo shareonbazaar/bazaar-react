@@ -218,6 +218,15 @@
   }
 }
 
+.empty-transaction-list {
+  text-align: center;
+  margin-top: 50px;
+  p {
+    color: grey;
+    font-style: italic;
+  }
+}
+
 .transaction {
   border: 1px solid lightgray;
   text-align: left;
