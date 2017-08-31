@@ -24,7 +24,7 @@
     "react/forbid-prop-types": "off",
     "react/require-default-props": 1,
     "jsx-a11y/anchor-has-content": "off",
-    "class-methods-use-this": [1, { "exceptMethods": ['getChildContext', 'componentWillMount'] }],
+    "class-methods-use-this": "off",
     "react/no-unused-prop-types": "off",
     "jsx-a11y/no-static-element-interactions": "off",
   },

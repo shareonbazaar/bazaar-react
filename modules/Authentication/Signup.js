@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import validator from 'email-validator';
 
-import { Button, Grid, Col, Row, Alert } from 'react-bootstrap';
+import { Button, Grid, Col, Row, Alert, FormGroup } from 'react-bootstrap';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Link } from 'react-router';
 
@@ -76,37 +76,41 @@ Authentic
   }
   renderLoginButton() {
     return (
-      <div className="form-offset">
-        <FormattedMessage
-          id={'Signup.alreadyhaveaccount'}
-          defaultMessage={'Already have an account?'}
-        />
-        <Link
-          className="sign-up-link"
-          to="/login"
-        >
+      <FormGroup>
+        <div className="form-offset">
           <FormattedMessage
-            id={'Signup.login'}
-            defaultMessage={'Login'}
+            id={'Signup.alreadyhaveaccount'}
+            defaultMessage={'Already have an account?'}
           />
-        </Link>
-      </div>
+          <Link
+            className="sign-up-link"
+            to="/login"
+          >
+            <FormattedMessage
+              id={'Signup.login'}
+              defaultMessage={'Login'}
+            />
+          </Link>
+        </div>
+      </FormGroup>
     );
   }
   renderSignupButton() {
     return (
-      <div className="form-offset">
-        <Button
-          className="login-button"
-          bsStyle="primary"
-          type="submit"
-        >
-          <FormattedMessage
-            id={'Signup.signup'}
-            defaultMessage={'Sign up'}
-          />
-        </Button>
-      </div>
+      <FormGroup>
+        <div className="form-offset">
+          <Button
+            className="login-button"
+            bsStyle="primary"
+            type="submit"
+          >
+            <FormattedMessage
+              id={'Signup.signup'}
+              defaultMessage={'Sign up'}
+            />
+          </Button>
+        </div>
+      </FormGroup>
     );
   }
   render() {
@@ -192,12 +196,8 @@ Authentic
                   formControlOnChange={(e) => { this.onChange(e, 'confirmPassword'); }}
                   messageText={formatMessage(signupMessages.confirmPassword)}
                 />
-                <ResponsiveInputField>
-                  {this.renderSignupButton()}
-                </ResponsiveInputField>
-                <ResponsiveInputField>
-                  {this.renderLoginButton()}
-                </ResponsiveInputField>
+                {this.renderSignupButton()}
+                {this.renderLoginButton()}
               </form>
             </Col>
             <Col md={5}>
