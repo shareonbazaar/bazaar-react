@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Button, FormGroup, Alert } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
+
 import SkillsModal from '../SkillsModal/SkillsModal';
 import { updateProfile, clearProfileAlert } from '../../utils/actions';
 import Radio from './Radio';
@@ -82,6 +84,7 @@ class EditProfile extends React.Component {
 
   onSubmit() {
     const { name, gender, hometown, location, status, aboutMe, skills, interests, file } = this.state;
+    const { loggedInUser } = this.props;
     const form = new FormData();
     form.append('profile.name', name);
     form.append('profile.gender', gender);
@@ -109,6 +112,7 @@ class EditProfile extends React.Component {
       form.append('profilepic', file);
     }
     this.props.updateProfile(form);
+    this.props.push(`/profile/${loggedInUser._id}`);
   }
   renderHeader() {
     return (
@@ -308,6 +312,7 @@ EditProfile.propTypes = {
   clearProfileAlert: PropTypes.func,
   response: PropTypes.object,
   intl: PropTypes.object,
+  push: PropTypes.func,
 };
 EditProfile.defaultProps = {
   loggedInUser: null,
@@ -316,6 +321,7 @@ EditProfile.defaultProps = {
   clearProfileAlert: () => {},
   response: null,
   intl: null,
+  push: () => {},
 };
 
-export default connect(mapStateToProps, { updateProfile, clearProfileAlert })(injectIntl(EditProfile));
+export default connect(mapStateToProps, { updateProfile, clearProfileAlert, push })(injectIntl(EditProfile));
