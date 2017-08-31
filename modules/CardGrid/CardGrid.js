@@ -33,25 +33,46 @@ export default class CardGrid extends React.Component {
     this.props.updateProfile(form);
   }
 
+  renderUsers() {
+    const { users, loggedInUser } = this.props;
+    return (
+      <Masonry className="user-list" options={masonryOptions}>
+        {users.map(user => (
+          <UserCard
+            onBookmarkClicked={() => this.toggleBookmark(user._id)}
+            key={user._id}
+            user={user}
+            bookmarked={loggedInUser.bookmarks.indexOf(user._id) >= 0}
+          />
+        ))
+        }
+      </Masonry>
+    );
+  }
+
+  renderEmptyPage() {
+    const { localizedMessages } = this.props;
+    const { formatMessage } = this.props.intl;
+    return (
+      <div className="empty-card-grid">
+        <p>
+          {formatMessage(localizedMessages.noUsersMessage)}
+        </p>
+      </div>
+    );
+  }
+
   render() {
-    const { users, isFetching, loggedInUser } = this.props;
+    const { users, isFetching } = this.props;
     if (!users || isFetching) {
       return (<div>Loading...</div>);
     }
 
     return (
       <div className="community-page">
-        <Masonry className="user-list" options={masonryOptions}>
-          {users.map(user => (
-            <UserCard
-              onBookmarkClicked={() => this.toggleBookmark(user._id)}
-              key={user._id}
-              user={user}
-              bookmarked={loggedInUser.bookmarks.indexOf(user._id) >= 0}
-            />
-          ))
-          }
-        </Masonry>
+        {
+          users.length > 0 ? this.renderUsers() : this.renderEmptyPage()
+        }
       </div>
     );
   }
@@ -64,6 +85,8 @@ CardGrid.propTypes = {
   loggedInUser: PropTypes.object,
   bookmarkCard: PropTypes.func,
   updateProfile: PropTypes.func,
+  localizedMessages: PropTypes.object,
+  intl: PropTypes.object,
 };
 
 CardGrid.defaultProps = {
@@ -73,4 +96,6 @@ CardGrid.defaultProps = {
   loggedInUser: {},
   bookmarkCard: () => {},
   updateProfile: () => {},
+  localizedMessages: {},
+  intl: null,
 };
