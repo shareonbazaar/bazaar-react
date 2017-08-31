@@ -74,7 +74,7 @@ exports.apiGetTransactions = (req, res) => {
                 'happenedAt': 1,
                 'placeName': 1,
                 'request_type': 1,
-                '_participants': 1,
+                '_participants': { '$setDifference': [ '$_participants', [helpers.toObjectId(req.user._id)] ] },
                 '_confirmations': 1,
                 'createdAt': 1,
             }
