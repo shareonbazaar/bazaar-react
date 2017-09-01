@@ -26,3 +26,35 @@ public/*.svg
 .ebextensions/*
 
 public/bundle.js
+  *.log
+
+# API keys and secrets
+.env
+
+# Dependency directory
+node_modules
+
+# OS metadata
+.DS_Store
+
+# Translation build files
+build/*
+
+# Test coverage files
+coverage/*
+
+#Public folder images
+public/*.jpg
+public/*.ttf
+public/*.svg
+
+# yarn metadata
+*.lock
+
+# tag files
+.tags
+.tags1
+
+.ebextensions/*
+
+public/bundle.js
