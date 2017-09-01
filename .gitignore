@@ -23,6 +23,10 @@ public/*.svg
 # yarn metadata
 *.lock
 
+# tag files
+.tags
+.tags1
+
 .ebextensions/*
 
 public/bundle.js
