@@ -23,11 +23,9 @@ class Chat extends React.Component {
     this.state = {
       textValue: '',
       messages: messages.map(msg => ({
-        // eslint-disable-next-line
         author: msg._sender.profile.name,
         text: msg.message,
         date: msg.createdAt,
-        // eslint-disable-next-line
         sentByCurrUser: (currUser._id === msg._sender._id),
       })),
     };
