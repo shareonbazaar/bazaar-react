@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Button, Alert } from 'react-bootstrap';
+import { Button, Alert, FormGroup } from 'react-bootstrap';
 import validator from 'email-validator';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
@@ -109,9 +109,9 @@ class Contact extends React.Component {
             style={{ height: 160 }}
           />
           <hr />
-          <ResponsiveInputField>
+          <FormGroup>
             {this.renderSubmitButton()}
-          </ResponsiveInputField>
+          </FormGroup>
         </form>
       </div>
     );
