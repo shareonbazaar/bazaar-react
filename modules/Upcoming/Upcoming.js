@@ -131,7 +131,7 @@ class Upcoming extends React.Component {
     const { markerLocation, inViewMode, happenedAt } = this.state;
     const { content } = this.props;
     if (!inViewMode) {
-      updateTransaction({
+      this.props.updateTransaction({
         t_id: content._id,
         transaction: {
           loc: {
