@@ -30,5 +30,5 @@ SideBarLink.defaultProps = {
   toLink: '',
   imageSrc: '',
   text: '',
-  badgeNum: 0
+  badgeNum: null,
 };
