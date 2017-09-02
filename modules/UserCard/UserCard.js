@@ -31,7 +31,7 @@ class UserCard extends React.Component {
         </div>
         <div className="profile-info">
           <div
-            onClick={() => push(`/profile/${user._id}`)}
+            onClick={() => this.props.push(`/profile/${user._id}`)}
             className="profile-pic"
             style={imageStyle}
           />
@@ -54,12 +54,14 @@ UserCard.propTypes = {
   user: PropTypes.object,
   bookmarked: PropTypes.bool,
   onBookmarkClicked: PropTypes.func,
+  push: PropTypes.func,
 };
 
 UserCard.defaultProps = {
   user: null,
   bookmarked: false,
   onBookmarkClicked: () => {},
+  push: () => {},
 };
 
 export default connect(null, { push })(UserCard);
