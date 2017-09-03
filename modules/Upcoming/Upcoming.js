@@ -73,11 +73,7 @@ function TimePicker(props) {
     // eslint-disable-next-line
     } else {
       return (
-        <DateTime
-          dateFormat={'MMMM Do YYYY'}
-          onChange={onTimeSelected}
-          defaultValue={time ? new Date(time) : Date.now()}
-        />
+        <div>{moment(props.time).format('MMMM Do YYYY, h:mm a')}</div>
       );
     }
   // eslint-disable-next-line
@@ -86,7 +82,7 @@ function TimePicker(props) {
       <DateTime
         dateFormat={'MMMM Do YYYY'}
         onChange={onTimeSelected}
-        defaultValue={new Date(time)}
+        defaultValue={time ? new Date(time) : Date.now()}
       />
     );
   }
@@ -95,7 +91,7 @@ function TimePicker(props) {
 TimePicker.propTypes = {
   onTimeSelected: PropTypes.func,
   editMode: PropTypes.bool,
-  time: PropTypes.string,
+  time: PropTypes.object,
 };
 
 const BERLIN_LNG = 13.42;
@@ -117,7 +113,7 @@ class Upcoming extends React.Component {
         name: content.placeName || '',
       },
       zoom: DEFAULT_ZOOM,
-      happenedAt: content.happenedAt,
+      happenedAt: new Date(content.happenedAt),
       showReviewForm: false,
     };
 
