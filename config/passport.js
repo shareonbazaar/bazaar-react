@@ -67,53 +67,72 @@ exports.apiLogin = (req, res, next) => {
   })(req, res, next);
 };
 
+const handleLogin = (req, res, payload, mapPayloadToUser) => {
+  return (existingUser) => {
+    if (existingUser) {
+      res.json({
+        token: jwt.sign({ email: existingUser.email }, process.env.SESSION_SECRET),
+        user: existingUser,
+        error: null,
+        status: 200,
+      });
+    } else {
+      User.findOne({ email: payload.email }).exec()
+        .then((existingEmailUser) => {
+          if (existingEmailUser) {
+            res.status(CONFLICT).json({
+              error: 'There is already an account with this email address',
+              status: CONFLICT,
+            });
+          } else {
+            const newUser = new User(Object.assign({}, mapPayloadToUser(payload), {
+              _skills: req.body._skills,
+              _interests: req.body._interests,
+            }));
+            newUser.save()
+              .then(savedUser => contact.sendWelcomeEmail(savedUser, req.headers.host))
+              .then(() => {
+                newUser.populate('_skills _interests').execPopulate()
+                  .then(user => res.json({
+                    token: jwt.sign({ email: user.email }, process.env.SESSION_SECRET),
+                    user,
+                    error: null,
+                    status: 200,
+                  }));
+              });
+          }
+        })
+        .catch(err => res.status(500).json({ error: err }));
+    }
+  };
+};
 
-exports.apiSignup = (req, res, next) => {
+exports.apiSignup = (req, res) => {
   req.assert('firstName', 'You need to provide a first name').notEmpty();
   req.assert('lastName', 'You need to provide a last name').notEmpty();
   req.assert('email', 'Email is not valid').isEmail();
   req.assert('password', 'Password must be at least 4 characters long').notEmpty().len(4);
-  req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
   req.sanitize('email').normalizeEmail({ remove_dots: false });
 
   const errors = req.validationErrors();
   if (errors) {
-      return res.status(400).json({
-          error: errors.map(e => e.msg),
-          token: null,
-          status: 400,
-      });
+    return res.status(400).json({
+      error: errors.map(e => e.msg),
+      token: null,
+      status: 400,
+    });
   }
 
-  var protocol = req.secure ? 'https://' : 'http://';
-  var base_url = protocol + req.headers.host;
-  User.findOne({ email: req.body.email }).exec()
-  .then(existingUser => {
-      if (existingUser) {
-          res.status(CONFLICT).json({
-              error: "There is already an account with this email address",
-              status: CONFLICT,
-          });
-      } else {
-          const user = new User({
-              profile: {
-                name: req.body.firstName + ' ' + req.body.lastName,
-                picture: base_url + '/images/person_placeholder.gif',
-              },
-              email: req.body.email,
-              password: req.body.password,
-          });
-          user.save()
-          .then(user => contact.sendWelcomeEmail(user, req.headers.host))
-          .then(data => res.json({
-              token: jwt.sign({ email: user.email }, process.env.SESSION_SECRET),
-              user: user,
-              error: null,
-              status: 200,
-          }))
-      }
-  })
-  .catch(err => res.status(500).json({error: err}));
+  const protocol = req.secure ? 'https://' : 'http://';
+  const base_url = protocol + req.headers.host;
+  handleLogin(req, res, req.body, (payloadData) => ({
+    profile: {
+      name: `${payloadData.firstName}  ${payloadData.lastName}`,
+      picture: `${base_url}/images/person_placeholder.gif`,
+    },
+    email: payloadData.email,
+    password: payloadData.password,
+  }))(null);
 };
 
 /**
@@ -151,104 +170,46 @@ exports.forgotPassword = (req, res, next) => {
   .catch(err => res.status(500).json({error: err}));
 };
 
-exports.authenticate_google = (req, res, done) => {
-  var auth = new GoogleAuth;
-  var client = new auth.OAuth2(process.env.GOOGLE_ID, '', '');
+
+exports.authenticate_google = (req, res) => {
+  const auth = new GoogleAuth();
+  const client = new auth.OAuth2(process.env.GOOGLE_ID, '', '');
   client.verifyIdToken(req.body.id_token, process.env.GOOGLE_ID, (e, login) => {
-      var payload = login.getPayload();
-      User.findOne({ google: payload.sub }).populate('_skills _interests').exec()
-      .then(existingUser => {
-        if (existingUser) {
-            res.json({
-                token: jwt.sign({ email: existingUser.email }, process.env.SESSION_SECRET),
-                user: existingUser,
-                error: null,
-                status: 200,
-            });
-        } else {
-            User.findOne({ email: payload.email }).exec()
-            .then(existingEmailUser => {
-                if (existingEmailUser) {
-                    res.status(CONFLICT).json({
-                        error: "There is already an account with this email address",
-                        status: CONFLICT,
-                    });
-                } else {
-                    const user = new User({
-                        email: payload.email,
-                        google: payload.sub,
-                        'profile.name': payload.name,
-                        'profile.picture': payload.picture,
-                    });
-                    user.save()
-                    .then(user => contact.sendWelcomeEmail(user, req.headers.host))
-                    .then(data => res.json({
-                        token: jwt.sign({ email: user.email }, process.env.SESSION_SECRET),
-                        user: user,
-                        error: null,
-                        status: 200,
-                    }))
-                }
-            });
-          }
-      })
-      .catch(err => res.status(500).json({error: err}));
+    const payload = login.getPayload();
+    User.findOne({ google: payload.sub }).populate('_skills _interests').exec()
+      .then(handleLogin(req, res, payload, payloadData => ({
+        email: payloadData.email,
+        google: payloadData.sub,
+        'profile.name': payloadData.name,
+        'profile.picture': payloadData.picture,
+      })))
+      .catch(err => res.status(500).json({ error: err }));
   });
-}
+};
 
 const FB_ENDPOINT = 'https://graph.facebook.com/me';
-exports.authenticate_facebook = (req, res, done) => {
-    requestify.get(`${FB_ENDPOINT}`, {
-        params: {
-            fields: 'id,email,gender,location,hometown,name,picture',
-            access_token: req.body.access_token,
-        }
-    })
+exports.authenticate_facebook = (req, res) => {
+  requestify.get(`${FB_ENDPOINT}`, {
+    params: {
+      fields: 'id,email,gender,location,hometown,name,picture',
+      access_token: req.body.access_token,
+    }
+  })
     .then((response) => {
-        var payload = response.getBody();
-        User.findOne({ facebook: payload.id }).populate('_skills _interests').exec()
-        .then(existingUser => {
-            if (existingUser) {
-                //user has authenticated correctly thus we create a JWT token
-                res.json({
-                    token: jwt.sign({ email: existingUser.email }, process.env.SESSION_SECRET),
-                    user: existingUser,
-                    error: null,
-                    status: 200,
-                });
-            } else {
-                User.findOne({ email: payload.email }).exec()
-                .then(existingEmailUser => {
-                    if (existingEmailUser) {
-                        res.status(CONFLICT).json({
-                            error: "There is already an account with this email address",
-                            status: CONFLICT,
-                        });
-                    } else {
-                        const user = new User({
-                            email: payload.email,
-                            facebook: payload.id,
-                            'profile.name': payload.name,
-                            'profile.gender': payload.gender,
-                            'profile.hometown': payload.hometown.name,
-                            'profile.location': payload.location.name,
-                            'profile.picture': payload.picture.data.url,
-                        });
-                        user.save()
-                        .then(user => contact.sendWelcomeEmail(user, req.headers.host))
-                        .then(data => res.json({
-                            token: jwt.sign({ email: user.email }, process.env.SESSION_SECRET),
-                            user: user,
-                            error: null,
-                            status: 200,
-                        }))
-                    }
-                })
-            }
-        })
+      const payload = response.getBody();
+      User.findOne({ facebook: payload.id }).populate('_skills _interests').exec()
+        .then(handleLogin(req, res, payload, payloadData => ({
+          email: payloadData.email,
+          facebook: payloadData.id,
+          'profile.name': payload.name,
+          'profile.gender': payload.gender,
+          'profile.hometown': payload.hometown.name,
+          'profile.location': payload.location.name,
+          'profile.picture': payload.picture.data.url,
+        })));
     })
-    .catch(err => res.status(500).json({error: err}));
-}
+    .catch(err => res.status(500).json({ error: err }));
+};
 
 
 /**
