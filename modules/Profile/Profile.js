@@ -64,7 +64,7 @@ class Profile extends React.Component {
                 </div>
                 <h4>
                   <FormattedMessage
-                    id={'EditProfile.aboutme'}
+                    id={'Profile.aboutme'}
                     defaultMessage={'About Me'}
                   />
                 </h4>

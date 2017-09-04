@@ -12,10 +12,6 @@ const loginMessages = defineMessages({
 });
 
 const signupMessages = defineMessages({
-  signup: {
-    id: 'Signup.signup',
-    defaultMessage: 'Sign up',
-  },
   firstName: {
     id: 'Signup.firstname',
     defaultMessage: 'First Name',
@@ -35,26 +31,6 @@ const signupMessages = defineMessages({
   confirmPassword: {
     id: 'Signup.confirmpassword',
     defaultMessage: 'Confirm password',
-  },
-  alreadyHaveAccount: {
-    id: 'Signup.alreadyhaveaccount',
-    defaultMessage: 'Already have an account?',
-  },
-  login: {
-    id: 'Signup.login',
-    defaultMessage: 'Login',
-  },
-  forgotPassword: {
-    id: 'Signup.forgotpassword',
-    defaultMessage: 'Forgot Password?',
-  },
-  noAccount: {
-    id: 'Signup.noaccount',
-    defaultMessage: 'Don&apos;t have an account?',
-  },
-  confirmExchange: {
-    id: 'Complete.confirmexchange',
-    defaultMessage: 'Confirm exchange',
   },
 });
 
