@@ -223,7 +223,7 @@ export default class Splash extends React.Component {
               </header>
               <ul className="actions vertical">
                 <li>
-                  <Link to="/signup" className="button fit special">
+                  <Link to="/onboarding" className="button fit special">
                     <FormattedMessage
                       id={'Signup.signup'}
                       defaultMessage={'Sign up'}
@@ -264,7 +264,7 @@ export default class Splash extends React.Component {
               </Link>
             </li>
             <li>
-              <Link to="/signup">
+              <Link to="/onboarding">
                 <FormattedMessage
                   id={'Signup.signup'}
                   defaultMessage={'Sign up'}
