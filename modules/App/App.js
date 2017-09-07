@@ -6,10 +6,11 @@ import { Navbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 
-import { loadUsers } from '../../utils/actions';
+import { loadUsers, selectStage } from '../../utils/actions';
 
 import SideBar from '../SideBar/SideBar';
 import QueryBox from '../QueryBox/QueryBox';
+import ProgressButtons from '../Onboarding/ProgressButtons';
 
 class App extends React.Component {
   constructor(props) {
@@ -19,8 +20,25 @@ class App extends React.Component {
     };
   }
 
+  topBarComponent() {
+    const { location, isAuthenticated, stage } = this.props;
+    if (isAuthenticated && location.pathname === '/') {
+      return <QueryBox />;
+    } else if (location.pathname === '/onboarding') {
+      return (
+        <ProgressButtons
+          canGoForward={stage < 2}
+          canGoBack={stage > 0}
+          onForward={() => this.props.selectStage(stage + 1)}
+          onBack={() => this.props.selectStage(stage - 1)}
+        />
+      );
+    }
+    return null;
+  }
+
   render() {
-    const { location, isAuthenticated, children } = this.props;
+    const { children } = this.props;
     const { openSideBar } = this.state;
     return (
       <div className="app">
@@ -33,9 +51,7 @@ class App extends React.Component {
             <span className="brand-title">Bazaar</span>
           </IndexLink>
           {
-            location.pathname === '/'
-            && isAuthenticated
-            && <QueryBox />
+            this.topBarComponent()
           }
           <button
             onClick={() => this.setState({ openSideBar: !openSideBar })}
@@ -58,6 +74,7 @@ class App extends React.Component {
 
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
+  stage: state.onboarding.stage,
 });
 
 App.propTypes = {
@@ -65,12 +82,16 @@ App.propTypes = {
   isAuthenticated: PropTypes.bool,
   children: PropTypes.node,
   loadUsers: PropTypes.func,
+  selectStage: PropTypes.func,
+  stage: PropTypes.number,
 };
 App.defaultProps = {
   location: {},
   isAuthenticated: false,
   children: null,
-  loadUsers: () => {}
+  loadUsers: () => {},
+  selectStage: () => {},
+  stage: 0,
 };
 
-export default connect(mapStateToProps, { loadUsers })(App);
+export default connect(mapStateToProps, { loadUsers, selectStage })(App);

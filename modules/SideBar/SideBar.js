@@ -49,7 +49,7 @@ class SideBar extends React.Component {
               badgeNum={user.unreadTransactions.length > 0 ? user.unreadTransactions.length : null}
               toLink="/transactions"
               imageSrc="/images/chat.png"
-              text={'Wallet'}
+              text={'Exchanges'}
             />
           }
           {isAuthenticated && <SideBarLink toLink="/bookmarks" imageSrc="/images/bookmark_icon.png" text={formatMessage(messages.bookmarks)} />}

@@ -55,11 +55,11 @@ const editProfileMessages = defineMessages({
   },
   skills: {
     id: 'EditProfile.skills',
-    defaultMessage: 'Skills',
+    defaultMessage: 'Skills I can offer',
   },
   interests: {
     id: 'EditProfile.interests',
-    defaultMessage: 'Interests',
+    defaultMessage: 'Skills I want to receive',
   }
 });
 

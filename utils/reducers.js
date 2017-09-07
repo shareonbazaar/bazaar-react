@@ -15,7 +15,7 @@ import {
   DELETE_ACCOUNT_REQUEST, DELETE_ACCOUNT_CONFIRMED,
   FORGOT_REQUEST, CLEAR_FORGOT_EMAIL,
   STAGE_SELECTED, SKILL_SELECTED, INTEREST_SELECTED, ABOUT_ME_CHANGE, ON_START_CLICK,
-  SKILL_REMOVED
+  SKILL_REMOVED, ONBOARDING_SEARCH
 } from './actions'
 
 
@@ -229,18 +229,21 @@ function onboarding (state = {
     interests: [],
     aboutMeText: '',
     hasStarted: false,
+    animate: false,
+    searchText: '',
     }, action) {
     switch (action.type) {
         case STAGE_SELECTED:
             const { index } = action;
             const { skills, interests } = state;
             // Only allow user to progress if she has chosen at least two skills/interests
-            if ((index === 3 && skills.length < 2)
-                  || (index === 2 && interests.length < 2)) {
+            if ((index === 2 && skills.length < 2)
+                  || (index === 1 && interests.length < 2)) {
                 return state;
             } else {
                 return Object.assign({}, state, {
                     stage: action.index,
+                    animate: false,
                 });
             }
         case SKILL_SELECTED:
@@ -248,12 +251,14 @@ function onboarding (state = {
               if (state.interests.map(s => s._id).indexOf(action.skill._id) < 0) {
                 return Object.assign({}, state, {
                   interests: state.interests.concat([action.skill]),
+                  animate: true,
                 });
               }
             } else {
               if (state.skills.map(s => s._id).indexOf(action.skill._id) < 0) {
                 return Object.assign({}, state, {
                   skills: state.skills.concat([action.skill]),
+                  animate: true,
                 });
               }
             }
@@ -262,10 +267,12 @@ function onboarding (state = {
             if (action.isInterest) {
                 return Object.assign({}, state, {
                     interests: state.interests.filter(s => s._id !== action.skill._id),
+                    animate: false,
                 });
             } else {
                 return Object.assign({}, state, {
                     skills: state.skills.filter(s => s._id !== action.skill._id),
+                    animate: false,
                 });
             }
         case ABOUT_ME_CHANGE:
@@ -275,6 +282,11 @@ function onboarding (state = {
         case ON_START_CLICK:
             return Object.assign({}, state, {
                 hasStarted: true,
+            });
+        case ONBOARDING_SEARCH:
+            return Object.assign({}, state, {
+                searchText: action.text,
+                animate: false,
             });
         default:
             return state;

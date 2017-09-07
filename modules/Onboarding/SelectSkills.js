@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormControl, Modal, Button } from 'react-bootstrap';
+import { TransitionMotion, spring } from 'react-motion';
 
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 
@@ -18,10 +19,11 @@ class SelectSkills extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      inputText: '',
       tempSelectedSkill: null,
+      seeMoreCat: null,
     };
     this.onLevelSelect = this.onLevelSelect.bind(this);
+    this.onSkillClick = this.onSkillClick.bind(this);
   }
 
   onLevelSelect(isHighLevel) {
@@ -33,54 +35,122 @@ class SelectSkills extends React.Component {
     });
   }
 
-  renderModal() {
-    const { tempSelectedSkill } = this.state;
+  onSkillClick(skill) {
+    const { checkHighLevel, onSkillSelect } = this.props;
+    if (checkHighLevel) {
+      this.setState({ tempSelectedSkill: skill });
+    } else {
+      onSkillSelect(skill);
+    }
+  }
+
+  renderCategory(category) {
+    const { animate, categories } = this.props;
     return (
-      <Modal className="skill-level-modal" show={tempSelectedSkill !== null}>
+      <div className="skill-select" key={category._id}>
+        <h4>{category.label.en}</h4>
+        <TransitionMotion
+          willLeave={() => (animate ? { transform: spring(0) } : null)}
+          styles={category._skills.map(s => ({
+            key: s._id,
+            style: { transform: 100 },
+            data: s,
+          }))}
+        >
+          {
+            interpolatedStyles =>
+              (<div>
+                {interpolatedStyles.map(config => (
+                  <div
+                    style={{ opacity: config.style.transform }}
+                    key={config.data._id}
+                    onClick={() => this.onSkillClick(config.data)}
+                    className="skill-label"
+                  >
+                    {config.data.label.en}
+                  </div>
+                ))}
+                <div
+                  className="see-more skill-label"
+                  onClick={() => this.setState({ seeMoreCat: categories.find(c => c._id === category._id) })}
+                >
+                  See more skills
+                </div>
+              </div>)
+          }
+        </TransitionMotion>
+      </div>
+    );
+  }
+
+  // renderModal() {
+  //   const { tempSelectedSkill } = this.state;
+  //   return (
+  //     <Modal className="skill-level-modal" show={tempSelectedSkill !== null}>
+  //       <Modal.Body>
+  //         <h4>
+  //           <FormattedMessage
+  //             id={'Onboarding.highLevel'}
+  //             defaultMessage={'Could you teach this skill at a high level?'}
+  //           />
+  //         </h4>
+  //         <div className="temp-selected-skill">{tempSelectedSkill ? tempSelectedSkill.label.en : ''}</div>
+  //         <div className="choices">
+  //           <Button onClick={() => this.onLevelSelect(true)}>
+  //             <FormattedMessage
+  //               id={'Onboarding.yes'}
+  //               defaultMessage={'Yes'}
+  //             />
+  //           </Button>
+  //           <Button onClick={() => this.onLevelSelect(false)}>
+  //             <FormattedMessage
+  //               id={'Onboarding.no'}
+  //               defaultMessage={'No'}
+  //             />
+  //           </Button>
+  //         </div>
+  //       </Modal.Body>
+  //     </Modal>
+  //   );
+  // }
+
+  renderSeeMoreModal() {
+    const { seeMoreCat } = this.state;
+    return (
+      <Modal className="see-more-modal" onHide={() => this.setState({ seeMoreCat: null })} show={seeMoreCat !== null}>
         <Modal.Body>
-          <h4>
-            <FormattedMessage
-              id={'Onboarding.highLevel'}
-              defaultMessage={'Could you teach this skill at a high level?'}
-            />
-          </h4>
-          <div className="temp-selected-skill">{tempSelectedSkill ? tempSelectedSkill.label.en : ''}</div>
-          <div className="choices">
-            <Button onClick={() => this.onLevelSelect(true)}>
-              <FormattedMessage
-                id={'Onboarding.yes'}
-                defaultMessage={'Yes'}
-              />
-            </Button>
-            <Button onClick={() => this.onLevelSelect(false)}>
-              <FormattedMessage
-                id={'Onboarding.no'}
-                defaultMessage={'No'}
-              />
-            </Button>
-          </div>
+          { seeMoreCat !== null && this.renderCategory(seeMoreCat) }
         </Modal.Body>
       </Modal>
     );
   }
 
   render() {
-    const { title, onSkillSelect, onSkillRemove, skills, categories, checkHighLevel } = this.props;
+    const { onboardingSearch, onSkillRemove, skills, categories, checkHighLevel, searchText } = this.props;
     const { formatMessage } = this.props.intl;
-    const { inputText } = this.state;
+    const skillIds = skills.map(s => s._id);
+    const filteredResults = categories.map(cat => (
+      {
+        label: cat.label,
+        _id: cat._id,
+        _skills: cat._skills.filter(s => s.label.en.toLowerCase().indexOf(searchText.toLowerCase()) >= 0
+          && skillIds.indexOf(s._id) < 0)
+          .sort((a, b) => (a.label.en.length - b.label.en.length))
+          .slice(0, NUM_SKILLS_TO_SHOW)
+      }
+    )).filter(c => c._skills.length > 0);
 
     return (
       <div className="skill-select-container">
-        <h4 style={{display: `${skills.length >= 2 ? 'none' : 'initial'}`}}>
+        <p style={{ display: `${skills.length >= 2 ? 'none' : 'initial'}` }}>
           <FormattedMessage
             id={'Onboarding.chooseTwo'}
             defaultMessage={'Please choose at least two skills'}
           />
-          <span className="skills-count">{2 - skills.length}</span>
-        </h4>
+        </p>
         {
           skills.length === 0 ?
-            <p>
+            <p className="no-skills">
               <FormattedMessage
                 id={'Onboarding.noSkills'}
                 defaultMessage={'You currently have no skills added'}
@@ -93,7 +163,7 @@ class SelectSkills extends React.Component {
                   (<div className={`selected-skill ${skill.isHighLevel ? 'high-level' : ''}`} key={skill._id}>
                     {skill.label.en}
                     <div className="delete" onClick={() => onSkillRemove(skill)}>X</div>
-                    </div>
+                  </div>
                   ))
               }
             </div>
@@ -101,33 +171,14 @@ class SelectSkills extends React.Component {
         <FormControl
           type="text"
           placeholder={formatMessage(messages.placeholder)}
-          onChange={e => this.setState({ inputText: e.target.value })}
-          value={inputText}
+          onChange={e => onboardingSearch(e.target.value)}
+          value={searchText}
         />
         {
-          categories.map(cat =>
-            (
-              <div className="skill-select" key={cat._id}>
-                <h4>{cat.label.en}</h4>
-                {
-                  cat._skills.filter(s => s.label.en.toLowerCase().indexOf(inputText.toLowerCase()) >= 0)
-                    .sort((a, b) => (a.label.en.length - b.label.en.length)).slice(0, NUM_SKILLS_TO_SHOW).map(skill =>
-                      (
-                        <div
-                          key={skill._id}
-                          onClick={() => checkHighLevel ? this.setState({ tempSelectedSkill: skill }) : onSkillSelect(skill)}
-                          className="skill-label"
-                        >
-                          {skill.label.en}
-                        </div>
-                      )
-                    )
-                }
-              </div>
-            ))
+          filteredResults.map(this.renderCategory.bind(this))
         }
         {
-          this.renderModal()
+          this.renderSeeMoreModal()
         }
       </div>
     );
@@ -138,20 +189,24 @@ SelectSkills.propTypes = {
   title: PropTypes.string,
   onSkillSelect: PropTypes.func,
   onSkillRemove: PropTypes.func,
+  onboardingSearch: PropTypes.func,
   skills: PropTypes.array,
   categories: PropTypes.array,
   checkHighLevel: PropTypes.bool,
   intl: PropTypes.object,
+  animate: PropTypes.bool,
 };
 
 SelectSkills.defaultProps = {
   title: '',
   onSkillSelect: () => {},
   onSkillRemove: () => {},
+  onboardingSearch: () => {},
   skills: [],
   categories: [],
   checkHighLevel: false,
   intl: null,
+  animate: false,
 };
 
 

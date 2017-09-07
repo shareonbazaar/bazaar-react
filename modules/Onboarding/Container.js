@@ -9,7 +9,8 @@ import {
   aboutMeChange,
   updateProfile,
   loadCategories,
-  loginUser } from '../../utils/actions';
+  loginUser,
+  onboardingSearch } from '../../utils/actions';
 
 function mapStateToProps({ onboarding, categories, auth }) {
   return {
@@ -20,6 +21,8 @@ function mapStateToProps({ onboarding, categories, auth }) {
     hasStarted: onboarding.hasStarted,
     categories: categories.items,
     isAuthenticated: auth.isAuthenticated,
+    animate: onboarding.animate,
+    searchText: onboarding.searchText,
   };
 }
 
@@ -63,4 +66,5 @@ export default connect(mapStateToProps, {
   onStartClick,
   loadCategories,
   loginUser,
+  onboardingSearch,
 }, mergeProps)(View);

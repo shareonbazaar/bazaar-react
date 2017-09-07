@@ -90,7 +90,7 @@ function ProgressBar(props) {
                 (<path
                   key={i}
                   visibility={`${stage > i ? 'visible' : 'hidden'}`}
-                  stroke="#2C2A57"
+                  stroke="#5A7587"
                   strokeWidth="2"
                   fill="none"
                   d={`M${30 + (75 * i)},0 H${95 + 75* i}`}
@@ -157,6 +157,7 @@ function renderOnboarding(props) {
     completeOnboarding,
     categories,
     loginUser,
+    animate
   } = props;
 
   const stagesActive = [];
@@ -176,8 +177,8 @@ function renderOnboarding(props) {
           onSkillSelect={s => selectSkill(s, true)}
           onSkillRemove={s => removeSkill(s, true)}
           title={formatMessage(messages.selectInterestsTitle)}
-          categories={categories}
           checkHighLevel={false}
+          {...props}
         />
       );
       break;
@@ -188,8 +189,8 @@ function renderOnboarding(props) {
           onSkillSelect={s => selectSkill(s, false)}
           onSkillRemove={s => removeSkill(s, false)}
           title={formatMessage(messages.selectSkillsTitle)}
-          categories={categories}
-          checkHighLevel
+          checkHighLevel={false}
+          {...props}
         />
       );
       break;
@@ -201,8 +202,7 @@ function renderOnboarding(props) {
   }
   return (
     <div>
-      <h3>{`Step ${stage + 1}`}</h3>
-      <p>{stageDataTitles[stage]}</p>
+      <h3><span style={{fontWeight: 'bold'}}>{`Step ${stage + 1}:`} </span>{`${stageDataTitles[stage]}`}</h3>
       <ProgressBar stagesActive={stagesActive} shouldAnimate stage={stage} onStageClick={selectStage} />
       {element}
     </div>

@@ -38,17 +38,13 @@ const messages = defineMessages({
   },
   newcomerText: {
     id: 'Onboarding.newcomerText',
-    defaultMessage: `You are new in Germany and want to  learn a new 
-      skill, contribute to the community and be productive. However,
-      you face barriers such as expensive tuition fees, language 
-      differences or bureaucracy. Share on bazaar  gives you a easy and fun alternative.`,
+    defaultMessage: 'You are new to Germany and want to meet new friends, learn new skills and develop your career.',
   },
   localText: {
     id: 'Onboarding.localText',
-    defaultMessage: `You love the diversity of your community
-      and want people from different backgrounds  to feel accepted,
-      valued and involved. You  want to contribute your skills as
-      well as learn  new skills from others. Share on bazaar  enables you to do both.`,
+    defaultMessage: `You have been in Germany for a while and you are excited to build a more
+    culturally diverse landscape, through learning from different cultures and traditions, and
+    contributing your own skills to the community.`,
   }
 });
 

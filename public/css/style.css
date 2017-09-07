@@ -533,18 +533,31 @@
 
 .skill-label {
   display: inline-block;
-  padding: 3px 8px;
-  margin: 5px;
-  border: 1px solid black;
-  background-color: none;
-  border-radius: 2px;
+  padding: 8px 8px;
+  margin: 2%;
+  border: 2px solid #5A7587;
+  border-radius: 5px;
+  color: #5A7587;
+  text-align: center;
 }
 
 .skill-select {
-  .skill-label.selected, .skill-label:hover {
-    color: white;
-    background-color: #4a4a4a;
+  padding: 6px 4px 10px 4px;
+  margin: 10px 0;
+  border-radius: 5px;
+  background-color: white;
+  h4 {
+    text-align: center;
+    color: #E87E76;
+    font-weight: bold;
+  }
+  .skill-label {
+    width: 46%;
     cursor: pointer;
+  }
+  .see-more {
+    background-color: #E5E5E5;
+    border: none;
   }
 }
 
@@ -632,6 +645,10 @@
   padding: 10px 15px;
   line-height: 1.42857;
   display: inline-block;
+
+  &::placeholder {
+    font-style: italic;
+  }
 }
 
 .edit-profile-page,
@@ -824,20 +841,13 @@
 }
 
 .onboarding, .onboarding-modal {
-  h3, h4, p, span {
+  color: #4A4A4A;
+  h3, h4 {
     font-size: 18px;
   }
 
-  h3, button {
-    font-family: "SourceSansPro-SemiBold";
-  }
-
-  h4 {
-    font-family: "SourceSansPro-Regular";
-  }
-
   p {
-    font-family: "SourceSansPro-Light"
+    font-size: 14px;
   }
 
   .btn-primary {
@@ -894,7 +904,7 @@
           color: #2C2A57;
         }
         &.selected {
-          background-color: #F16687;
+          background-color: #E8526D;
           color: white;
         }
       }
@@ -924,38 +934,17 @@
     margin: 0 2%;
     button {
       font-size: 14px;
+      background-color: #2C2A57;
       &.faded {
         opacity: 0.3;
       }
     }
-
-    &.local button {
-      background-color: #2C2A57;
-    }
   }
 
   .skill-select-container {
-    .skill-select {
-      h4 {
-        text-align: center;
-      }
-      .skill-label {
-        width: 40%;
-      }
+    .no-skills {
+      font-style: italic;
     }
-    .skills-count {
-      margin-left: 10px;
-      display: inline-block;
-      background-color: #D0021B;
-      width: 18px;
-      height: 18px;
-      line-height: 16px;
-      border-radius: 50%;
-      vertical-align: bottom;
-      color: white;
-      text-align: center;
-    }
-
     .selected-skills-container {
       margin-bottom: 10px;
       .selected-skill {
@@ -1008,19 +997,25 @@
   }
 }
 
-.skill-level-modal {
-  .temp-selected-skill {
-    text-align: center;
-    border: 2px solid #2C2A57;
-    border-radius: 20px;
-    padding: 8px 0px;
-    margin: 8px 0;
-  }
-
+.progress-buttons {
+  margin-top: 10px;
+  display: inline-block;
   .btn {
-    width: 46%;
-    margin: 0 2%;
-    border-radius: 20px;
+    border-radius: 100px;
+    margin: 0 5px;
+    color: white;
+    &.back {
+      background-color: #5A7587;
+    }
+    &.forward {
+      background-color: #E8526D;
+    }
+  }
+}
+
+.see-more-modal {
+  .see-more {
+    display: none;
   }
 }
 

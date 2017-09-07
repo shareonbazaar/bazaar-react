@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, FormGroup, Checkbox } from 'react-bootstrap';
+import { Button, FormGroup } from 'react-bootstrap';
 import validator from 'email-validator';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Link } from 'react-router';
@@ -20,8 +20,6 @@ class Signup extends React.Component {
       confirmPassword: '',
       firstName: '',
       lastName: '',
-      acceptsNewsletter: true,
-      acceptsTerms: false,
       hasClickedSignup: false,
       isNewcomer: null,
     };
@@ -71,7 +69,7 @@ class Signup extends React.Component {
   }
 
   renderSignupButton() {
-    const { acceptsTerms, isNewcomer } = this.state;
+    const { isNewcomer } = this.state;
     return (
       <FormGroup>
         <div className="form-offset">
@@ -79,7 +77,7 @@ class Signup extends React.Component {
             className="login-button"
             bsStyle="primary"
             type="submit"
-            disabled={!acceptsTerms || isNewcomer === null}
+            disabled={isNewcomer === null}
             block
           >
             <FormattedMessage
@@ -99,8 +97,6 @@ class Signup extends React.Component {
       lastName,
       emailText,
       password,
-      acceptsNewsletter,
-      acceptsTerms,
       hasClickedSignup,
       isNewcomer,
     } = this.state;
@@ -134,19 +130,11 @@ class Signup extends React.Component {
           isNewcomer={isNewcomer}
           onNewcomerSelect={newcomer => this.setState({ isNewcomer: newcomer })}
         />
-        <FormGroup className="preferences">
-          <Checkbox onChange={() => this.setState({ acceptsNewsletter: !acceptsNewsletter })} checked={acceptsNewsletter}>
-            I want to receive a newsletter
-          </Checkbox>
 
-          <Checkbox onChange={() => this.setState({ acceptsTerms: !acceptsTerms })} checked={acceptsTerms}>
-            I agree with the <Link to="/terms">terms and conditions</Link>
-          </Checkbox>
-        </FormGroup>
-        <div className={`agreement ${acceptsTerms && (isNewcomer !== null) ? 'invisible' : 'visible'}`}>
-          Please agree to our terms and conditions
-        </div>
-        <div className={`account ${acceptsTerms && (isNewcomer !== null) ? 'visible' : 'invisible'}`}>
+        <div className={`account ${(isNewcomer !== null) ? 'visible' : 'invisible'}`}>
+          <div>
+            By signing up to Share on Bazaar I agree to the <Link to="/terms">terms and conditions</Link>
+          </div>
           <SocialMediaLogin
             responseFacebook={this.responseFacebook}
             responseGoogle={this.responseGoogle}
