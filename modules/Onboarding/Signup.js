@@ -21,7 +21,6 @@ class Signup extends React.Component {
       firstName: '',
       lastName: '',
       hasClickedSignup: false,
-      isNewcomer: null,
     };
     this.onChange = this.onChange.bind(this);
     this.responseGoogle = this.responseGoogle.bind(this);
@@ -50,7 +49,7 @@ class Signup extends React.Component {
         id_token: response.getAuthResponse().id_token,
         _skills: this.props.chosenSkills.map(s => s._id),
         _interests: this.props.chosenInterests.map(s => s._id),
-        'profile.status': this.state.isNewcomer ? 'newcomer' : 'local',
+        'profile.status': this.props.isNewcomer ? 'newcomer' : 'local',
 
       }
     });
@@ -63,13 +62,13 @@ class Signup extends React.Component {
         access_token: response.accessToken,
         _skills: this.props.chosenSkills.map(s => s._id),
         _interests: this.props.chosenInterests.map(s => s._id),
-        'profile.status': this.state.isNewcomer ? 'newcomer' : 'local',
+        'profile.status': this.props.isNewcomer ? 'newcomer' : 'local',
       }
     });
   }
 
   renderSignupButton() {
-    const { isNewcomer } = this.state;
+    const { isNewcomer } = this.props;
     return (
       <FormGroup>
         <div className="form-offset">
@@ -92,13 +91,13 @@ class Signup extends React.Component {
 
   render() {
     const { formatMessage } = this.props.intl;
+    const { isNewcomer } = this.props;
     const {
       firstName,
       lastName,
       emailText,
       password,
       hasClickedSignup,
-      isNewcomer,
     } = this.state;
     const firstNameValid = firstName.length > 0;
     const lastNameValid = lastName.length > 0;
@@ -127,8 +126,6 @@ class Signup extends React.Component {
       <div className="signup">
         <NewcomerStatus
           {...this.props}
-          isNewcomer={isNewcomer}
-          onNewcomerSelect={newcomer => this.setState({ isNewcomer: newcomer })}
         />
 
         <div className={`account ${(isNewcomer !== null) ? 'visible' : 'invisible'}`}>

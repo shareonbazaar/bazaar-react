@@ -10,6 +10,7 @@ import {
   updateProfile,
   loadCategories,
   loginUser,
+  onNewcomerSelect,
   onboardingSearch } from '../../utils/actions';
 
 function mapStateToProps({ onboarding, categories, auth }) {
@@ -23,6 +24,7 @@ function mapStateToProps({ onboarding, categories, auth }) {
     isAuthenticated: auth.isAuthenticated,
     animate: onboarding.animate,
     searchText: onboarding.searchText,
+    isNewcomer: onboarding.isNewcomer,
   };
 }
 
@@ -67,4 +69,5 @@ export default connect(mapStateToProps, {
   loadCategories,
   loginUser,
   onboardingSearch,
+  onNewcomerSelect,
 }, mergeProps)(View);

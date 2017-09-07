@@ -37,6 +37,7 @@ export const SKILL_REMOVED = 'SKILL_REMOVED'
 export const ABOUT_ME_CHANGE = 'ABOUT_ME_CHANGE'
 export const ON_START_CLICK = 'ON_START_CLICK'
 export const ONBOARDING_SEARCH = 'ONBOARDING_SEARCH'
+export const ON_NEWCOMER_SELECT = 'ON_NEWCOMER_SELECT'
 
 function callApi (endpoint, method='GET', data={}) {
     var config = {
@@ -100,6 +101,13 @@ export function onboardingSearch (text) {
     return {
         type: ONBOARDING_SEARCH,
         text,
+    }
+}
+
+export function onNewcomerSelect (isNewcomer) {
+    return {
+        type: ON_NEWCOMER_SELECT,
+        isNewcomer,
     }
 }
 

@@ -15,7 +15,7 @@ import {
   DELETE_ACCOUNT_REQUEST, DELETE_ACCOUNT_CONFIRMED,
   FORGOT_REQUEST, CLEAR_FORGOT_EMAIL,
   STAGE_SELECTED, SKILL_SELECTED, INTEREST_SELECTED, ABOUT_ME_CHANGE, ON_START_CLICK,
-  SKILL_REMOVED, ONBOARDING_SEARCH
+  SKILL_REMOVED, ONBOARDING_SEARCH, ON_NEWCOMER_SELECT
 } from './actions'
 
 
@@ -231,6 +231,7 @@ function onboarding (state = {
     hasStarted: false,
     animate: false,
     searchText: '',
+    isNewcomer: null,
     }, action) {
     switch (action.type) {
         case STAGE_SELECTED:
@@ -287,6 +288,10 @@ function onboarding (state = {
             return Object.assign({}, state, {
                 searchText: action.text,
                 animate: false,
+            });
+        case ON_NEWCOMER_SELECT:
+            return Object.assign({}, state, {
+                isNewcomer: action.isNewcomer,
             });
         default:
             return state;

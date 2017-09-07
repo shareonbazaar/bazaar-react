@@ -21,13 +21,19 @@ class App extends React.Component {
   }
 
   topBarComponent() {
-    const { location, isAuthenticated, stage } = this.props;
+    const { location, isAuthenticated, stage, skills, interests } = this.props;
+    let canGoForward = false;
+    if (stage === 0) {
+      canGoForward = interests.length >= 2;
+    } else if (stage === 1) {
+      canGoForward = skills.length >= 2;
+    }
     if (isAuthenticated && location.pathname === '/') {
       return <QueryBox />;
     } else if (location.pathname === '/onboarding') {
       return (
         <ProgressButtons
-          canGoForward={stage < 2}
+          canGoForward={canGoForward}
           canGoBack={stage > 0}
           onForward={() => this.props.selectStage(stage + 1)}
           onBack={() => this.props.selectStage(stage - 1)}
@@ -43,13 +49,16 @@ class App extends React.Component {
     return (
       <div className="app">
         <Helmet>
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
         </Helmet>
         <Navbar fixedTop fluid>
-          <IndexLink onClick={() => this.props.loadUsers()} to="/">
-            <img alt="" width="20" src="/images/logo.png" />
-            <span className="brand-title">Bazaar</span>
-          </IndexLink>
+          {
+            location.pathname !== '/onboarding' &&
+            <IndexLink onClick={() => this.props.loadUsers()} to="/">
+              <img alt="" width="20" src="/images/logo.png" />
+              <span className="brand-title">Bazaar</span>
+            </IndexLink>
+          }
           {
             this.topBarComponent()
           }
@@ -75,6 +84,8 @@ class App extends React.Component {
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
   stage: state.onboarding.stage,
+  skills: state.onboarding.skills,
+  interests: state.onboarding.interests,
 });
 
 App.propTypes = {
@@ -84,6 +95,8 @@ App.propTypes = {
   loadUsers: PropTypes.func,
   selectStage: PropTypes.func,
   stage: PropTypes.number,
+  skills: PropTypes.array,
+  interests: PropTypes.array,
 };
 App.defaultProps = {
   location: {},
@@ -92,6 +105,8 @@ App.defaultProps = {
   loadUsers: () => {},
   selectStage: () => {},
   stage: 0,
+  skills: [],
+  interests: [],
 };
 
 export default connect(mapStateToProps, { loadUsers, selectStage })(App);

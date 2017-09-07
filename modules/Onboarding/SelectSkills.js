@@ -116,10 +116,19 @@ class SelectSkills extends React.Component {
 
   renderSeeMoreModal() {
     const { seeMoreCat } = this.state;
+    const { skills } = this.props;
+    const skillIds = skills.map(s => s._id);
+    let cat = null;
+    if (seeMoreCat !== null) {
+      cat = {
+        ...seeMoreCat,
+        _skills: seeMoreCat._skills.filter(s => skillIds.indexOf(s._id) < 0),
+      };
+    }
     return (
       <Modal className="see-more-modal" onHide={() => this.setState({ seeMoreCat: null })} show={seeMoreCat !== null}>
         <Modal.Body>
-          { seeMoreCat !== null && this.renderCategory(seeMoreCat) }
+          { seeMoreCat !== null && this.renderCategory(cat) }
         </Modal.Body>
       </Modal>
     );
@@ -186,7 +195,7 @@ class SelectSkills extends React.Component {
 }
 
 SelectSkills.propTypes = {
-  title: PropTypes.string,
+  searchText: PropTypes.string,
   onSkillSelect: PropTypes.func,
   onSkillRemove: PropTypes.func,
   onboardingSearch: PropTypes.func,
@@ -198,7 +207,7 @@ SelectSkills.propTypes = {
 };
 
 SelectSkills.defaultProps = {
-  title: '',
+  searchText: '',
   onSkillSelect: () => {},
   onSkillRemove: () => {},
   onboardingSearch: () => {},
