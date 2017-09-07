@@ -245,6 +245,7 @@ function onboarding (state = {
                 return Object.assign({}, state, {
                     stage: action.index,
                     animate: false,
+                    searchText: '',
                 });
             }
         case SKILL_SELECTED:
@@ -253,6 +254,7 @@ function onboarding (state = {
                 return Object.assign({}, state, {
                   interests: state.interests.concat([action.skill]),
                   animate: true,
+                  searchText: '',
                 });
               }
             } else {
@@ -260,6 +262,7 @@ function onboarding (state = {
                 return Object.assign({}, state, {
                   skills: state.skills.concat([action.skill]),
                   animate: true,
+                  searchText: '',
                 });
               }
             }
