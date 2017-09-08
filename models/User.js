@@ -1,4 +1,3 @@
-const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const mongoose = require('mongoose');
 const helpers = require('../utils/helpers');
@@ -53,22 +52,21 @@ userSchema.pre('save', function (next) {
   const user = this;
   if (!user.isModified('password')) { return next(); }
 
-  bcrypt.hash(user.password, 10)
-  .then(hash => {
-      user.password = hash;
-      next();
-  })
-  .catch(err => next(err))
+  const salt = "saltsaltsaltsalt"; /** Gives us salt of length 16 */
+  const hash = crypto.createHmac('sha512', salt); /** Hashing algorithm sha512 */
+  hash.update(user.password);
+  user.password = hash.digest('hex');
+  next();
 });
 
 userSchema.pre('findOneAndUpdate', function (next) {
     if (!this._update.password) { return next(); }
-    bcrypt.hash(this._update.password, 10)
-    .then(hash => {
-        this._update.password = hash;
-        next();
-    })
-    .catch(err => next(err))
+
+    const salt = "saltsaltsaltsalt";
+    const hash = crypto.createHmac('sha512', salt); /** Hashing algorithm sha512 */
+    hash.update(this._update.password);
+    this._update.password = hash.digest('hex');
+    next();
 });
 
 /**
@@ -79,9 +77,11 @@ userSchema.methods.comparePassword = function (candidatePassword) {
         if (!candidatePassword || !this.password) {
             resolve(false);
         } else {
-            bcrypt.compare(candidatePassword, this.password)
-            .then(isMatch => resolve(isMatch))
-            .catch(err => reject(err))
+            const salt = "saltsaltsaltsalt";
+            const hash = crypto.createHmac('sha512', salt); /** Hashing algorithm sha512 */
+            hash.update(candidatePassword);
+            const res = hash.digest('hex');
+            resolve(res === this.password);
         }
     });
 };
