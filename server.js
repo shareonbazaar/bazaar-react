@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
-const config = require('./webpack.config');
+const webpackconfig = require('./webpack.dev-config');
 
 // Use native promises
 mongoose.Promise = global.Promise;
@@ -67,9 +67,9 @@ const upload = multer({ storage: storage })
 app.use(upload.single('profilepic'));
 
 if (app.get('env') === 'development') {
-  new WebpackDevServer(webpack(config), {
-    publicPath: config.output.publicPath,
-    path: config.output.path,
+  new WebpackDevServer(webpack(webpackconfig), {
+    publicPath: webpackconfig.output.publicPath,
+    path: webpackconfig.output.path,
     hot: true,
     historyApiFallback: true,
     proxy: {
