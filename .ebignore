@@ -14,7 +14,7 @@ tmp/
 
 .git/
 secrets/
-node_modules/
+
 .idea
 *.iml
 .DS_Store
