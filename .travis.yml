@@ -1,0 +1,16 @@
+language: node_js
+node_js:
+  - "6.9.1"
+
+deploy:
+  provider: elasticbeanstalk
+  access_key_id: AKIAJKKOIKJQYVFVOXWQ
+  secret_access_key:
+    secure: U5ctE/29p6zEg4ypbWUJeWLXAh+lEizEJT1XiOF3XnD79OmOg5i6FKqyLiH9S9YRRvUnF5bafRtB6OSFTK5/oPppbOXhnT+gI/ijnXN9dCfMMhKyuiAYpYQy5YZfhbdmXNJAw1eVREChCOVupTKLtHi/7tvdEl3QcT6UdwR9iYjusr0/XlfmJvqrwewSLMBnLlp3Muwd1XrRZfo5qsos/At1p1Pa2FyzK1PFUv5rqJ0tl8QV45TYoLvga8udLqOXqx+N3TzttXolXMYmunFPZ6BgpceZ4DsMytS96tXzE2atya/PtB53BlvsoQpTia8xmKxtJr0n5V3zVjDG5Byr+knS606NNZj8r88UP+/jPd+ifwZEIYp9Ca/2fWcrAan96D3u7j6as/pjRcbMaCOi/ut7P/pQidyIUSlq5WAR0QUuS7L+pxqDpq7JyBq74tchgNUkASwnl/DY3iUrets4HZTXYbkAqG6cUkn4jMWL0zlzA7gtu3ODbSkUf8dm09DA0XSOKzG7+/ZZpUq805mUhRiVbNBJrSsDgfQSFkrklcJNohEqA42zCXksTn8Y2E3/Z3kyWKdijhBDuNwH0NYKUe3NqqcRBFKzmNzaPRsLQdZI9gMmpfkb53pDX9KsZIalOO16p1d0WU/p0U8viMjBxO3qYzdBCpaCT4GZFRlTkMc=
+  region: eu-central-1
+  app: bazaar
+  env: bazaar-dev
+  bucket_name: elasticbeanstalk-eu-central-1-937945657856
+  skip_cleanup: true
+  on:
+    branch: dev
