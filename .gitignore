@@ -27,6 +27,6 @@ public/*.svg
 .tags
 .tags1
 
-.ebextensions/https-*
+.ebextensions/*
 
 public/bundle.js
