@@ -128,7 +128,7 @@ exports.apiSignup = (req, res) => {
   const base_url = protocol + req.headers.host;
   handleLogin(req, res, req.body, (payloadData) => ({
     profile: {
-      name: `${payloadData.firstName}  ${payloadData.lastName}`,
+      name: `${payloadData.firstName} ${payloadData.lastName}`,
       picture: `${base_url}/images/person_placeholder.gif`,
     },
     email: payloadData.email,
