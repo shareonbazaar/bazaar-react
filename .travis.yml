@@ -5,6 +5,12 @@ node_js:
 before_script:
   - npm run build:prod
 
+before_deploy:
+  - git config user.email "rorymacqueen@gmail.com"
+  - git config user.name "Rory MacQueen"
+  - git add --force public/bundle.js
+  - git commit -m 'adds bundle.js'
+
 deploy:
   provider: elasticbeanstalk
   access_key_id: AKIAJKKOIKJQYVFVOXWQ
