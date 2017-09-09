@@ -19,6 +19,8 @@ class Login extends React.Component {
       emailText: '',
       password: '',
     };
+    this.responseGoogle = this.responseGoogle.bind(this);
+    this.responseFacebook = this.responseFacebook.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -31,6 +33,24 @@ class Login extends React.Component {
   onChange(e, field) {
     this.setState({
       [field]: e.target.value,
+    });
+  }
+
+  responseGoogle(response) {
+    this.props.loginUser({
+      endpoint: '/auth/google',
+      data: {
+        id_token: response.getAuthResponse().id_token,
+      }
+    });
+  }
+
+  responseFacebook(response) {
+    this.props.loginUser({
+      endpoint: '/auth/facebook',
+      data: {
+        access_token: response.accessToken,
+      }
     });
   }
 
