@@ -91,7 +91,7 @@ function ProgressBar(props) {
       </div>
       <div className="progress-container">
         <MtSvgLines animate={shouldAnimate} duration={2000}>
-          <svg width="100%" height="10px" viewBox="0 0 200 2">
+          <svg className="progress-line" width="100%" height="7px" viewBox="0 0 200 2">
             {
               Array(stage).fill(0).map((v, i) =>
                 (<path
@@ -100,11 +100,17 @@ function ProgressBar(props) {
                   stroke="#5A7587"
                   strokeWidth="2"
                   fill="none"
-                  d={`M${30 + (75 * i)},0 H${95 + 75* i}`}
+                  d={`M${40 + (60 * i)},0 H${95 + (75 * i)}`}
                 />))
             }
           </svg>
         </MtSvgLines>
+        {
+          stage === stageData.length &&
+          <svg className="arrow">
+            <polygon points="0,0 0,20 20,10" style={{ fill: '#2C2A57', stroke: '#2C2A57' }} />
+          </svg>
+        }
       </div>
     </div>
   );

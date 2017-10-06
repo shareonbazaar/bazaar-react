@@ -893,7 +893,7 @@
         width: 45px;
         height: 45px;
         margin: 0 auto 5px auto;
-        line-height: 50px;
+        line-height: 45px;
 
         &.complete {
           background-color: white;
@@ -922,6 +922,23 @@
     transform: translate(-50%, -75%);
     width: 100%;
     z-index: 0;
+    display: flex;
+
+    .progress-line {
+      vertical-align: text-bottom;
+    }
+
+    .mt-svg {
+      display: inline-block;
+      flex-grow: 1;
+    }
+
+    .arrow {
+
+      display: inline-block;
+      width: 25px;
+      max-height: 20px
+    }
   }
 }
 
