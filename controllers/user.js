@@ -32,7 +32,7 @@ exports.apiGetUser = function (req, res) {
     .exec()
     .then(user => {
         if (!user) {
-            res.status(404).json(err);
+            res.status(404).json({error: "User not found"});
         } else {
             return Transaction.find({'_participants': user._id})
             .then(transactions => {
