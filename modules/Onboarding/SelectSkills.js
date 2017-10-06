@@ -138,11 +138,12 @@ class SelectSkills extends React.Component {
     const { onboardingSearch, onSkillRemove, skills, categories, checkHighLevel, searchText } = this.props;
     const { formatMessage } = this.props.intl;
     const skillIds = skills.map(s => s._id);
+    const sanitize = s => s.toLowerCase().trim();
     const filteredResults = categories.map(cat => (
       {
         label: cat.label,
         _id: cat._id,
-        _skills: cat._skills.filter(s => s.label.en.toLowerCase().indexOf(searchText.toLowerCase()) >= 0
+        _skills: cat._skills.filter(s => sanitize(s.label.en).indexOf(sanitize(searchText)) >= 0
           && skillIds.indexOf(s._id) < 0)
           .sort((a, b) => (a.label.en.length - b.label.en.length))
           .slice(0, NUM_SKILLS_TO_SHOW)

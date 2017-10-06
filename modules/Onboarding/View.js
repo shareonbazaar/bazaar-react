@@ -79,7 +79,14 @@ function ProgressBar(props) {
       <div className="stages">
         {
           stageData.map((title, i) =>
-            <Stage onClick={() => onStageClick(i)} isActive={stagesActive.indexOf(i) >= 0} stage={stage} title={title} key={i} index={i} />)
+            (<Stage
+              onClick={() => onStageClick(i)}
+              isActive={stagesActive.indexOf(i) >= 0}
+              stage={stage}
+              title={title}
+              key={i}
+              index={i}
+            />))
         }
       </div>
       <div className="progress-container">
