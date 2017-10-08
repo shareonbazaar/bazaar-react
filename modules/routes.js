@@ -32,12 +32,12 @@ export default (store) => {
   };
 
   function AppContainer(props) {
-    //eslint-disable-next-line
+    // eslint-disable-next-line
     const { children, location } = props;
     if (!(store.getState().auth.isAuthenticated) && location.pathname === '/') {
       return <Splash />;
     }
-    //eslint-disable-next-line
+    // eslint-disable-next-line
     return <App children={children} location={location} />;
   }
 
