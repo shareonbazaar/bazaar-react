@@ -353,7 +353,7 @@ export function loginUser (creds) {
                     type: LOGIN_FAILURE,
                     message: error.toString(),
                 })
-                return Promise.reject(user)
+                return Promise.reject(error)
             } else {
                 // If login was successful, set the token in local storage
                 localStorage.setItem('token', token)

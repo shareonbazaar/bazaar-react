@@ -22,6 +22,7 @@ function mapStateToProps({ onboarding, categories, auth }) {
     hasStarted: onboarding.hasStarted,
     categories: categories.items,
     isAuthenticated: auth.isAuthenticated,
+    loginResponse: auth.loginResponse,
     animate: onboarding.animate,
     searchText: onboarding.searchText,
     isNewcomer: onboarding.isNewcomer,

@@ -101,7 +101,7 @@ const handleLogin = (req, res, payload, mapPayloadToUser) =>
                 }));
             });
         })
-        .catch(err => res.status(500).json({ error: err }));
+        .catch(err => res.status(500).json({ error: err.message }));
     }
   };
 

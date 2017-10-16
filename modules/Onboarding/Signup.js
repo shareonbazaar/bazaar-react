@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, FormGroup } from 'react-bootstrap';
+import { Button, FormGroup, Alert } from 'react-bootstrap';
 import validator from 'email-validator';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Link } from 'react-router';
@@ -91,7 +91,7 @@ class Signup extends React.Component {
 
   render() {
     const { formatMessage } = this.props.intl;
-    const { isNewcomer } = this.props;
+    const { isNewcomer, loginResponse } = this.props;
     const {
       firstName,
       lastName,
@@ -139,6 +139,11 @@ class Signup extends React.Component {
           />
           <p>Or sign up with your email</p>
           <form onSubmit={onSignupClicked}>
+            {loginResponse &&
+              <Alert bsStyle="danger">
+                <p>{loginResponse.message}</p>
+              </Alert>
+            }
             <ResponsiveInputField
               formGroupIsValid={(hasClickedSignup && !firstNameValid)}
               formControlType="text"
@@ -180,19 +185,14 @@ class Signup extends React.Component {
 
 Signup.defaultProps = {
   isAuthenticated: false,
-  location: {},
-  push: () => {},
-  loginUser: () => {},
-  response: {},
-  intl: null,
+  loginResponse: null,
 };
 Signup.propTypes = {
   isAuthenticated: PropTypes.bool,
-  location: PropTypes.object,
-  push: PropTypes.func,
-  loginUser: PropTypes.func,
-  response: PropTypes.object,
-  intl: PropTypes.object,
+  push: PropTypes.func.isRequired,
+  loginUser: PropTypes.func.isRequired,
+  loginResponse: PropTypes.object,
+  intl: PropTypes.object.isRequired,
 };
 
 export default injectIntl(Signup);
