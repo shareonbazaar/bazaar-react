@@ -18,6 +18,7 @@ module.exports = {
       GOOGLE_MAP_API: JSON.stringify(process.env.GOOGLE_MAP_API),
       FACEBOOK_ID: JSON.stringify(process.env.FACEBOOK_ID),
       GOOGLE_ID: JSON.stringify(process.env.GOOGLE_ID),
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
     }),
   ],
   module: {
