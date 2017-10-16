@@ -3,12 +3,13 @@ node_js:
   - "6.9.1"
 
 before_script:
-  - npm run build:prod
+  - npm run build:server && npm run build:client
 
 before_deploy:
   - git config user.email "rorymacqueen@gmail.com"
   - git config user.name "Rory MacQueen"
   - git add --force public/bundle.js
+  - git add --force dist/
   - git commit -m 'adds bundle.js'
 
 deploy:
