@@ -6,7 +6,6 @@ import { Modal, Button } from 'react-bootstrap';
 
 import Signup from './Signup';
 import SelectSkills from './SelectSkills';
-import AboutMe from './AboutMe';
 
 const stageData = [
   'receive',
