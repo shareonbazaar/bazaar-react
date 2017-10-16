@@ -1,54 +1,53 @@
-var mongoose = require('mongoose');
-var User = require('./User');
-var Enums = require('./Enums');
-const helpers = require('../utils/helpers');
+import mongoose from 'mongoose';
+import Enums from './Enums';
+import helpers from '../utils/helpers';
 
-var transactionSchema = new mongoose.Schema({
+const transactionSchema = new mongoose.Schema({
   amount: Number,
   status: {
     type: String,
-    enum: Object.keys(Enums.StatusType).map(function (key) { Enums.StatusType[key] }),
+    enum: Object.keys(Enums.StatusType).map(key => Enums.StatusType[key]),
   },
   service: { type: mongoose.Schema.Types.ObjectId, ref: 'Skill' },
   request_type: {
     type: String,
-    enum: Object.keys(Enums.RequestType).map(function (key) { Enums.RequestType[key] }),
+    enum: Object.keys(Enums.RequestType).map(key => Enums.RequestType[key]),
   },
-  _participants:  [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  _participants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   _confirmations: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   _creator: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  loc : {
-    type: {type: String},
+  loc: {
+    type: { type: String },
     coordinates: { type: [], index: '2dsphere', get: helpers.NullInitialization }
   },
   placeName: String,
   happenedAt: Date,
 }, { timestamps: true });
 
-transactionSchema.index({loc: '2dsphere'});
+transactionSchema.index({ loc: '2dsphere' });
 
-transactionSchema.pre('update', function ( next) {
-    if (this._update['$addToSet'] && this._update['$addToSet']._confirmations) {
-        this.findOne(this._conditions)
-        .then(t => {
-            const userConfirmed = (u) => {
-                let alreadyConfirmed = t._confirmations
-                                      .map(i => i.toString())
-                                      .indexOf(u.toString()) >= 0;
+transactionSchema.pre('update', function (next) {
+  if (this._update.$addToSet && this._update.$addToSet._confirmations) {
+    this.findOne(this._conditions)
+      .then((t) => {
+        const userConfirmed = (u) => {
+          const alreadyConfirmed = t._confirmations
+            .map(i => i.toString())
+            .indexOf(u.toString()) >= 0;
 
-                let confirmingNow = (u.toString() == this._update['$addToSet']._confirmations.toString())
-                return alreadyConfirmed || confirmingNow;
-            }
+          const confirmingNow = (u.toString() === this._update.$addToSet._confirmations.toString());
+          return alreadyConfirmed || confirmingNow;
+        };
 
-            if (t._participants.every(userConfirmed)) {
-                this.update({status: Enums.StatusType.COMPLETE});
-            }
+        if (t._participants.every(userConfirmed)) {
+          this.update({ status: Enums.StatusType.COMPLETE });
+        }
 
-            next();
-        })
-    } else {
         next();
-    }
+      });
+  } else {
+    next();
+  }
 });
 
 module.exports = mongoose.model('Transaction', transactionSchema);

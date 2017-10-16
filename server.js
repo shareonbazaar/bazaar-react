@@ -1,14 +1,14 @@
 // server.js
-const express = require('express')
-const path = require('path')
-const dotenv = require('dotenv');
-const mongoose = require('mongoose');
-const passport = require('passport');
-const bodyParser = require('body-parser');
-const expressValidator = require('express-validator');
-const webpack = require('webpack');
-const WebpackDevServer = require('webpack-dev-server');
-const webpackconfig = require('./webpack.dev-config');
+import express from 'express';
+import path from 'path';
+import dotenv from 'dotenv';
+import mongoose from 'mongoose';
+import passport from 'passport';
+import bodyParser from 'body-parser';
+import { check, validationResult } from 'express-validator/check';
+import webpack from 'webpack';
+import WebpackDevServer from 'webpack-dev-server';
+import webpackconfig from './webpack.dev-config';
 
 // Use native promises
 mongoose.Promise = global.Promise;
@@ -29,16 +29,16 @@ module.exports = app;
 
 
 var server = require('http').Server(app);
-const passportConfig = require('./config/passport');
+import passportConfig from './config/passport';
 
 /**
  * Controllers (route handlers).
  */
-const userController = require('./controllers/user');
-const transactionController = require('./controllers/transaction');
-const messageController = require('./controllers/message');
-const skillController = require('./controllers/skill');
-const contactController = require('./controllers/contact');
+import userController from './controllers/user';
+import transactionController from './controllers/transaction';
+import messageController from './controllers/message';
+import skillController from './controllers/skill';
+import contactController from './controllers/contact';
 
 
 /**
@@ -56,7 +56,6 @@ app.set('port', process.env.PORT || 3000);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(expressValidator());
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -90,6 +89,16 @@ app.use(express.static(path.join(__dirname, 'public')))
 // Initialize the sockets for sending and receiving messages
 messageController.initSockets(server);
 
+
+const UNPROCESSABLE_ENTITY = 422;
+const verify = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(UNPROCESSABLE_ENTITY).json({ errors: errors.mapped() });
+  }
+  next();
+};
+
 app.get('/api/users/:id', passport.authenticate('jwt', { session: false }), userController.apiGetUser);
 app.get('/api/users', passport.authenticate('jwt', { session: false }), userController.apiSearchUsers);
 app.post('/api/users', passport.authenticate('jwt', { session: false }), userController.patchUser);
@@ -101,17 +110,31 @@ app.post('/api/confirmTransaction', passport.authenticate('jwt', { session: fals
 app.post('/api/reviews', passport.authenticate('jwt', { session: false }), transactionController.postReview);
 app.get('/api/categories', skillController.apiGetCategories);
 
-app.post('/api/contact', contactController.postContact);
+const validateContact = [
+  check('name').exists(),
+  check('email').isEmail(),
+  check('message').exists(),  
+];
 
+app.post('/api/contact', validateContact, verify, contactController.postContact);
 
 // ...
 app.get('*', (req, res) => {
   // and drop 'public' in the middle of here
   res.sendFile(path.join(__dirname, 'public', 'index.html'))
-})
+});
+
+const validateUser = [
+  check('firstName').exists(),
+  check('lastName').exists(),
+  check('email').isEmail(),
+  check('password').exists(),
+];
+
+
 
 app.post('/api/login', passportConfig.apiLogin);
-app.post('/api/signup', passportConfig.apiSignup);
+app.post('/api/signup', validateUser, verify, passportConfig.apiSignup);
 app.post('/api/forgot', passportConfig.forgotPassword);
 app.post('/api/resetPassword', passportConfig.resetTokenLogin);
 

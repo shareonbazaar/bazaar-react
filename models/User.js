@@ -1,7 +1,7 @@
-const bcrypt = require('bcrypt');
-const crypto = require('crypto');
-const mongoose = require('mongoose');
-const helpers = require('../utils/helpers');
+import bcrypt from 'bcrypt';
+import crypto from 'crypto';
+import mongoose from 'mongoose';
+import helpers from '../utils/helpers';
 
 const userSchema = new mongoose.Schema({
   email: { type: String, unique: true },
@@ -14,12 +14,12 @@ const userSchema = new mongoose.Schema({
   unreadTransactions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Transaction' }],
 
   coins: { type: Number, default: 5 },
-  loc : {
-    type: {type: String},
+  loc: {
+    type: { type: String },
     coordinates: { type: [], index: '2dsphere', get: helpers.NullInitialization }
   },
 
-  bookmarks:  [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  bookmarks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 
   facebook: String,
   google: String,
@@ -43,7 +43,7 @@ const userSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-userSchema.index({loc: '2dsphere'});
+userSchema.index({ loc: '2dsphere' });
 
 
 /**
@@ -54,36 +54,36 @@ userSchema.pre('save', function (next) {
   if (!user.isModified('password')) { return next(); }
 
   bcrypt.hash(user.password, 10)
-  .then(hash => {
+    .then((hash) => {
       user.password = hash;
       next();
-  })
-  .catch(err => next(err))
+    })
+    .catch(err => next(err));
 });
 
 userSchema.pre('findOneAndUpdate', function (next) {
-    if (!this._update.password) { return next(); }
-    bcrypt.hash(this._update.password, 10)
-    .then(hash => {
-        this._update.password = hash;
-        next();
+  if (!this._update.password) { return next(); }
+  bcrypt.hash(this._update.password, 10)
+    .then((hash) => {
+      this._update.password = hash;
+      next();
     })
-    .catch(err => next(err))
+    .catch(err => next(err));
 });
 
 /**
  * Helper method for validating user's password.
  */
 userSchema.methods.comparePassword = function (candidatePassword) {
-    return new Promise((resolve, reject) => {
-        if (!candidatePassword || !this.password) {
-            resolve(false);
-        } else {
-            bcrypt.compare(candidatePassword, this.password)
-            .then(isMatch => resolve(isMatch))
-            .catch(err => reject(err))
-        }
-    });
+  return new Promise((resolve, reject) => {
+    if (!candidatePassword || !this.password) {
+      resolve(false);
+    } else {
+      bcrypt.compare(candidatePassword, this.password)
+        .then(isMatch => resolve(isMatch))
+        .catch(err => reject(err));
+    }
+  });
 };
 
 /**

@@ -1,7 +1,6 @@
-var mongoose = require('mongoose');
-var Skill = require('../models/Skill');
+import mongoose from 'mongoose';
 
-var categorySchema = new mongoose.Schema({
+const categorySchema = new mongoose.Schema({
   label: {
     en: { type: String, default: '' },
     de: { type: String, default: '' },
