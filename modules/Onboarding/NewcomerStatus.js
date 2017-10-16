@@ -84,7 +84,6 @@ class StatusOption extends React.Component {
 function NewcomerStatus (props) {
   const { formatMessage } = props.intl;
   const { onNewcomerSelect, isNewcomer } = props;
-  console.log(isNewcomer)
   return (
     <div className="newcomer-status">
       <h3>
