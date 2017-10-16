@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import TransactionList from '../TransactionList/TransactionList';
 import { loadTransactions, updateProfile } from '../../utils/actions';
-import { StatusType } from '../../models/Enums';
+import { StatusType } from '../../src/utils/Enums';
 
 
 const getVisibleTransactions = (transactions, filter) => {

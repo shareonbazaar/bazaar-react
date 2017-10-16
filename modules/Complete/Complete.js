@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
-import { StatusType } from '../../models/Enums';
+import { StatusType } from '../../src/utils/Enums';
 import { submitReview, confirmTransaction } from '../../utils/actions';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import ReviewModal from '../ReviewModal/ReviewModal';

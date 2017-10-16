@@ -8,7 +8,7 @@ import { Button } from 'react-bootstrap';
 // import { push } from 'react-router-redux';
 import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
 
-import { RequestType } from '../../models/Enums';
+import { RequestType } from '../../src/utils/Enums';
 import { loadUsers, getSurprise } from '../../utils/actions';
 
 

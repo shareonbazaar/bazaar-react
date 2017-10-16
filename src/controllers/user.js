@@ -3,7 +3,7 @@ import aws from 'aws-sdk';
 import User from '../models/User';
 import Transaction from '../models/Transaction';
 import Review from '../models/Review';
-import Enums from '../models/Enums';
+import Enums from '../utils/Enums';
 import helpers from '../utils/helpers';
 
 

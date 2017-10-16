@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StatusType } from '../../models/Enums';
+import { StatusType } from '../../src/utils/Enums';
 
 import { setVisibilityFilter } from '../../utils/actions';
 

@@ -5,7 +5,8 @@ import { Button, Modal, Grid, Row, Col, ControlLabel, FormGroup, FormControl, Al
 import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
 
 import { skillRequest } from '../../utils/actions';
-import { RequestType, StatusType } from '../../models/Enums';
+import { RequestType, StatusType } from '../../src/utils/Enums';
+
 
 const messages = defineMessages({
   receive: {

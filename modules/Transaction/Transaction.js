@@ -5,7 +5,7 @@ import { Collapse, Grid, Col, Row, Button } from 'react-bootstrap';
 import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
-import { RequestType, StatusType } from '../../models/Enums';
+import { RequestType, StatusType } from '../../src/utils/Enums';
 import Identity from '../Identity/Identity';
 import Upcoming from '../Upcoming/Upcoming';
 // import ConfirmationModal from './ConfirmationModal';

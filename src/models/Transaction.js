@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import Enums from './Enums';
+import Enums from '../utils/Enums';
 import helpers from '../utils/helpers';
 
 const transactionSchema = new mongoose.Schema({

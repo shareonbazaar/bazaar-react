@@ -5,14 +5,25 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import passport from 'passport';
 import bodyParser from 'body-parser';
+import multer from 'multer';
+
 import { check, validationResult } from 'express-validator/check';
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
-import webpackconfig from './webpack.dev-config';
+import webpackconfig from '../config/webpack.dev-config';
+import passportConfig from './controllers/passport';
+
+/**
+ * Controllers (route handlers).
+ */
+import userController from './controllers/user';
+import transactionController from './controllers/transaction';
+import messageController from './controllers/message';
+import skillController from './controllers/skill';
+import contactController from './controllers/contact';
 
 // Use native promises
 mongoose.Promise = global.Promise;
-
 
 
 /**
@@ -28,17 +39,7 @@ const app = express();
 module.exports = app;
 
 
-var server = require('http').Server(app);
-import passportConfig from './config/passport';
-
-/**
- * Controllers (route handlers).
- */
-import userController from './controllers/user';
-import transactionController from './controllers/transaction';
-import messageController from './controllers/message';
-import skillController from './controllers/skill';
-import contactController from './controllers/contact';
+const server = require('http').Server(app);
 
 
 /**
@@ -60,9 +61,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-const multer  = require('multer');
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage })
+const upload = multer({ storage });
 app.use(upload.single('profilepic'));
 
 if (app.get('env') === 'development') {
@@ -72,19 +72,19 @@ if (app.get('env') === 'development') {
     hot: true,
     historyApiFallback: true,
     proxy: {
-      "*": "http://localhost:3000",
+      '*': 'http://localhost:3000',
     }
-  }).listen(8080, 'localhost', (err, result) => {
+  }).listen(8080, 'localhost', (err) => {
     if (err) {
       return console.log(err);
     }
-    console.log("WebpackDevServer listening on port 8080. Open browser at:");
-    console.log("http://localhost:8080");
+    console.log('WebpackDevServer listening on port 8080. Open browser at:');
+    console.log('http://localhost:8080');
   });
 }
 
 // serve our static stuff like index.css
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, '../public')));
 
 // Initialize the sockets for sending and receiving messages
 messageController.initSockets(server);
@@ -113,7 +113,7 @@ app.get('/api/categories', skillController.apiGetCategories);
 const validateContact = [
   check('name').exists(),
   check('email').isEmail(),
-  check('message').exists(),  
+  check('message').exists(),
 ];
 
 app.post('/api/contact', validateContact, verify, contactController.postContact);
@@ -121,7 +121,7 @@ app.post('/api/contact', validateContact, verify, contactController.postContact)
 // ...
 app.get('*', (req, res) => {
   // and drop 'public' in the middle of here
-  res.sendFile(path.join(__dirname, 'public', 'index.html'))
+  res.sendFile(path.join(__dirname, '../public', 'index.html'));
 });
 
 const validateUser = [
@@ -130,7 +130,6 @@ const validateUser = [
   check('email').isEmail(),
   check('password').exists(),
 ];
-
 
 
 app.post('/api/login', passportConfig.apiLogin);
@@ -143,8 +142,6 @@ app.post('/api/resetPassword', passportConfig.resetTokenLogin);
  */
 app.post('/auth/google', passportConfig.authenticate_google);
 app.post('/auth/facebook', passportConfig.authenticate_facebook);
-
-
 
 
 /**

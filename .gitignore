@@ -11,6 +11,7 @@ node_modules
 
 # Translation build files
 build/*
+dist/*
 
 # Test coverage files
 coverage/*
