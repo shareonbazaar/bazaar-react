@@ -21,33 +21,13 @@ const editProfileMessages = defineMessages({
     id: 'EditProfile.newcomer',
     defaultMessage: 'Newcomer',
   },
-  pic: {
-    id: 'EditProfile.pic',
-    defaultMessage: 'Profile picture',
-  },
-  email: {
-    id: 'Signup.email',
-    defaultMessage: 'Email',
-  },
-  name: {
-    id: 'EditProfile.name',
-    defaultMessage: 'Name',
-  },
   gender: {
     id: 'EditProfile.gender',
-    defaultMessage: 'Gender',
-  },
-  location: {
-    id: 'EditProfile.location',
-    defaultMessage: 'Location',
-  },
-  hometown: {
-    id: 'EditProfile.hometown',
-    defaultMessage: 'Hometown',
+    defaultMessage: 'What is your gender',
   },
   status: {
     id: 'EditProfile.status',
-    defaultMessage: 'Status',
+    defaultMessage: 'How would you describe yourself?',
   },
   aboutMe: {
     id: 'EditProfile.aboutme',

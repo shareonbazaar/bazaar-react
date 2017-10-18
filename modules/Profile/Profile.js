@@ -94,7 +94,7 @@ class Profile extends React.Component {
                       defaultMessage={'I can offer'}
                     />
                   </h4>
-                  {profiledUser.skills.map((skill, i) => <div className="skill-label" key={i}>{skill.label.en}</div>)}
+                  {profiledUser.skills.map((skill, i) => <div className="skill-label offer" key={i}>{skill.label.en}</div>)}
                 </div>
               </div>
               <div className="skills-box">
@@ -105,7 +105,7 @@ class Profile extends React.Component {
                       defaultMessage={'I am interested in'}
                     />
                   </h4>
-                  {profiledUser.interests.map((skill, i) => <div className="skill-label" key={i}>{skill.label.en}</div>)}
+                  {profiledUser.interests.map((skill, i) => <div className="skill-label receive" key={i}>{skill.label.en}</div>)}
                 </div>
               </div>
             </Col>

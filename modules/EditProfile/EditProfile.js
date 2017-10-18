@@ -5,7 +5,7 @@ import { Button, FormGroup, Alert } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
-import SkillsModal from '../SkillsModal/SkillsModal';
+import SkillsModal from './SkillsModal';
 import { updateProfile, clearProfileAlert } from '../../utils/actions';
 import Radio from './Radio';
 import UploadPhoto from './UploadPhoto';
@@ -120,7 +120,7 @@ class EditProfile extends React.Component {
         <h3>
           <FormattedMessage
             id={'EditProfile.title'}
-            defaultMessage={'Edit your profile'}
+            defaultMessage={'Edit profile'}
           />
         </h3>
       </div>
@@ -147,26 +147,39 @@ class EditProfile extends React.Component {
         {this.renderHeader()}
         <div>
           {response && this.renderAlert()}
-          <ResponsiveInputField
-            renderChildren
-            className="label-top"
-            messageText={formatMessage(editProfileMessages.pic)}
-          >
-            <UploadPhoto className="user-activities" imageUrl={picture} onImageChange={this.onImageChange} />
-          </ResponsiveInputField>
+          <UploadPhoto className="user-activities" imageUrl={picture} onImageChange={this.onImageChange} />
           <ResponsiveInputField
             formControlValue={email}
             formControlType="email"
             formControlPlaceHolder="Email"
             formControlOnChange={(e) => { this.onChange(e, 'email'); }}
-            messageText={formatMessage(editProfileMessages.email)}
           />
           <ResponsiveInputField
             formControlValue={name}
             formControlType="name"
             formControlPlaceHolder="John Doe"
             formControlOnChange={(e) => { this.onChange(e, 'name'); }}
-            messageText={formatMessage(editProfileMessages.name)}
+          />
+          <ResponsiveInputField
+            formControlValue={location}
+            formControlType="name"
+            formControlPlaceHolder="Location"
+            formControlOnChange={(e) => { this.onChange(e, 'location'); }}
+          />
+          <ResponsiveInputField
+            formControlValue={hometown}
+            formControlType="name"
+            formControlPlaceHolder="Hometown"
+            formControlOnChange={(e) => { this.onChange(e, 'hometown'); }}
+          />
+          <ResponsiveInputField
+            formControlValue={aboutMe}
+            formControlOnChange={(e) => { this.onChange(e, 'aboutMe'); }}
+            className="label-top"
+            messageText={formatMessage(editProfileMessages.aboutMe)}
+            componentClass="textarea"
+            rows={3}
+            style={{ height: 100 }}
           />
           <ResponsiveInputField
             renderChildren
@@ -191,19 +204,50 @@ class EditProfile extends React.Component {
             </div>
           </ResponsiveInputField>
           <ResponsiveInputField
-            formControlValue={location}
-            formControlType="name"
-            formControlPlaceHolder="Location"
-            formControlOnChange={(e) => { this.onChange(e, 'location'); }}
-            messageText={formatMessage(editProfileMessages.location)}
-          />
+            renderChildren
+            messageText={formatMessage(editProfileMessages.skills)}
+          >
+            <div className="skill-select">
+              {
+                skills.map(skill => (
+                  <SkillLabel className='offer' key={skill._id} label={skill.label.en} />
+                ))
+              }
+              <div className="skill-label">
+                <SkillsModal
+                  title="Select skills to offer"
+                  skills={skills}
+                  onSkillClick={(skill) => { this.onArrayChange('skills', skill); }}
+                />
+              </div>
+            </div>
+          </ResponsiveInputField>
           <ResponsiveInputField
-            formControlValue={hometown}
-            formControlType="name"
-            formControlPlaceHolder="Hometown"
-            formControlOnChange={(e) => { this.onChange(e, 'hometown'); }}
-            messageText={formatMessage(editProfileMessages.hometown)}
-          />
+            renderChildren
+            messageText={formatMessage(editProfileMessages.interests)}
+          >
+            <div className="skill-select">
+              {
+                // eslint-disable-next-line
+                interests.map((skill, i) => {
+                  return (
+                    <SkillLabel
+                      className='receive'
+                      key={skill._id}
+                      label={skill.label.en}
+                    />
+                  );
+                })
+              }
+              <div className="skill-label">
+                <SkillsModal
+                  title="Select skills to receive"
+                  skills={interests}
+                  onSkillClick={(skill) => { this.onArrayChange('interests', skill); }}
+                />
+              </div>
+            </div>
+          </ResponsiveInputField>
           <ResponsiveInputField
             renderChildren
             messageText={formatMessage(editProfileMessages.status)}
@@ -225,66 +269,10 @@ class EditProfile extends React.Component {
               }
             </div>
           </ResponsiveInputField>
-          <ResponsiveInputField
-            formControlValue={aboutMe}
-            formControlOnChange={(e) => { this.onChange(e, 'aboutMe'); }}
-            className="label-top"
-            messageText={formatMessage(editProfileMessages.aboutMe)}
-            componentClass="textarea"
-            rows={3}
-            style={{ height: 100 }}
-          />
-          <ResponsiveInputField
-            renderChildren
-            className="label-top"
-            messageText={formatMessage(editProfileMessages.skills)}
-          >
-            <div className="user-activities">
-              <ul>
-                {
-                  // skills.map((skill, i) => (
-                  skills.map(skill => (
-                    <SkillLabel key={skill._id} label={skill.label.en} />
-                  ))
-                }
-              </ul>
-              <SkillsModal
-                title="Skills"
-                skills={skills.map(s => s._id)}
-                onSkillClick={(skill) => { this.onArrayChange('skills', skill); }}
-              />
-            </div>
-          </ResponsiveInputField>
-          <ResponsiveInputField
-            renderChildren
-            className="label-top"
-            messageText={formatMessage(editProfileMessages.interests)}
-          >
-            <div className="user-activities">
-              <ul>
-                {
-                  // eslint-disable-next-line
-                  interests.map((skill, i) => {
-                    return (
-                      <SkillLabel
-                        key={skill._id}
-                        label={skill.label.en}
-                      />
-                    );
-                  })
-                }
-              </ul>
-              <SkillsModal
-                title="Interests"
-                skills={interests.map(s => s._id)}
-                onSkillClick={(skill) => { this.onArrayChange('interests', skill); }}
-              />
-            </div>
-          </ResponsiveInputField>
           <hr />
           <FormGroup>
             <div className="save-button">
-              <Button onClick={this.onSubmit} bsStyle="primary">
+              <Button className="action-call" onClick={this.onSubmit} bsStyle="primary">
                 <FormattedMessage
                   id={'EditProfile.savechanges'}
                   defaultMessage={'Save changes'}
@@ -298,10 +286,11 @@ class EditProfile extends React.Component {
   }
 }
 
-function mapStateToProps({ auth }) {
+function mapStateToProps({ auth, categories }) {
   return {
     loggedInUser: auth.user,
-    response: auth.profileUpdateResponse
+    response: auth.profileUpdateResponse,
+    categories: categories.items,
   };
 }
 

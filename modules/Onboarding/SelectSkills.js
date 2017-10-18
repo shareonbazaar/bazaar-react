@@ -65,7 +65,7 @@ class SelectSkills extends React.Component {
                     style={{ opacity: config.style.transform }}
                     key={config.data._id}
                     onClick={() => this.onSkillClick(config.data)}
-                    className="skill-label"
+                    className="skill-label offer"
                   >
                     {config.data.label.en}
                   </div>
@@ -199,9 +199,9 @@ SelectSkills.propTypes = {
   searchText: PropTypes.string,
   onSkillSelect: PropTypes.func,
   onSkillRemove: PropTypes.func,
-  onboardingSearch: PropTypes.func,
+  onboardingSearch: PropTypes.func.isRequired,
   skills: PropTypes.array,
-  categories: PropTypes.array,
+  categories: PropTypes.array.isRequired,
   checkHighLevel: PropTypes.bool,
   intl: PropTypes.object,
   animate: PropTypes.bool,
@@ -211,9 +211,7 @@ SelectSkills.defaultProps = {
   searchText: '',
   onSkillSelect: () => {},
   onSkillRemove: () => {},
-  onboardingSearch: () => {},
   skills: [],
-  categories: [],
   checkHighLevel: false,
   intl: null,
   animate: false,

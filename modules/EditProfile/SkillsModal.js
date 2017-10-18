@@ -4,8 +4,9 @@ import { connect } from 'react-redux';
 import { Button, Modal } from 'react-bootstrap';
 import { FormattedMessage } from 'react-intl';
 
-import { loadCategories } from '../../utils/actions';
+import { loadCategories, onboardingSearch } from '../../utils/actions';
 
+import SelectSkills from '../Onboarding/SelectSkills';
 
 class SkillsModal extends React.Component {
   constructor(props) {
@@ -29,35 +30,21 @@ class SkillsModal extends React.Component {
             <Modal.Title>
               <FormattedMessage
                 id={'SkillsModal.title'}
-                defaultMessage={'Select {title}'}
+                defaultMessage={'{title}'}
                 values={{ title }}
               />
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div>
-              {
-                // eslint-disable-next-line
-                categories.map((cat) => {
-                  return (
-                    <div className="skill-select" key={cat._id}>
-                      <h4>{cat.label.en}</h4>
-                      { // eslint-disable-next-line
-                        cat._skills.map((skill) => {
-                          return (
-                            <div
-                              key={skill._id}
-                              onClick={() => onSkillClick(skill)}
-                              className={`skill-label ${skills.indexOf(skill._id) >= 0 ? 'selected' : ''}`}
-                            >
-                              {skill.label.en}
-                            </div>
-                          );
-                        })}
-                    </div>
-                  );
-                })
-              }
+              <SelectSkills
+                skills={skills}
+                onSkillSelect={s => onSkillClick(s)}
+                onSkillRemove={s => onSkillClick(s)}
+                checkHighLevel={false}
+                categories={categories}
+                {...this.props}
+              />
             </div>
           </Modal.Body>
           <Modal.Footer>
@@ -71,12 +58,12 @@ class SkillsModal extends React.Component {
         </Modal>
         <Button
           onClick={() => this.setState({ showModal: true })}
+          className="action-call"
           bsStyle="primary"
         >
           <FormattedMessage
             id={'SkillsModal.edit'}
-            defaultMessage={'Edit {title}'}
-            values={{ title }}
+            defaultMessage={'Add more skills'}
           />
         </Button>
       </div>
@@ -85,25 +72,23 @@ class SkillsModal extends React.Component {
 }
 
 SkillsModal.propTypes = {
-  loadCategories: PropTypes.func,
-  title: PropTypes.string,
+  loadCategories: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
   categories: PropTypes.array,
-  onSkillClick: PropTypes.func,
+  onSkillClick: PropTypes.func.isRequired,
   skills: PropTypes.array,
 };
 
 SkillsModal.defaultProps = {
-  loadCategories: () => {},
-  title: '',
   categories: [],
-  onSkillClick: () => {},
   skills: [],
 };
 
-function mapStateToProps(state) {
+function mapStateToProps({ categories, onboarding }) {
   return {
-    categories: state.categories.items,
+    categories: categories.items,
+    searchText: onboarding.searchText,
   };
 }
 
-export default connect(mapStateToProps, { loadCategories })(SkillsModal);
+export default connect(mapStateToProps, { loadCategories, onboardingSearch })(SkillsModal);
