@@ -8,7 +8,7 @@ import { Button, FormGroup, Alert } from 'react-bootstrap';
 
 import { FormattedMessage, injectIntl } from 'react-intl';
 import ResponsiveInputField from './ResponsiveInputField';
-import { loginUser } from '../../utils/actions';
+import { loginUser, clearLoginAlert } from '../../utils/actions';
 import SocialMediaLogin from './SocialMediaLogin';
 import { loginMessages } from './messages';
 
@@ -28,6 +28,10 @@ class Login extends React.Component {
       const newLocation = this.props.location.state ? this.props.location.state.redirect : '/';
       this.props.push(newLocation);
     }
+  }
+
+  componentWillMount() {
+    this.props.clearLoginAlert();
   }
 
   onChange(e, field) {
@@ -157,18 +161,17 @@ class Login extends React.Component {
 Login.propTypes = {
   isAuthenticated: PropTypes.bool,
   location: PropTypes.object,
-  push: PropTypes.func,
+  push: PropTypes.func.isRequired,
   response: PropTypes.object,
   intl: PropTypes.object,
-  loginUser: PropTypes.func,
+  loginUser: PropTypes.func.isRequired,
+  clearLoginAlert: PropTypes.func.isRequired,
 };
 Login.defaultProps = {
   isAuthenticated: false,
   location: null,
-  push: () => {},
   response: null,
   intl: null,
-  loginUser: () => {},
 };
 
 function mapStateToProps({ auth }) {
@@ -180,4 +183,4 @@ function mapStateToProps({ auth }) {
 }
 
 
-export default connect(mapStateToProps, { loginUser, push })(injectIntl(Login));
+export default connect(mapStateToProps, { loginUser, push, clearLoginAlert })(injectIntl(Login));

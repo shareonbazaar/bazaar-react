@@ -23,6 +23,7 @@ export const UPDATE_PROFILE_REQUEST = 'UPDATE_PROFILE_REQUEST';
 export const UPDATE_PROFILE_RECEIVED = 'UPDATE_PROFILE_RECEIVED';
 export const UPDATE_PROFILE_FAILURE = 'UPDATE_PROFILE_FAILURE';
 export const CLEAR_PROFILE_ALERT = 'CLEAR_PROFILE_ALERT';
+export const CLEAR_LOGIN_ALERT = 'CLEAR_LOGIN_ALERT';
 export const CONTACT_SUBMIT_REQUEST = 'CONTACT_SUBMIT_REQUEST';
 export const CONTACT_SUBMIT_CONFIRMED = 'CONTACT_SUBMIT_CONFIRMED';
 export const CLEAR_CONTACT_ALERT = 'CLEAR_CONTACT_ALERT';
@@ -229,6 +230,12 @@ export function loadCategories() {
 export function clearProfileAlert() {
   return {
     type: CLEAR_PROFILE_ALERT,
+  };
+}
+
+export function clearLoginAlert() {
+  return {
+    type: CLEAR_LOGIN_ALERT,
   };
 }
 

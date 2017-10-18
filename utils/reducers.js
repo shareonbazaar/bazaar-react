@@ -65,6 +65,10 @@ function auth(state = {
       return Object.assign({}, state, {
         profileUpdateResponse: null,
       });
+    case actions.CLEAR_LOGIN_ALERT:
+      return Object.assign({}, state, {
+        loginResponse: null,
+      });
     case actions.FORGOT_REQUEST:
       return Object.assign({}, state, {
         forgotEmail: action.forgotEmail,
