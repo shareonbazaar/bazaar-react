@@ -12,6 +12,7 @@ function SocialMediaLogin(props) {
       <div className={props.className}>
         <FacebookLogin
           isDisabled={props.disabled}
+          disableMobileRedirect={true}
           appId={FACEBOOK_ID}
           autoLoad={false}
           fields="name,email,picture"
