@@ -214,7 +214,7 @@ function renderOnboarding(props) {
   }
   return (
     <div>
-      <h3><span style={{fontWeight: 'bold'}}>{`Step ${stage + 1}:`} </span>{`${stageDataTitles[stage]}`}</h3>
+      <h3><span style={{ fontWeight: 'bold' }}>{`Step ${stage + 1}:`} </span>{`${stageDataTitles[stage]}`}</h3>
       <ProgressBar stagesActive={stagesActive} shouldAnimate stage={stage} onStageClick={selectStage} />
       {element}
     </div>
