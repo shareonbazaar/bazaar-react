@@ -5,7 +5,7 @@ import { IndexLink } from 'react-router';
 import { Navbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
-
+import LinkedFooter from '../LinkedFooter/LinkedFooter';
 import { loadUsers, selectStage } from '../../utils/actions';
 
 import SideBar from '../SideBar/SideBar';
@@ -43,6 +43,7 @@ class App extends React.Component {
     return null;
   }
 
+
   render() {
     const { children } = this.props;
     const { openSideBar } = this.state;
@@ -75,7 +76,10 @@ class App extends React.Component {
           </button>
         </Navbar>
         <SideBar toggled={openSideBar} />
-        {children}
+        <div style={{ minHeight: '100vh' }}>
+          {children}
+        </div>
+        <LinkedFooter />
       </div>
     );
   }
