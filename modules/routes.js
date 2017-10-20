@@ -41,6 +41,7 @@ export default (store) => {
     return <App children={children} location={location} />;
   }
 
+
   return (
     <Route path="/" component={AppContainer}>
       <IndexRoute component={Community} />

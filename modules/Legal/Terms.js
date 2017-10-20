@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Terms = () => (
-  <div className="terms-page">
+  <div className="content-page">
     <h1 style={{ textAlign: 'center' }}>Terms and Conditions</h1>
     <div className="terms">
       <h2 style={{ textAlign: 'center' }}>Privacy Policy</h2>
@@ -156,5 +156,6 @@ This privacy policy has been compiled to better serve those who are concerned wi
     </div>
   </div>
 );
+
 
 export default Terms;

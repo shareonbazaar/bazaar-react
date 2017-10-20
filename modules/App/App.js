@@ -43,6 +43,7 @@ class App extends React.Component {
     return null;
   }
 
+
   render() {
     const { children } = this.props;
     const { openSideBar } = this.state;

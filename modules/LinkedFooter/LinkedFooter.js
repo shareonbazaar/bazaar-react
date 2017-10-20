@@ -8,7 +8,6 @@ const footerStyle = {
   margin: 0,
   padding: 5,
   fontSize: 12,
-  // background: '#e6e6e6',
 };
 const LinkedFooter = () =>
   (<div style={footerStyle}>
