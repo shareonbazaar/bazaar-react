@@ -9,13 +9,13 @@ import Profile from './Profile/Profile';
 import EditProfile from './EditProfile/EditProfile';
 import Contact from './Contact/Contact';
 import Settings from './Settings/Settings';
-import Terms from './Terms/Terms';
+import Terms from './Legal/Terms';
+import Imprint from './Legal/Imprint';
 
 import Login from './Authentication/Login';
 import Signup from './Authentication/Signup';
 import Forgot from './Authentication/Forgot';
 import Onboarding from './Onboarding/Container';
-
 
 export default (store) => {
   // validate authentication for private routes
@@ -56,6 +56,8 @@ export default (store) => {
       <Route path="bookmarks" component={Bookmarks} />
       <Route path="settings" component={Settings} onEnter={requireAuth} />
       <Route path="onboarding" component={Onboarding} />
+      <Route path="terms" component={Terms} />
+      <Route path="imprint" component={Imprint} />
     </Route>
   );
 };
