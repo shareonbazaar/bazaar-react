@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormControl, Modal, Button } from 'react-bootstrap';
+import { FormControl, Modal } from 'react-bootstrap';
 import { TransitionMotion, spring } from 'react-motion';
 
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 
 const NUM_SKILLS_TO_SHOW = 3;
+const sanitize = s => s.toLowerCase().trim();
 
 const messages = defineMessages({
   placeholder: {
@@ -24,6 +25,7 @@ class SelectSkills extends React.Component {
     };
     this.onLevelSelect = this.onLevelSelect.bind(this);
     this.onSkillClick = this.onSkillClick.bind(this);
+    this.onKeyPress = this.onKeyPress.bind(this);
   }
 
   onLevelSelect(isHighLevel) {
@@ -36,11 +38,23 @@ class SelectSkills extends React.Component {
   }
 
   onSkillClick(skill) {
-    const { checkHighLevel, onSkillSelect } = this.props;
-    if (checkHighLevel) {
-      this.setState({ tempSelectedSkill: skill });
-    } else {
-      onSkillSelect(skill);
+    const { onSkillSelect } = this.props;
+    onSkillSelect(skill);
+  }
+
+  onKeyPress(e) {
+    const { categories, onSkillSelect } = this.props;
+    if (e.charCode === 13) {
+      const text = sanitize(e.target.value);
+      categories.some(c =>
+        c._skills.some((s) => {
+          if (sanitize(s.label.en) === text) {
+            onSkillSelect(s);
+            return true;
+          }
+          return false;
+        })
+      );
     }
   }
 
@@ -83,37 +97,6 @@ class SelectSkills extends React.Component {
     );
   }
 
-  // renderModal() {
-  //   const { tempSelectedSkill } = this.state;
-  //   return (
-  //     <Modal className="skill-level-modal" show={tempSelectedSkill !== null}>
-  //       <Modal.Body>
-  //         <h4>
-  //           <FormattedMessage
-  //             id={'Onboarding.highLevel'}
-  //             defaultMessage={'Could you teach this skill at a high level?'}
-  //           />
-  //         </h4>
-  //         <div className="temp-selected-skill">{tempSelectedSkill ? tempSelectedSkill.label.en : ''}</div>
-  //         <div className="choices">
-  //           <Button onClick={() => this.onLevelSelect(true)}>
-  //             <FormattedMessage
-  //               id={'Onboarding.yes'}
-  //               defaultMessage={'Yes'}
-  //             />
-  //           </Button>
-  //           <Button onClick={() => this.onLevelSelect(false)}>
-  //             <FormattedMessage
-  //               id={'Onboarding.no'}
-  //               defaultMessage={'No'}
-  //             />
-  //           </Button>
-  //         </div>
-  //       </Modal.Body>
-  //     </Modal>
-  //   );
-  // }
-
   renderSeeMoreModal() {
     const { seeMoreCat } = this.state;
     const { skills } = this.props;
@@ -138,7 +121,6 @@ class SelectSkills extends React.Component {
     const { onboardingSearch, onSkillRemove, skills, categories, checkHighLevel, searchText } = this.props;
     const { formatMessage } = this.props.intl;
     const skillIds = skills.map(s => s._id);
-    const sanitize = s => s.toLowerCase().trim();
     const filteredResults = categories.map(cat => (
       {
         label: cat.label,
@@ -183,6 +165,7 @@ class SelectSkills extends React.Component {
           placeholder={formatMessage(messages.placeholder)}
           onChange={e => onboardingSearch(e.target.value)}
           value={searchText}
+          onKeyPress={this.onKeyPress}
         />
         {
           filteredResults.map(this.renderCategory.bind(this))
