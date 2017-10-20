@@ -227,6 +227,12 @@ class View extends React.Component {
     this.props.loadCategories();
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.stage !== this.props.stage) {
+      window.scrollTo(0, 0);
+    }
+  }
+
   render() {
     const { hasStarted } = this.props;
     return (
