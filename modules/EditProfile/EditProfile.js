@@ -84,7 +84,6 @@ class EditProfile extends React.Component {
 
   onSubmit() {
     const { name, gender, hometown, location, status, aboutMe, skills, interests, file } = this.state;
-    const { loggedInUser } = this.props;
     const form = new FormData();
     form.append('profile.name', name);
     form.append('profile.gender', gender);
@@ -245,7 +244,7 @@ class EditProfile extends React.Component {
                   title="Select skills to receive"
                   skills={interests}
                   onSkillClick={(skill) => { this.onArrayChange('interests', skill); }}
-                  areInterests={true}
+                  areInterests
                 />
               </div>
             </div>
@@ -297,22 +296,16 @@ function mapStateToProps({ auth, categories }) {
 }
 
 EditProfile.propTypes = {
-  loggedInUser: PropTypes.object,
-  submitChanges: PropTypes.func,
-  updateProfile: PropTypes.func,
-  clearProfileAlert: PropTypes.func,
+  loggedInUser: PropTypes.object.isRequired,
+  submitChanges: PropTypes.func.isRequired,
+  updateProfile: PropTypes.func.isRequired,
+  clearProfileAlert: PropTypes.func.isRequired,
   response: PropTypes.object,
-  intl: PropTypes.object,
-  push: PropTypes.func,
+  intl: PropTypes.object.isRequired,
+  push: PropTypes.func.isRequired,
 };
 EditProfile.defaultProps = {
-  loggedInUser: null,
-  submitChanges: () => {},
-  updateProfile: () => {},
-  clearProfileAlert: () => {},
   response: null,
-  intl: null,
-  push: () => {},
 };
 
 export default connect(mapStateToProps, { updateProfile, clearProfileAlert, push })(injectIntl(EditProfile));
