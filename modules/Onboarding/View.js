@@ -10,7 +10,7 @@ import SelectSkills from './SelectSkills';
 const stageData = [
   'receive',
   'offer',
-  'my profile',
+  'profile',
 ];
 
 const stageDataTitles = [
@@ -117,19 +117,18 @@ function ProgressBar(props) {
 
 ProgressBar.propTypes = {
   shouldAnimate: PropTypes.bool,
-  onStageClick: PropTypes.func,
+  onStageClick: PropTypes.func.isRequired,
   stage: PropTypes.number,
   stagesActive: PropTypes.array,
 };
 
 ProgressBar.defaultProps = {
   shouldAnimate: false,
-  onStageClick: () => {},
   stage: stageData.length,
   stagesActive: [],
 };
 
-function renderWelcome(props) {
+function Welcome(props) {
   const { hasStarted, onStartClick } = props;
   return (
     <Modal
@@ -158,7 +157,13 @@ function renderWelcome(props) {
   );
 }
 
-function renderOnboarding(props) {
+Welcome.propTypes = {
+  hasStarted: PropTypes.bool.isRequired,
+  onStartClick: PropTypes.func.isRequired,
+};
+
+
+function Onboarding(props) {
   const {
     stage,
     selectStage,
@@ -166,10 +171,7 @@ function renderOnboarding(props) {
     removeSkill,
     chosenSkills,
     chosenInterests,
-    completeOnboarding,
-    categories,
-    loginUser,
-    animate
+    intl,
   } = props;
 
   const stagesActive = [];
@@ -179,7 +181,7 @@ function renderOnboarding(props) {
   if (chosenSkills.length >= 2) {
     stagesActive.push(2);
   }
-  const { formatMessage } = props.intl;
+  const { formatMessage } = intl;
   let element = null;
   switch (stage) {
     case 0:
@@ -189,7 +191,7 @@ function renderOnboarding(props) {
           onSkillSelect={s => selectSkill(s, true)}
           onSkillRemove={s => removeSkill(s, true)}
           title={formatMessage(messages.selectInterestsTitle)}
-          checkHighLevel={false}
+          areInterests
           {...props}
         />
       );
@@ -201,7 +203,7 @@ function renderOnboarding(props) {
           onSkillSelect={s => selectSkill(s, false)}
           onSkillRemove={s => removeSkill(s, false)}
           title={formatMessage(messages.selectSkillsTitle)}
-          checkHighLevel={false}
+          areInterests={false}
           {...props}
         />
       );
@@ -221,6 +223,17 @@ function renderOnboarding(props) {
   );
 }
 
+Onboarding.propTypes = {
+  stage: PropTypes.number.isRequired,
+  intl: PropTypes.object.isRequired,
+  selectStage: PropTypes.func.isRequired,
+  loadCategories: PropTypes.func.isRequired,
+  selectSkill: PropTypes.func.isRequired,
+  removeSkill: PropTypes.func.isRequired,
+  chosenSkills: PropTypes.array.isRequired,
+  chosenInterests: PropTypes.array.isRequired,
+};
+
 class View extends React.Component {
   componentDidMount() {
     window.scrollTo(0, 0);
@@ -238,7 +251,10 @@ class View extends React.Component {
     return (
       <div className="onboarding content-page">
         {
-          hasStarted ? renderOnboarding(this.props) : renderWelcome(this.props)
+          hasStarted ?
+            <Onboarding {...this.props} />
+            :
+            <Welcome {...this.props} />
         }
       </div>
     );
@@ -247,17 +263,13 @@ class View extends React.Component {
 
 View.propTypes = {
   stage: PropTypes.number,
-  selectStage: PropTypes.func,
-  progressStage: PropTypes.func,
-  loadCategories: PropTypes.func,
+  selectStage: PropTypes.func.isRequired,
+  loadCategories: PropTypes.func.isRequired,
   hasStarted: PropTypes.bool,
 };
 
 View.defaultProps = {
   stage: 1,
-  selectStage: () => {},
-  progressStage: () => {},
-  loadCategories: () => {},
   hasStarted: false,
 };
 

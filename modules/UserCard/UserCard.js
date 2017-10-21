@@ -9,7 +9,7 @@ class UserCard extends React.Component {
 
   renderSkill(skill, i) {
     return (
-      <div key={i} className="skill-label">
+      <div key={i} className="skill-label offer">
         {skill.label.en}
       </div>
     );
@@ -51,17 +51,14 @@ class UserCard extends React.Component {
 }
 
 UserCard.propTypes = {
-  user: PropTypes.object,
+  user: PropTypes.object.isRequired,
   bookmarked: PropTypes.bool,
-  onBookmarkClicked: PropTypes.func,
-  push: PropTypes.func,
+  onBookmarkClicked: PropTypes.func.isRequired,
+  push: PropTypes.func.isRequired,
 };
 
 UserCard.defaultProps = {
-  user: null,
   bookmarked: false,
-  onBookmarkClicked: () => {},
-  push: () => {},
 };
 
 export default connect(null, { push })(UserCard);

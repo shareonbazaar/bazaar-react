@@ -15,31 +15,68 @@ const messages = defineMessages({
   },
 });
 
+function Category(props) {
+  const { animate, category, children, onSkillClick, onSeeMoreClick, areInterests } = props;
+  return (
+    <div className="skill-select" key={category._id}>
+      {children}
+      <TransitionMotion
+        willLeave={() => (animate ? { transform: spring(0) } : null)}
+        styles={category._skills.map(s => ({
+          key: s._id,
+          style: { transform: 100 },
+          data: s,
+        }))}
+      >
+        {
+          interpolatedStyles =>
+            (<div>
+              {interpolatedStyles.map(config => (
+                <div
+                  style={{ opacity: config.style.transform }}
+                  key={config.data._id}
+                  onClick={() => onSkillClick(config.data)}
+                  className={`skill-label ${areInterests ? 'receive' : 'offer'}`}
+                >
+                  {config.data.label.en}
+                </div>
+              ))}
+              <div
+                className="see-more skill-label"
+                onClick={onSeeMoreClick}
+              >
+                See more skills
+              </div>
+            </div>)
+        }
+      </TransitionMotion>
+    </div>
+  );
+}
+
+Category.propTypes = {
+  children: PropTypes.object,
+  onSeeMoreClick: PropTypes.func,
+  onSkillClick: PropTypes.func.isRequired,
+  category: PropTypes.object.isRequired,
+  categories: PropTypes.array.isRequired,
+  animate: PropTypes.bool.isRequired,
+  areInterests: PropTypes.bool.isRequired,
+};
+
+Category.defaultProps = {
+  children: null,
+  onSeeMoreClick: () => {},
+};
+
 
 class SelectSkills extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tempSelectedSkill: null,
       seeMoreCat: null,
     };
-    this.onLevelSelect = this.onLevelSelect.bind(this);
-    this.onSkillClick = this.onSkillClick.bind(this);
     this.onKeyPress = this.onKeyPress.bind(this);
-  }
-
-  onLevelSelect(isHighLevel) {
-    const { onSkillSelect } = this.props;
-    const { tempSelectedSkill } = this.state;
-    onSkillSelect({ ...tempSelectedSkill, isHighLevel });
-    this.setState({
-      tempSelectedSkill: null,
-    });
-  }
-
-  onSkillClick(skill) {
-    const { onSkillSelect } = this.props;
-    onSkillSelect(skill);
   }
 
   onKeyPress(e) {
@@ -58,67 +95,34 @@ class SelectSkills extends React.Component {
     }
   }
 
-  renderCategory(category) {
-    const { animate, categories } = this.props;
-    return (
-      <div className="skill-select" key={category._id}>
-        <h4>{category.label.en}</h4>
-        <TransitionMotion
-          willLeave={() => (animate ? { transform: spring(0) } : null)}
-          styles={category._skills.map(s => ({
-            key: s._id,
-            style: { transform: 100 },
-            data: s,
-          }))}
-        >
-          {
-            interpolatedStyles =>
-              (<div>
-                {interpolatedStyles.map(config => (
-                  <div
-                    style={{ opacity: config.style.transform }}
-                    key={config.data._id}
-                    onClick={() => this.onSkillClick(config.data)}
-                    className="skill-label offer"
-                  >
-                    {config.data.label.en}
-                  </div>
-                ))}
-                <div
-                  className="see-more skill-label"
-                  onClick={() => this.setState({ seeMoreCat: categories.find(c => c._id === category._id) })}
-                >
-                  See more skills
-                </div>
-              </div>)
-          }
-        </TransitionMotion>
-      </div>
-    );
-  }
-
   renderSeeMoreModal() {
     const { seeMoreCat } = this.state;
+    const { onSkillSelect } = this.props;
+    if (seeMoreCat === null) return null;
     const { skills } = this.props;
     const skillIds = skills.map(s => s._id);
-    let cat = null;
-    if (seeMoreCat !== null) {
-      cat = {
-        ...seeMoreCat,
-        _skills: seeMoreCat._skills.filter(s => skillIds.indexOf(s._id) < 0),
-      };
-    }
+    const cat = {
+      ...seeMoreCat,
+      _skills: seeMoreCat._skills.filter(s => skillIds.indexOf(s._id) < 0),
+    };
     return (
       <Modal className="see-more-modal" onHide={() => this.setState({ seeMoreCat: null })} show={seeMoreCat !== null}>
+        <Modal.Header closeButton>
+          <h4>{cat.label.en}</h4>
+        </Modal.Header>
         <Modal.Body>
-          { seeMoreCat !== null && this.renderCategory(cat) }
+          <Category
+            {...this.props}
+            category={cat}
+            onSkillClick={s => onSkillSelect(s)}
+          />
         </Modal.Body>
       </Modal>
     );
   }
 
   render() {
-    const { onboardingSearch, onSkillRemove, skills, categories, checkHighLevel, searchText } = this.props;
+    const { onboardingSearch, onSkillRemove, skills, categories, searchText, onSkillSelect } = this.props;
     const { formatMessage } = this.props.intl;
     const skillIds = skills.map(s => s._id);
     const filteredResults = categories.map(cat => (
@@ -149,10 +153,10 @@ class SelectSkills extends React.Component {
               />
             </p>
             :
-            <div className={`selected-skills-container ${checkHighLevel ? 'contains-high-level' : ''}`}>
+            <div className="selected-skills-container">
               {
                 skills.map(skill =>
-                  (<div className={`selected-skill ${skill.isHighLevel ? 'high-level' : ''}`} key={skill._id}>
+                  (<div className="selected-skill" key={skill._id}>
                     {skill.label.en}
                     <div className="delete" onClick={() => onSkillRemove(skill)}>X</div>
                   </div>
@@ -168,7 +172,19 @@ class SelectSkills extends React.Component {
           onKeyPress={this.onKeyPress}
         />
         {
-          filteredResults.map(this.renderCategory.bind(this))
+          filteredResults.map(c =>
+            (
+              <Category
+                key={c._id}
+                {...this.props}
+                category={c}
+                onSkillClick={s => onSkillSelect(s)}
+                onSeeMoreClick={() => this.setState({ seeMoreCat: categories.find(c2 => c2._id === c._id) })}
+              >
+                <h4>{c.label.en}</h4>
+              </Category>
+            )
+          )
         }
         {
           this.renderSeeMoreModal()
@@ -180,22 +196,18 @@ class SelectSkills extends React.Component {
 
 SelectSkills.propTypes = {
   searchText: PropTypes.string,
-  onSkillSelect: PropTypes.func,
-  onSkillRemove: PropTypes.func,
+  onSkillSelect: PropTypes.func.isRequired,
+  onSkillRemove: PropTypes.func.isRequired,
   onboardingSearch: PropTypes.func.isRequired,
   skills: PropTypes.array,
   categories: PropTypes.array.isRequired,
-  checkHighLevel: PropTypes.bool,
   intl: PropTypes.object,
   animate: PropTypes.bool,
 };
 
 SelectSkills.defaultProps = {
   searchText: '',
-  onSkillSelect: () => {},
-  onSkillRemove: () => {},
   skills: [],
-  checkHighLevel: false,
   intl: null,
   animate: false,
 };

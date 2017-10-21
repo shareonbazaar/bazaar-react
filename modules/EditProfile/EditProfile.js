@@ -210,7 +210,7 @@ class EditProfile extends React.Component {
             <div className="skill-select">
               {
                 skills.map(skill => (
-                  <SkillLabel className='offer' key={skill._id} label={skill.label.en} />
+                  <SkillLabel className="offer" key={skill._id} label={skill.label.en} />
                 ))
               }
               <div className="skill-label">
@@ -218,6 +218,7 @@ class EditProfile extends React.Component {
                   title="Select skills to offer"
                   skills={skills}
                   onSkillClick={(skill) => { this.onArrayChange('skills', skill); }}
+                  areInterests={false}
                 />
               </div>
             </div>
@@ -232,7 +233,7 @@ class EditProfile extends React.Component {
                 interests.map((skill, i) => {
                   return (
                     <SkillLabel
-                      className='receive'
+                      className="receive"
                       key={skill._id}
                       label={skill.label.en}
                     />
@@ -244,6 +245,7 @@ class EditProfile extends React.Component {
                   title="Select skills to receive"
                   skills={interests}
                   onSkillClick={(skill) => { this.onArrayChange('interests', skill); }}
+                  areInterests={true}
                 />
               </div>
             </div>

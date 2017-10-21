@@ -937,7 +937,7 @@
       }
 
       .stage-title {
-        font-size: 10px;
+        font-size: 11px;
       }
     }
   }
@@ -1043,12 +1043,13 @@
 }
 
 .progress-buttons {
-  margin-top: 10px;
+  margin-top: 14px;
   display: inline-block;
   .btn {
     border-radius: 100px;
     margin: 0 5px;
     color: white;
+    padding: 8px 10px;
     &.back {
       background-color: #5A7587;
     }
@@ -1059,6 +1060,11 @@
 }
 
 .see-more-modal {
+  h4 {
+    text-align: center;
+    color: #E87E76;
+    font-weight: bold;
+  }
   .see-more {
     display: none;
   }

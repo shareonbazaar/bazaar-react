@@ -41,7 +41,6 @@ class SkillsModal extends React.Component {
                 skills={skills}
                 onSkillSelect={s => onSkillClick(s)}
                 onSkillRemove={s => onSkillClick(s)}
-                checkHighLevel={false}
                 categories={categories}
                 {...this.props}
               />
