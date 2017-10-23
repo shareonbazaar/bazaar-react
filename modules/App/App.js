@@ -11,6 +11,7 @@ import { loadUsers, selectStage } from '../../utils/actions';
 import SideBar from '../SideBar/SideBar';
 import QueryBox from '../QueryBox/QueryBox';
 import ProgressButtons from '../Onboarding/ProgressButtons';
+import { BAZAAR_GREY } from '../Layout/Styles';
 
 class App extends React.Component {
   constructor(props) {
@@ -52,7 +53,7 @@ class App extends React.Component {
         <Helmet>
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
         </Helmet>
-        <Navbar fixedTop fluid>
+        <Navbar style={{ background: BAZAAR_GREY }} fixedTop fluid>
           {
             location.pathname !== '/onboarding' &&
             <IndexLink onClick={() => this.props.loadUsers()} to="/">
@@ -65,14 +66,35 @@ class App extends React.Component {
           }
           <button
             onClick={() => this.setState({ openSideBar: !openSideBar })}
-            id="menu-toggle"
             type="button"
-            className="navbar-toggle"
+            style={{
+              display: 'inline-block',
+              marginRight: '0px',
+              border: 'none',
+              float: 'right',
+              padding: '9px 10px',
+              marginTop: '8px',
+              background: 'transparent',
+              outline: 'none',
+            }}
           >
-            <span className="sr-only">Toggle navigation</span>
-            <span className="icon-bar" />
-            <span className="icon-bar" />
-            <span className="icon-bar" />
+            {
+              Array(3).fill(0).map((v, i) =>
+                (
+                  <span
+                    key={i}
+                    style={{
+                      backgroundColor: 'white',
+                      display: 'block',
+                      width: '22px',
+                      height: '2px',
+                      borderRadius: '1px',
+                      marginTop: i > 0 ? '4px' : '0px',
+                    }}
+                  />
+                )
+              )
+            }
           </button>
         </Navbar>
         <SideBar toggled={openSideBar} />

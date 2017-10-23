@@ -2,8 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormControl, Modal } from 'react-bootstrap';
 import { TransitionMotion, spring } from 'react-motion';
-
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
+
+import SkillLabel from '../EditProfile/SkillLabel';
+import { Header1, Header2 } from '../Layout/Headers';
+import { BAZAAR_BLUE, BAZAAR_ORANGE, LIGHT_GREY } from '../Layout/Styles';
 
 const NUM_SKILLS_TO_SHOW = 3;
 const sanitize = s => s.toLowerCase().trim();
@@ -15,11 +18,33 @@ const messages = defineMessages({
   },
 });
 
+
 function Category(props) {
-  const { animate, category, children, onSkillClick, onSeeMoreClick, areInterests } = props;
+  const { animate, category, onSkillClick, onSeeMoreClick, areInterests, showSeeMore } = props;
+  const skillLevelContainer = {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-evenly',
+  };
   return (
-    <div className="skill-select" key={category._id}>
-      {children}
+    <div style={
+      {
+        padding: '6px 4px 10px 4px',
+        margin: '10px 0',
+        borderRadius: '5px',
+        backgroundColor: 'white',
+      }
+    }
+    >
+      <Header1
+        style={{
+          textAlign: 'center',
+          fontWeight: 'bold',
+          color: `${areInterests ? BAZAAR_BLUE : BAZAAR_ORANGE}`,
+        }}
+      >
+        {category.label.en}
+      </Header1>
       <TransitionMotion
         willLeave={() => (animate ? { transform: spring(0) } : null)}
         styles={category._skills.map(s => ({
@@ -30,23 +55,34 @@ function Category(props) {
       >
         {
           interpolatedStyles =>
-            (<div>
+            (<div style={skillLevelContainer}>
               {interpolatedStyles.map(config => (
-                <div
-                  style={{ opacity: config.style.transform }}
+                <SkillLabel
                   key={config.data._id}
+                  style={{ opacity: config.style.transform, flexBasis: '48%', margin: '1% 0', cursor: 'pointer' }}
                   onClick={() => onSkillClick(config.data)}
-                  className={`skill-label ${areInterests ? 'receive' : 'offer'}`}
-                >
-                  {config.data.label.en}
-                </div>
+                  skill={config.data}
+                  isInterest={areInterests}
+                />
               ))}
-              <div
-                className="see-more skill-label"
-                onClick={onSeeMoreClick}
-              >
-                See more skills
-              </div>
+              {
+                showSeeMore &&
+                <div
+                  onClick={onSeeMoreClick}
+                  style={{
+                    flexBasis: '48%',
+                    margin: '1% 0',
+                    borderRadius: '5px',
+                    textAlign: 'center',
+                    fontSize: '11px',
+                    padding: '8px 8px',
+                    color: `${areInterests ? BAZAAR_BLUE : BAZAAR_ORANGE}`,
+                    backgroundColor: LIGHT_GREY,
+                  }}
+                >
+                  See more skills
+                </div>
+              }
             </div>)
         }
       </TransitionMotion>
@@ -55,18 +91,18 @@ function Category(props) {
 }
 
 Category.propTypes = {
-  children: PropTypes.object,
   onSeeMoreClick: PropTypes.func,
   onSkillClick: PropTypes.func.isRequired,
   category: PropTypes.object.isRequired,
   categories: PropTypes.array.isRequired,
   animate: PropTypes.bool.isRequired,
   areInterests: PropTypes.bool.isRequired,
+  showSeeMore: PropTypes.bool,
 };
 
 Category.defaultProps = {
-  children: null,
   onSeeMoreClick: () => {},
+  showSeeMore: true,
 };
 
 
@@ -106,15 +142,13 @@ class SelectSkills extends React.Component {
       _skills: seeMoreCat._skills.filter(s => skillIds.indexOf(s._id) < 0),
     };
     return (
-      <Modal className="see-more-modal" onHide={() => this.setState({ seeMoreCat: null })} show={seeMoreCat !== null}>
-        <Modal.Header closeButton>
-          <h4>{cat.label.en}</h4>
-        </Modal.Header>
+      <Modal onHide={() => this.setState({ seeMoreCat: null })} show={seeMoreCat !== null}>
         <Modal.Body>
           <Category
             {...this.props}
             category={cat}
             onSkillClick={s => onSkillSelect(s)}
+            showSeeMore={false}
           />
         </Modal.Body>
       </Modal>
@@ -122,7 +156,7 @@ class SelectSkills extends React.Component {
   }
 
   render() {
-    const { onboardingSearch, onSkillRemove, skills, categories, searchText, onSkillSelect } = this.props;
+    const { onboardingSearch, onSkillRemove, skills, categories, searchText, onSkillSelect, areInterests } = this.props;
     const { formatMessage } = this.props.intl;
     const skillIds = skills.map(s => s._id);
     const filteredResults = categories.map(cat => (
@@ -137,30 +171,63 @@ class SelectSkills extends React.Component {
     )).filter(c => c._skills.length > 0);
 
     return (
-      <div className="skill-select-container">
-        <p style={{ display: `${skills.length >= 2 ? 'none' : 'initial'}` }}>
-          <FormattedMessage
-            id={'Onboarding.chooseTwo'}
-            defaultMessage={'Please choose at least two skills'}
-          />
-        </p>
+      <div>
+        {
+          skills.length < 2 &&
+          <Header2>
+            <FormattedMessage
+              id={'Onboarding.chooseTwo'}
+              defaultMessage={'Please choose at least two skills'}
+            />
+          </Header2>
+        }
         {
           skills.length === 0 ?
-            <p className="no-skills">
+            <p style={{ fontStyle: 'italic' }}>
               <FormattedMessage
                 id={'Onboarding.noSkills'}
                 defaultMessage={'You currently have no skills added'}
               />
             </p>
             :
-            <div className="selected-skills-container">
+            <div
+              style={{ marginBottom: '10px', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-evenly' }}
+            >
               {
                 skills.map(skill =>
-                  (<div className="selected-skill" key={skill._id}>
-                    {skill.label.en}
-                    <div className="delete" onClick={() => onSkillRemove(skill)}>X</div>
-                  </div>
-                  ))
+                  (
+                    <SkillLabel
+                      skill={skill}
+                      key={skill._id}
+                      isSelected
+                      isInterest={areInterests}
+                      style={{ flexBasis: '48%', margin: '1% 0' }}
+                    >
+                      <div
+                        onClick={() => onSkillRemove(skill)}
+                        style={
+                          {
+                            display: 'inline-block',
+                            backgroundColor: 'white',
+                            borderRadius: '50%',
+                            height: '12px',
+                            width: '12px',
+                            textAlign: 'center',
+                            lineHeight: '12px',
+                            marginLeft: '5px',
+                            fontSize: '10px',
+                            fontWeight: 'bold',
+                            cursor: 'pointer',
+                            float: 'right',
+                            color: `${areInterests ? BAZAAR_BLUE : BAZAAR_ORANGE}`,
+                          }
+                        }
+                      >
+                        X
+                      </div>
+                    </SkillLabel>
+                  )
+                )
               }
             </div>
         }
@@ -180,9 +247,7 @@ class SelectSkills extends React.Component {
                 category={c}
                 onSkillClick={s => onSkillSelect(s)}
                 onSeeMoreClick={() => this.setState({ seeMoreCat: categories.find(c2 => c2._id === c._id) })}
-              >
-                <h4>{c.label.en}</h4>
-              </Category>
+              />
             )
           )
         }
@@ -201,14 +266,14 @@ SelectSkills.propTypes = {
   onboardingSearch: PropTypes.func.isRequired,
   skills: PropTypes.array,
   categories: PropTypes.array.isRequired,
-  intl: PropTypes.object,
+  intl: PropTypes.object.isRequired,
   animate: PropTypes.bool,
+  areInterests: PropTypes.bool.isRequired,
 };
 
 SelectSkills.defaultProps = {
   searchText: '',
   skills: [],
-  intl: null,
   animate: false,
 };
 

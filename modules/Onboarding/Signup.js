@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, FormGroup, Alert } from 'react-bootstrap';
+import { FormGroup, Alert } from 'react-bootstrap';
 import validator from 'email-validator';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Link } from 'react-router';
@@ -9,6 +9,7 @@ import NewcomerStatus from './NewcomerStatus';
 import SocialMediaLogin from '../Authentication/SocialMediaLogin';
 import ResponsiveInputField from '../Authentication/ResponsiveInputField';
 import { signupMessages } from '../Authentication/messages';
+import ActionButton from '../Actions/ActionButton';
 
 
 class Signup extends React.Component {
@@ -72,9 +73,8 @@ class Signup extends React.Component {
     return (
       <FormGroup>
         <div className="form-offset">
-          <Button
+          <ActionButton
             className="login-button"
-            bsStyle="primary"
             type="submit"
             disabled={isNewcomer === null}
             block
@@ -83,7 +83,7 @@ class Signup extends React.Component {
               id={'Signup.signup'}
               defaultMessage={'Sign up'}
             />
-          </Button>
+          </ActionButton>
         </div>
       </FormGroup>
     );

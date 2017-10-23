@@ -2,10 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import MtSvgLines from 'react-mt-svg-lines';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 
 import Signup from './Signup';
 import SelectSkills from './SelectSkills';
+import ActionButton from '../Actions/ActionButton';
+import { BAZAAR_ORANGE, BAZAAR_BLUE } from '../Layout/Styles';
+import { Header1 } from '../Layout/Headers';
 
 const stageData = [
   'receive',
@@ -38,18 +41,33 @@ const messages = defineMessages({
   },
 });
 
+
 function Stage(props) {
+  const { stage, onClick, index, title } = props;
   return (
-    <div onClick={props.onClick} className="onboarding-stage">
+    <div
+      onClick={onClick}
+      style={{
+        flexGrow: 1,
+        textAlign: 'center',
+      }}
+    >
       <div
-        className={`stage-index ${props.stage > props.index ? 'complete' : ''} 
-        ${props.stage === props.index ? 'selected' : ''} 
-        ${props.isActive ? 'active' : ''}`}
+        style={{
+          fontSize: '28px',
+          backgroundColor: stage >= index ? BAZAAR_ORANGE : BAZAAR_BLUE,
+          color: 'white',
+          borderRadius: '50%',
+          width: '45px',
+          height: '45px',
+          margin: '0 auto 5px auto',
+          lineHeight: '50px',
+        }}
       >
-        {props.index + 1}
+        {index + 1}
       </div>
-      <div className="stage-title">
-        {props.title}
+      <div style={{ fontSize: '11px' }}>
+        {title}
       </div>
     </div>
   );
@@ -60,7 +78,6 @@ Stage.propTypes = {
   stage: PropTypes.number,
   title: PropTypes.string,
   onClick: PropTypes.func,
-  isActive: PropTypes.bool
 };
 
 Stage.defaultProps = {
@@ -68,14 +85,29 @@ Stage.defaultProps = {
   stage: 0,
   title: '',
   onClick: () => {},
-  isActive: false,
 };
 
 function ProgressBar(props) {
   const { shouldAnimate, onStageClick, stage, stagesActive } = props;
+  console.log(stage)
   return (
-    <div className="stages-container">
-      <div className="stages">
+    <div
+      style={{
+        position: 'relative',
+        height: '52px',
+        marginBottom: '20px',
+      }}
+    >
+      <div
+        style={{
+          position: 'absolute',
+          top: '0px',
+          left: '0px',
+          width: '100%',
+          zIndex: '5',
+          display: 'flex',
+        }}
+      >
         {
           stageData.map((title, i) =>
             (<Stage
@@ -88,15 +120,24 @@ function ProgressBar(props) {
             />))
         }
       </div>
-      <div className="progress-container">
-        <MtSvgLines animate={shouldAnimate} duration={2000}>
-          <svg className="progress-line" width="100%" height="7px" viewBox="0 0 200 2">
+      <div
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -75%)',
+          width: '100%',
+          zIndex: '0',
+          display: 'flex',
+        }}
+      >
+        <MtSvgLines animate={shouldAnimate} duration={2000} style={{ flexGrow: 1 }}>
+          <svg style={{ verticalAlign: 'text-bottom' }} width="100%" height="7px" viewBox="0 0 200 2">
             {
-              Array(stage).fill(0).map((v, i) =>
+              Array(stageData.length - 1).fill(0).map((v, i) =>
                 (<path
                   key={i}
-                  visibility={`${stage > i ? 'visible' : 'hidden'}`}
-                  stroke="#5A7587"
+                  stroke={stage > i ? BAZAAR_ORANGE : BAZAAR_BLUE}
                   strokeWidth="2"
                   fill="none"
                   d={`M${40 + (60 * i)},0 H${95 + (75 * i)}`}
@@ -104,12 +145,6 @@ function ProgressBar(props) {
             }
           </svg>
         </MtSvgLines>
-        {
-          stage === stageData.length &&
-          <svg className="arrow">
-            <polygon points="0,0 0,20 20,10" style={{ fill: '#2C2A57', stroke: '#2C2A57' }} />
-          </svg>
-        }
       </div>
     </div>
   );
@@ -117,7 +152,7 @@ function ProgressBar(props) {
 
 ProgressBar.propTypes = {
   shouldAnimate: PropTypes.bool,
-  onStageClick: PropTypes.func.isRequired,
+  onStageClick: PropTypes.func,
   stage: PropTypes.number,
   stagesActive: PropTypes.array,
 };
@@ -126,6 +161,7 @@ ProgressBar.defaultProps = {
   shouldAnimate: false,
   stage: stageData.length,
   stagesActive: [],
+  onStageClick: () => {},
 };
 
 function Welcome(props) {
@@ -134,24 +170,24 @@ function Welcome(props) {
     <Modal
       show={!hasStarted}
       onHide={() => this.hideModal()}
-      className="welcome-modal"
+      style={{ textAlign: 'center' }}
     >
       <Modal.Header>
         <Modal.Title>Welcome to Share on Bazaar</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p>You can create your profile in 3 simple steps</p>
-        <ProgressBar />
+        <h5>You can create your profile in 3 simple steps</h5>
+        <ProgressBar stage={-1} />
       </Modal.Body>
-      <Modal.Footer>
-        <Button
+      <Modal.Footer style={{ textAlign: 'center' }}>
+        <ActionButton
           onClick={onStartClick}
         >
           <FormattedMessage
             id={'ProgressBar.start'}
             defaultMessage={'Let\'s get started'}
           />
-        </Button>
+        </ActionButton>
       </Modal.Footer>
     </Modal>
   );
@@ -216,7 +252,7 @@ function Onboarding(props) {
   }
   return (
     <div>
-      <h3><span style={{ fontWeight: 'bold' }}>{`Step ${stage + 1}:`} </span>{`${stageDataTitles[stage]}`}</h3>
+      <Header1><span style={{ fontWeight: 'bold' }}>{`Step ${stage + 1}:`} </span>{`${stageDataTitles[stage]}`}</Header1>
       <ProgressBar stagesActive={stagesActive} shouldAnimate stage={stage} onStageClick={selectStage} />
       {element}
     </div>
@@ -249,7 +285,7 @@ class View extends React.Component {
   render() {
     const { hasStarted } = this.props;
     return (
-      <div className="onboarding content-page">
+      <div className="content-page">
         {
           hasStarted ?
             <Onboarding {...this.props} />

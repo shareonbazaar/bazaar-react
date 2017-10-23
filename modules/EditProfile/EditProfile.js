@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Button, FormGroup, Alert } from 'react-bootstrap';
+import { FormGroup, Alert } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
@@ -12,6 +12,51 @@ import UploadPhoto from './UploadPhoto';
 import SkillLabel from './SkillLabel';
 import { editProfileMessages } from './messages';
 import ResponsiveInputField from '../Authentication/ResponsiveInputField';
+import ActionButton from '../Actions/ActionButton';
+
+function EditSkills(props) {
+  const { skills, onSkillClick, messageText, isInterest } = props;
+  return (
+    <ResponsiveInputField
+      renderChildren
+      messageText={messageText}
+    >
+      <div style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'space-evenly',
+      }}
+      >
+        {
+          skills.map(skill => (
+            <SkillLabel
+              key={skill._id}
+              skill={skill}
+              isInterest={isInterest}
+              isSelected
+              style={{ flexBasis: '48%', margin: '1% 0' }}
+            />
+          ))
+        }
+        <div style={{ flexBasis: '48%', margin: '1% 0' }}>
+          <SkillsModal
+            title={messageText}
+            skills={skills}
+            onSkillClick={onSkillClick}
+            areInterests={isInterest}
+          />
+        </div>
+      </div>
+    </ResponsiveInputField>
+  );
+}
+
+EditSkills.propTypes = {
+  skills: PropTypes.array.isRequired,
+  onSkillClick: PropTypes.func.isRequired,
+  messageText: PropTypes.string.isRequired,
+  isInterest: PropTypes.bool.isRequired,
+};
 
 class EditProfile extends React.Component {
   constructor(props) {
@@ -146,7 +191,7 @@ class EditProfile extends React.Component {
         {this.renderHeader()}
         <div>
           {response && this.renderAlert()}
-          <UploadPhoto className="user-activities" imageUrl={picture} onImageChange={this.onImageChange} />
+          <UploadPhoto imageUrl={picture} onImageChange={this.onImageChange} />
           <ResponsiveInputField
             formControlValue={email}
             formControlType="email"
@@ -202,53 +247,18 @@ class EditProfile extends React.Component {
               }
             </div>
           </ResponsiveInputField>
-          <ResponsiveInputField
-            renderChildren
+          <EditSkills
             messageText={formatMessage(editProfileMessages.skills)}
-          >
-            <div className="skill-select">
-              {
-                skills.map(skill => (
-                  <SkillLabel className="offer" key={skill._id} label={skill.label.en} />
-                ))
-              }
-              <div className="skill-label">
-                <SkillsModal
-                  title="Select skills to offer"
-                  skills={skills}
-                  onSkillClick={(skill) => { this.onArrayChange('skills', skill); }}
-                  areInterests={false}
-                />
-              </div>
-            </div>
-          </ResponsiveInputField>
-          <ResponsiveInputField
-            renderChildren
+            skills={skills}
+            onSkillClick={(skill) => { this.onArrayChange('skills', skill); }}
+            isInterest={false}
+          />
+          <EditSkills
             messageText={formatMessage(editProfileMessages.interests)}
-          >
-            <div className="skill-select">
-              {
-                // eslint-disable-next-line
-                interests.map((skill, i) => {
-                  return (
-                    <SkillLabel
-                      className="receive"
-                      key={skill._id}
-                      label={skill.label.en}
-                    />
-                  );
-                })
-              }
-              <div className="skill-label">
-                <SkillsModal
-                  title="Select skills to receive"
-                  skills={interests}
-                  onSkillClick={(skill) => { this.onArrayChange('interests', skill); }}
-                  areInterests
-                />
-              </div>
-            </div>
-          </ResponsiveInputField>
+            skills={interests}
+            onSkillClick={(skill) => { this.onArrayChange('interests', skill); }}
+            isInterest
+          />
           <ResponsiveInputField
             renderChildren
             messageText={formatMessage(editProfileMessages.status)}
@@ -272,13 +282,16 @@ class EditProfile extends React.Component {
           </ResponsiveInputField>
           <hr />
           <FormGroup>
-            <div className="save-button">
-              <Button className="action-call" onClick={this.onSubmit} bsStyle="primary">
+            <div>
+              <ActionButton
+                onClick={this.onSubmit}
+                block
+              >
                 <FormattedMessage
                   id={'EditProfile.savechanges'}
                   defaultMessage={'Save changes'}
                 />
-              </Button>
+              </ActionButton>
             </div>
           </FormGroup>
         </div>
@@ -297,7 +310,6 @@ function mapStateToProps({ auth, categories }) {
 
 EditProfile.propTypes = {
   loggedInUser: PropTypes.object.isRequired,
-  submitChanges: PropTypes.func.isRequired,
   updateProfile: PropTypes.func.isRequired,
   clearProfileAlert: PropTypes.func.isRequired,
   response: PropTypes.object,

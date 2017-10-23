@@ -7,6 +7,7 @@ import { FormattedMessage } from 'react-intl';
 import { loadCategories, onboardingSearch } from '../../utils/actions';
 
 import SelectSkills from '../Onboarding/SelectSkills';
+import ActionButton from '../Actions/ActionButton';
 
 class SkillsModal extends React.Component {
   constructor(props) {
@@ -28,11 +29,7 @@ class SkillsModal extends React.Component {
         <Modal show={showModal} onHide={() => this.setState({ showModal: false })}>
           <Modal.Header closeButton>
             <Modal.Title>
-              <FormattedMessage
-                id={'SkillsModal.title'}
-                defaultMessage={'{title}'}
-                values={{ title }}
-              />
+              { title }
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
@@ -55,16 +52,16 @@ class SkillsModal extends React.Component {
             </Button>
           </Modal.Footer>
         </Modal>
-        <Button
+        <ActionButton
+          block
+          style={{ fontSize: '11px', padding: '8px 15px' }}
           onClick={() => this.setState({ showModal: true })}
-          className="action-call"
-          bsStyle="primary"
         >
           <FormattedMessage
             id={'SkillsModal.edit'}
             defaultMessage={'Add more skills'}
           />
-        </Button>
+        </ActionButton>
       </div>
     );
   }

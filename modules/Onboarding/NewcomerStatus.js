@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import { Button, Modal } from 'react-bootstrap';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 
+import { Header2, Text } from '../Layout/Headers';
+import ActionButton from '../Actions/ActionButton';
+
 const messages = defineMessages({
   confirmLocal: {
     id: 'Onboarding.confirmLocal',
@@ -54,44 +57,70 @@ class StatusOption extends React.Component {
     this.state = { showModal: false };
   }
 
-  render () {
+  render() {
     const { showModal } = this.state;
-    const { title, text, buttonText, confirmationText, negatoryText, className, onClick, faded } = this.props;
+    const { title, text, buttonText, confirmationText, negatoryText, onClick, style, faded } = this.props;
     return (
-      <div className={`status-option ${className || ''}`}>
-        <Modal className='onboarding-modal' show={showModal} onHide={() => this.setState({showModal: false})}>
+      <div style={style}>
+        <Modal show={showModal} onHide={() => this.setState({ showModal: false })}>
           <Modal.Body>
-            <h3>{title}</h3>
-            <p>{text}</p>
+            <Header2 style={{ fontWeight: 'bold' }}>{title}</Header2>
+            <Text>{text}</Text>
             <div className="choices">
-              <Button block onClick={() => { this.setState({showModal: false}); onClick(); }}>
+              <ActionButton block onClick={() => { this.setState({ showModal: false }); onClick(); }}>
                 {confirmationText}
-              </Button>
-              <Button block onClick={() => this.setState({showModal: false})}>
+              </ActionButton>
+              <ActionButton block onClick={() => this.setState({ showModal: false })}>
                 {negatoryText}
-              </Button>
+              </ActionButton>
             </div>
           </Modal.Body>
         </Modal>
-        <Button className={`${ faded ? 'faded' : ''}`} onClick={() => this.setState({showModal: true})} bsStyle="primary" bsSize="large" block>
+        <Button
+          onClick={() => this.setState({ showModal: true })}
+          style={{
+            width: '100%',
+            opacity: faded ? 0.3 : 1,
+          }}
+        >
           {buttonText}
         </Button>
       </div>
-    )
+    );
   }
 }
 
-function NewcomerStatus (props) {
+StatusOption.propTypes = {
+  title: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired,
+  buttonText: PropTypes.string.isRequired,
+  confirmationText: PropTypes.string.isRequired,
+  negatoryText: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+  style: PropTypes.object,
+  faded: PropTypes.bool.isRequired,
+};
+
+StatusOption.defaultProps = {
+  style: {},
+};
+
+function NewcomerStatus(props) {
   const { formatMessage } = props.intl;
   const { onNewcomerSelect, isNewcomer } = props;
+  const statusStyle = {
+    display: 'inline-block',
+    width: '46%',
+    margin: '0 1%',
+  };
   return (
-    <div className="newcomer-status">
-      <h3>
+    <div style={{ margin: '10px 0' }}>
+      <Header2>
         <FormattedMessage
           id={'Onboarding.describe'}
           defaultMessage={'How would you describe yourself?'}
         />
-      </h3>
+      </Header2>
 
       <StatusOption
         title={formatMessage(messages.confirmNewcomer)}
@@ -101,6 +130,7 @@ function NewcomerStatus (props) {
         negatoryText={formatMessage(messages.noNewcomer)}
         onClick={() => onNewcomerSelect(true)}
         faded={isNewcomer == null ? false : !isNewcomer}
+        style={statusStyle}
       />
 
       <StatusOption
@@ -112,9 +142,20 @@ function NewcomerStatus (props) {
         negatoryText={formatMessage(messages.noLocal)}
         onClick={() => onNewcomerSelect(false)}
         faded={isNewcomer == null ? false : isNewcomer}
+        style={statusStyle}
       />
     </div>
-  )
+  );
 }
+
+NewcomerStatus.propTypes = {
+  onNewcomerSelect: PropTypes.func.isRequired,
+  intl: PropTypes.object.isRequired,
+  isNewcomer: PropTypes.bool,
+};
+
+NewcomerStatus.defaultProps = {
+  isNewcomer: null,
+};
 
 export default injectIntl(NewcomerStatus);
