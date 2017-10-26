@@ -84,6 +84,7 @@ class EditProfile extends React.Component {
 
   componentWillMount() {
     this.props.clearProfileAlert();
+    window.scrollTo(0, 0);
   }
 
   onChange(e, field) {
