@@ -4,6 +4,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { FormGroup, Alert } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
+import Autocomplete from 'react-google-autocomplete';
 
 import SkillsModal from './SkillsModal';
 import { updateProfile, clearProfileAlert } from '../../utils/actions';
@@ -206,17 +207,27 @@ class EditProfile extends React.Component {
             formControlOnChange={(e) => { this.onChange(e, 'name'); }}
           />
           <ResponsiveInputField
-            formControlValue={location}
-            formControlType="name"
-            formControlPlaceHolder="Location"
-            formControlOnChange={(e) => { this.onChange(e, 'location'); }}
-          />
+            renderChildren
+          >
+            <Autocomplete
+              className="form-control"
+              defaultValue={location}
+              onPlaceSelected={place => this.setState({ location: place.name })}
+              placeholder="Location"
+              types={[]}
+            />
+          </ResponsiveInputField>
           <ResponsiveInputField
-            formControlValue={hometown}
-            formControlType="name"
-            formControlPlaceHolder="Hometown"
-            formControlOnChange={(e) => { this.onChange(e, 'hometown'); }}
-          />
+            renderChildren
+          >
+            <Autocomplete
+              className="form-control"
+              defaultValue={hometown}
+              onPlaceSelected={place => this.setState({ hometown: place.name })}
+              placeholder="Hometown"
+              types={[]}
+            />
+          </ResponsiveInputField>
           <ResponsiveInputField
             formControlValue={aboutMe}
             formControlOnChange={(e) => { this.onChange(e, 'aboutMe'); }}
