@@ -88,8 +88,7 @@ Stage.defaultProps = {
 };
 
 function ProgressBar(props) {
-  const { shouldAnimate, onStageClick, stage, stagesActive } = props;
-  console.log(stage)
+  const { onStageClick, stage, stagesActive } = props;
   return (
     <div
       style={{
@@ -131,7 +130,7 @@ function ProgressBar(props) {
           display: 'flex',
         }}
       >
-        <MtSvgLines animate={shouldAnimate} duration={2000} style={{ flexGrow: 1 }}>
+        <MtSvgLines animate={false} duration={2000} style={{ flexGrow: 1 }}>
           <svg style={{ verticalAlign: 'text-bottom' }} width="100%" height="7px" viewBox="0 0 200 2">
             {
               Array(stageData.length - 1).fill(0).map((v, i) =>
@@ -151,14 +150,12 @@ function ProgressBar(props) {
 }
 
 ProgressBar.propTypes = {
-  shouldAnimate: PropTypes.bool,
   onStageClick: PropTypes.func,
   stage: PropTypes.number,
   stagesActive: PropTypes.array,
 };
 
 ProgressBar.defaultProps = {
-  shouldAnimate: false,
   stage: stageData.length,
   stagesActive: [],
   onStageClick: () => {},
@@ -253,7 +250,7 @@ function Onboarding(props) {
   return (
     <div>
       <Header1><span style={{ fontWeight: 'bold' }}>{`Step ${stage + 1}:`} </span>{`${stageDataTitles[stage]}`}</Header1>
-      <ProgressBar stagesActive={stagesActive} shouldAnimate stage={stage} onStageClick={selectStage} />
+      <ProgressBar stagesActive={stagesActive} stage={stage} onStageClick={selectStage} />
       {element}
     </div>
   );
