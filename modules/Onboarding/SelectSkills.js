@@ -21,10 +21,10 @@ const messages = defineMessages({
 
 function Category(props) {
   const { animate, category, onSkillClick, onSeeMoreClick, areInterests, showSeeMore } = props;
-  const skillLevelContainer = {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-evenly',
+  const skillLevelStyle = {
+    flexBasis: '47%',
+    margin: '1% 0',
+    cursor: 'pointer',
   };
   return (
     <div style={
@@ -55,11 +55,11 @@ function Category(props) {
       >
         {
           interpolatedStyles =>
-            (<div style={skillLevelContainer}>
+            (<div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
               {interpolatedStyles.map(config => (
                 <SkillLabel
                   key={config.data._id}
-                  style={{ opacity: config.style.transform, flexBasis: '48%', margin: '1% 0', cursor: 'pointer' }}
+                  style={{ opacity: config.style.transform, ...skillLevelStyle }}
                   onClick={() => onSkillClick(config.data)}
                   skill={config.data}
                   isInterest={areInterests}
@@ -70,8 +70,7 @@ function Category(props) {
                 <div
                   onClick={onSeeMoreClick}
                   style={{
-                    flexBasis: '48%',
-                    margin: '1% 0',
+                    ...skillLevelStyle,
                     borderRadius: '5px',
                     textAlign: 'center',
                     fontSize: '11px',
@@ -191,7 +190,7 @@ class SelectSkills extends React.Component {
             </p>
             :
             <div
-              style={{ marginBottom: '10px', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-evenly' }}
+              style={{ marginBottom: '10px', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}
             >
               {
                 skills.map(skill =>
@@ -201,7 +200,7 @@ class SelectSkills extends React.Component {
                       key={skill._id}
                       isSelected
                       isInterest={areInterests}
-                      style={{ flexBasis: '48%', margin: '1% 0' }}
+                      style={{ flexBasis: '47%', margin: '1% 0' }}
                     >
                       <div
                         onClick={() => onSkillRemove(skill)}

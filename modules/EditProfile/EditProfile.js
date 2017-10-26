@@ -24,7 +24,7 @@ function EditSkills(props) {
       <div style={{
         display: 'flex',
         flexWrap: 'wrap',
-        justifyContent: 'space-evenly',
+        justifyContent: 'space-between',
       }}
       >
         {
