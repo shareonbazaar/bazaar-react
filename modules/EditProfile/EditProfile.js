@@ -14,6 +14,7 @@ import SkillLabel from './SkillLabel';
 import { editProfileMessages } from './messages';
 import ResponsiveInputField from '../Authentication/ResponsiveInputField';
 import ActionButton from '../Actions/ActionButton';
+import NewcomerStatus from '../Onboarding/NewcomerStatus';
 
 function EditSkills(props) {
   const { skills, onSkillClick, messageText, isInterest } = props;
@@ -271,27 +272,10 @@ class EditProfile extends React.Component {
             onSkillClick={(skill) => { this.onArrayChange('interests', skill); }}
             isInterest
           />
-          <ResponsiveInputField
-            renderChildren
-            messageText={formatMessage(editProfileMessages.status)}
-          >
-            <div className="radio-block">
-              {
-                [
-                  { name: 'local', label: formatMessage(editProfileMessages.local) },
-                  { name: 'newcomer', label: formatMessage(editProfileMessages.newcomer) }
-                ].map(props => (
-                  <Radio
-                    key={props.name}
-                    selected={status}
-                    name={props.name}
-                    onClick={() => this.setState({ status: props.name })}
-                    label={props.label}
-                  />
-                ))
-              }
-            </div>
-          </ResponsiveInputField>
+          <NewcomerStatus
+            onNewcomerSelect={isNewcomer => this.setState({ status: isNewcomer ? 'newcomer' : 'local' })}
+            isNewcomer={status === 'newcomer'}
+          />
           <hr />
           <FormGroup>
             <div>
