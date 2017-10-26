@@ -6,6 +6,7 @@ import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 
 import SkillLabel from '../EditProfile/SkillLabel';
 import { Header1, Header2 } from '../Layout/Headers';
+import CloseButton from '../Actions/CloseButton';
 import { BAZAAR_BLUE, BAZAAR_ORANGE, LIGHT_GREY } from '../Layout/Styles';
 
 const NUM_SKILLS_TO_SHOW = 3;
@@ -143,6 +144,7 @@ class SelectSkills extends React.Component {
     return (
       <Modal onHide={() => this.setState({ seeMoreCat: null })} show={seeMoreCat !== null}>
         <Modal.Body>
+          <CloseButton onClick={() => this.setState({ seeMoreCat: null })} />
           <Category
             {...this.props}
             category={cat}

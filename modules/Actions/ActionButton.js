@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 
-const actionPink = '#E38BA2';
+import { ACTION_PINK } from '../Layout/Styles';
 
 export default function ActionButton(props) {
   const { onClick, children, style } = props;
@@ -11,7 +11,7 @@ export default function ActionButton(props) {
       {...props}
       onClick={onClick}
       style={{
-        backgroundColor: actionPink,
+        backgroundColor: ACTION_PINK,
         color: 'white',
         ...style,
       }}
