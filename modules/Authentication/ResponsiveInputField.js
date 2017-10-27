@@ -17,7 +17,7 @@ export default function ResponsiveInputField(props) {
   } = props;
   return (
     <FormGroup
-      validationState={formGroupIsValid ? 'error' : null}
+      validationState={!formGroupIsValid ? 'error' : null}
     >
       <ControlLabel className={className}>
         {messageText}
@@ -53,7 +53,7 @@ ResponsiveInputField.defaultProps = {
   formControlValue: '',
   formControlPlaceHolder: '',
   formControlOnChange: () => {},
-  formGroupIsValid: false,
+  formGroupIsValid: true,
   children: null,
   renderChildren: false,
   messageText: '',
