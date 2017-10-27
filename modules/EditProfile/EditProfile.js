@@ -20,8 +20,8 @@ function EditSkills(props) {
   const { skills, onSkillClick, messageText, isInterest } = props;
   return (
     <ResponsiveInputField
-      renderChildren
       messageText={messageText}
+      customInput
     >
       <div style={{
         display: 'flex',
@@ -208,7 +208,7 @@ class EditProfile extends React.Component {
             formControlOnChange={(e) => { this.onChange(e, 'name'); }}
           />
           <ResponsiveInputField
-            renderChildren
+            customInput
           >
             <Autocomplete
               className="form-control"
@@ -219,7 +219,7 @@ class EditProfile extends React.Component {
             />
           </ResponsiveInputField>
           <ResponsiveInputField
-            renderChildren
+            customInput
           >
             <Autocomplete
               className="form-control"
@@ -239,7 +239,7 @@ class EditProfile extends React.Component {
             style={{ height: 100 }}
           />
           <ResponsiveInputField
-            renderChildren
+            customInput
             messageText={formatMessage(editProfileMessages.gender)}
           >
             <div className="radio-block">

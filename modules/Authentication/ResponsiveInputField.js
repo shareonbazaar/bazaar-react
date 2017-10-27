@@ -12,7 +12,7 @@ export default function ResponsiveInputField(props) {
     messageText,
     className,
     children,
-    renderChildren,
+    customInput,
     ...rest,
   } = props;
   return (
@@ -22,7 +22,7 @@ export default function ResponsiveInputField(props) {
       <ControlLabel className={className}>
         {messageText}
       </ControlLabel>
-      {renderChildren ?
+      {customInput ?
         children :
         (<FormControl
           type={formControlType}
@@ -30,7 +30,10 @@ export default function ResponsiveInputField(props) {
           placeholder={formControlPlaceHolder}
           onChange={formControlOnChange}
           {...rest}
-        />)
+        >
+          {children}
+        </FormControl>
+        )
       }
     </FormGroup>
   );
@@ -43,7 +46,7 @@ ResponsiveInputField.propTypes = {
   formControlOnChange: PropTypes.func,
   formGroupIsValid: PropTypes.bool,
   children: PropTypes.node,
-  renderChildren: PropTypes.bool,
+  customInput: PropTypes.bool,
   messageText: PropTypes.string,
   className: PropTypes.string,
 };
@@ -55,7 +58,7 @@ ResponsiveInputField.defaultProps = {
   formControlOnChange: () => {},
   formGroupIsValid: true,
   children: null,
-  renderChildren: false,
+  customInput: false,
   messageText: '',
   className: '',
 };
