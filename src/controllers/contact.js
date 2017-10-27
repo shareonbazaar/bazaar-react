@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import fs from 'fs.promised';
+import fs from 'fs-extra';
 import mustache from 'mustache';
 import moment from 'moment';
 

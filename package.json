@@ -38,7 +38,7 @@
     "express": "^4.14.0",
     "express-validator": "^4.1.1",
     "file-loader": "^0.10.0",
-    "fs.promised": "^3.0.0",
+    "fs-extra": "^4.0.2",
     "google-auth-library": "^0.10.0",
     "google-map-react": "^0.22.3",
     "if-env": "^1.0.0",
