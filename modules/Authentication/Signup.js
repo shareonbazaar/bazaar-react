@@ -158,7 +158,7 @@ Authentic
               }
               <form onSubmit={onSignupClicked}>
                 <ResponsiveInputField
-                  formGroupIsValid={(hasClickedSignup && !firstNameValid)}
+                  formGroupIsValid={(!hasClickedSignup || firstNameValid)}
                   formControlType="text"
                   formControlValue={firstName}
                   formControlPlaceHolder="John"
@@ -166,7 +166,7 @@ Authentic
                   messageText={formatMessage(signupMessages.firstName)}
                 />
                 <ResponsiveInputField
-                  formGroupIsValid={(hasClickedSignup && !lastNameValid)}
+                  formGroupIsValid={(!hasClickedSignup || lastNameValid)}
                   formControlType="text"
                   formControlValue={lastName}
                   formControlPlaceHolder="Doe"
@@ -174,7 +174,7 @@ Authentic
                   messageText={formatMessage(signupMessages.lastName)}
                 />
                 <ResponsiveInputField
-                  formGroupIsValid={(hasClickedSignup && !emailValid)}
+                  formGroupIsValid={(!hasClickedSignup || emailValid)}
                   formControlType="email"
                   formControlValue={emailText}
                   formControlPlaceHolder="Email"
@@ -189,7 +189,7 @@ Authentic
                   messageText={formatMessage(signupMessages.password)}
                 />
                 <ResponsiveInputField
-                  formGroupIsValid={(hasClickedSignup && !passwordsValid)}
+                  formGroupIsValid={(!hasClickedSignup || passwordsValid)}
                   formControlType="password"
                   formControlValue={confirmPassword}
                   formControlPlaceHolder="Password"

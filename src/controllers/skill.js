@@ -37,8 +37,8 @@ exports.addSkill = (req, res) => {
 };
 
 /**
- * DELETE /skills
- * Add new skill
+ * DELETE /skills/:id
+ * Delete skill
  */
 exports.deleteSkill = (req, res) => {
   Skill.remove({ _id: req.params.id })

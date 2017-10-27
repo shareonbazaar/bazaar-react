@@ -10,7 +10,6 @@ export default function ResponsiveInputField(props) {
     formControlOnChange,
     formGroupIsValid,
     messageText,
-    className,
     children,
     customInput,
     ...rest,
@@ -48,7 +47,6 @@ ResponsiveInputField.propTypes = {
   children: PropTypes.node,
   customInput: PropTypes.bool,
   messageText: PropTypes.string,
-  className: PropTypes.string,
 };
 
 ResponsiveInputField.defaultProps = {
@@ -60,5 +58,4 @@ ResponsiveInputField.defaultProps = {
   children: null,
   customInput: false,
   messageText: '',
-  className: '',
 };

@@ -121,25 +121,25 @@ class Profile extends React.Component {
                 </h3>
                 {
                   profiledUser.reviews.length === 0 ?
-                        <div className="empty-card-grid">
-                          <p>
-                            <FormattedMessage
-                              id={'Profile.emptyReviews'}
-                              defaultMessage={'No reviews here yet'}
-                            />
-                          </p>
-                        </div>
-                  :
-                  profiledUser.reviews.map((review, i) =>
-                    (<Review
-                      key={i}
-                      imageUrl={review._creator.profile.picture}
-                      name={review._creator.profile.name.split(' ')[0]}
-                      service={review._transaction.service.label.en}
-                      text={review.text}
-                      createdAt={review.createdAt}
-                      rating={review.rating}
-                    />))
+                    <div className="empty-card-grid">
+                      <p>
+                        <FormattedMessage
+                          id={'Profile.emptyReviews'}
+                          defaultMessage={'No reviews here yet'}
+                        />
+                      </p>
+                    </div>
+                    :
+                    profiledUser.reviews.map((review, i) =>
+                      (<Review
+                        key={i}
+                        imageUrl={review._creator.profile.picture}
+                        name={review._creator.profile.name.split(' ')[0]}
+                        service={review._transaction.service.label.en}
+                        text={review.text}
+                        createdAt={review.createdAt}
+                        rating={review.rating}
+                      />))
                 }
               </div>
             </Col>

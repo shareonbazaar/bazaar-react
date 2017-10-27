@@ -35,14 +35,14 @@ class Settings extends React.Component {
     this.onChange = this.onChange.bind(this);
   }
 
+  componentWillMount() {
+    this.props.clearProfileAlert();
+  }
+
   onChange(e, field) {
     this.setState({
       [field]: e.target.value,
     });
-  }
-
-  componentWillMount() {
-    this.props.clearProfileAlert();
   }
 
   render() {
@@ -205,21 +205,16 @@ class Settings extends React.Component {
 }
 
 Settings.propTypes = {
-  updateProfile: PropTypes.func,
+  updateProfile: PropTypes.func.isRequired,
+  clearProfileAlert: PropTypes.func.isRequired,
+  loggedInUser: PropTypes.object.isRequired,
+  deleteAccount: PropTypes.func.isRequired,
+  intl: PropTypes.object.isRequired,
   response: PropTypes.object,
-  clearContactAlert: PropTypes.func,
-  loggedInUser: PropTypes.object,
-  deleteAccount: PropTypes.func,
-  intl: PropTypes.object,
 };
 
 Settings.defaultProps = {
-  updateProfile: () => {},
   response: {},
-  clearContactAlert: () => {},
-  loggedInUser: null,
-  deleteAccount: () => {},
-  intl: null,
 };
 
 // eslint-disable-next-line

@@ -145,7 +145,7 @@ class Signup extends React.Component {
               </Alert>
             }
             <ResponsiveInputField
-              formGroupIsValid={(hasClickedSignup && !firstNameValid)}
+              formGroupIsValid={(!hasClickedSignup || firstNameValid)}
               formControlType="text"
               formControlValue={firstName}
               formControlPlaceHolder="John"
@@ -153,7 +153,7 @@ class Signup extends React.Component {
               messageText={formatMessage(signupMessages.firstName)}
             />
             <ResponsiveInputField
-              formGroupIsValid={(hasClickedSignup && !lastNameValid)}
+              formGroupIsValid={(!hasClickedSignup || lastNameValid)}
               formControlType="text"
               formControlValue={lastName}
               formControlPlaceHolder="Doe"
@@ -161,7 +161,7 @@ class Signup extends React.Component {
               messageText={formatMessage(signupMessages.lastName)}
             />
             <ResponsiveInputField
-              formGroupIsValid={(hasClickedSignup && !emailValid)}
+              formGroupIsValid={(!hasClickedSignup || emailValid)}
               formControlType="email"
               formControlValue={emailText}
               formControlPlaceHolder="Email"
@@ -189,9 +189,12 @@ Signup.defaultProps = {
 };
 Signup.propTypes = {
   isAuthenticated: PropTypes.bool,
+  isNewcomer: PropTypes.bool.isRequired,
   push: PropTypes.func.isRequired,
   loginUser: PropTypes.func.isRequired,
   loginResponse: PropTypes.object,
+  chosenSkills: PropTypes.array.isRequired,
+  chosenInterests: PropTypes.array.isRequired,
   intl: PropTypes.object.isRequired,
 };
 

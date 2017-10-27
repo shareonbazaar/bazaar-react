@@ -23,15 +23,15 @@ class Login extends React.Component {
     this.responseFacebook = this.responseFacebook.bind(this);
   }
 
+  componentWillMount() {
+    this.props.clearLoginAlert();
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.isAuthenticated) {
       const newLocation = this.props.location.state ? this.props.location.state.redirect : '/';
       this.props.push(newLocation);
     }
-  }
-
-  componentWillMount() {
-    this.props.clearLoginAlert();
   }
 
   onChange(e, field) {
@@ -163,7 +163,7 @@ Login.propTypes = {
   location: PropTypes.object,
   push: PropTypes.func.isRequired,
   response: PropTypes.object,
-  intl: PropTypes.object,
+  intl: PropTypes.object.isRequired,
   loginUser: PropTypes.func.isRequired,
   clearLoginAlert: PropTypes.func.isRequired,
 };
@@ -171,7 +171,6 @@ Login.defaultProps = {
   isAuthenticated: false,
   location: null,
   response: null,
-  intl: null,
 };
 
 function mapStateToProps({ auth }) {
