@@ -139,7 +139,7 @@ function ProgressBar(props) {
                   stroke={stage > i ? BAZAAR_ORANGE : BAZAAR_BLUE}
                   strokeWidth="2"
                   fill="none"
-                  d={`M${40 + (60 * i)},0 H${95 + (75 * i)}`}
+                  d={`M${33 + (66 * i)},0 H${100 + (66 * i)}`}
                 />))
             }
           </svg>
