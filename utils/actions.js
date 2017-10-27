@@ -37,6 +37,10 @@ export const SKILL_REMOVED = 'SKILL_REMOVED';
 export const ON_START_CLICK = 'ON_START_CLICK';
 export const ONBOARDING_SEARCH = 'ONBOARDING_SEARCH';
 export const ON_NEWCOMER_SELECT = 'ON_NEWCOMER_SELECT';
+export const ADD_SKILL = 'ADD_SKILL';
+export const CONFIRM_SKILL_SUBMISSION = 'CONFIRM_SKILL_SUBMISSION';
+export const DELETE_SKILL = 'DELETE_SKILL';
+export const CONFIRM_SKILL_DELETION = 'CONFIRM_SKILL_DELETION';
 
 function callApi(endpoint, method = 'GET', data = {}) {
   const config = {
@@ -125,12 +129,45 @@ export function loadTransactions() {
   };
 }
 
+export function loadCategories() {
+  return (dispatch) => {
+    dispatch({ type: CATEGORIES_REQUEST });
+    return callApi('/api/categories')
+      .then(categories => dispatch({
+        type: CATEGORIES_RECEIVED,
+        categories
+      }));
+  };
+}
 
 export function skillRequest(data) {
   return (dispatch) => {
     dispatch({ type: SUBMIT_REQUEST });
     return callApi('/api/transactions', 'POST', data)
       .then(() => dispatch({ type: CONFIRM_REQUEST_SUBMISSION }));
+  };
+}
+
+export function addSkill(data) {
+  return (dispatch) => {
+    dispatch({ type: ADD_SKILL });
+    return callApi('/api/skills', 'POST', data)
+      .then(({ error }) => {
+        if (error) console.log(error);
+        dispatch({ type: CONFIRM_SKILL_SUBMISSION });
+        dispatch(loadCategories());
+      });
+  };
+}
+
+export function deleteSkill(skill_id) {
+  return (dispatch) => {
+    dispatch({ type: DELETE_SKILL });
+    return callApi(`/api/skills/${skill_id}`, 'DELETE')
+      .then(() => {
+        dispatch({ type: CONFIRM_SKILL_DELETION });
+        dispatch(loadCategories());
+      });
   };
 }
 
@@ -215,17 +252,6 @@ export function confirmTransaction(body) {
   };
 }
 
-
-export function loadCategories() {
-  return (dispatch) => {
-    dispatch({ type: CATEGORIES_REQUEST });
-    return callApi('/api/categories')
-      .then(categories => dispatch({
-        type: CATEGORIES_RECEIVED,
-        categories
-      }));
-  };
-}
 
 export function clearProfileAlert() {
   return {

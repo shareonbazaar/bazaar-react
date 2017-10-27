@@ -16,12 +16,20 @@ import Login from './Authentication/Login';
 import Signup from './Authentication/Signup';
 import Forgot from './Authentication/Forgot';
 import Onboarding from './Onboarding/Container';
+import ManageSkills from './ManageSkills/Container';
 
 export default (store) => {
   // validate authentication for private routes
   const requireAuth = (nextState, replace) => {
     if (!store.getState().auth.isAuthenticated) {
       replace({ pathname: '/login', state: { redirect: nextState.location } });
+    }
+  };
+
+  const requireAdmin = (nextState, replace) => {
+    const state = store.getState();
+    if (!state.auth.isAuthenticated || !state.auth.user.isAdmin) {
+      replace({ pathname: '/' });
     }
   };
 
@@ -59,6 +67,7 @@ export default (store) => {
       <Route path="onboarding" component={Onboarding} />
       <Route path="terms" component={Terms} />
       <Route path="imprint" component={Imprint} />
+      <Route path="skills" component={ManageSkills} onEnter={requireAdmin} />
     </Route>
   );
 };

@@ -193,6 +193,32 @@ function categories(state = {
   }
 }
 
+const flattenCategory = (curr, category) =>
+  curr.concat(category._skills.map(s => ({
+    title: s.label.en,
+    category: category.label.en,
+    _id: s._id,
+  })));
+
+function skills(state = {
+  isFetching: false,
+  items: []
+}, action) {
+  switch (action.type) {
+    case actions.CATEGORIES_REQUEST:
+      return Object.assign({}, state, {
+        isFetching: true,
+      });
+    case actions.CATEGORIES_RECEIVED:
+      return Object.assign({}, state, {
+        isFetching: false,
+        items: action.categories.reduce(flattenCategory, [])
+      });
+    default:
+      return state;
+  }
+}
+
 function contact(state = {
   response: null
 }, action) {
@@ -295,6 +321,7 @@ const appReducer = combineReducers({
   categories,
   contact,
   onboarding,
+  skills,
 });
 
 export default (state, action) => {

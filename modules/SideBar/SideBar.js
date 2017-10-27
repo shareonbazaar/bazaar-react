@@ -24,6 +24,10 @@ const messages = defineMessages({
     id: 'SideBar.contact',
     defaultMessage: 'Contact',
   },
+  skills: {
+    id: 'SideBar.skills',
+    defaultMessage: 'Skills',
+  },
   login: {
     id: 'SideBar.login',
     defaultMessage: 'Login',
@@ -39,6 +43,7 @@ const messages = defineMessages({
 class SideBar extends React.Component {
   render() {
     const { user, isAuthenticated, toggled } = this.props;
+    const isAdmin = user ? user.isAdmin : false;
     const { formatMessage } = this.props.intl;
     return (
       <div className={`sidebar-wrapper ${toggled ? 'toggled' : ''}`}>
@@ -56,6 +61,7 @@ class SideBar extends React.Component {
           {isAuthenticated && <SideBarLink toLink={`/profile/${user._id}`} imageSrc="/images/profile.png" text={formatMessage(messages.profile)} />}
           {isAuthenticated && <SideBarLink toLink="/settings/" imageSrc="/images/settings.png" text={formatMessage(messages.settings)} />}
           <SideBarLink toLink="/contact" imageSrc="/images/help.png" text={formatMessage(messages.contact)} />
+          {isAuthenticated && isAdmin && <SideBarLink toLink="/admin/skills" imageSrc="/images/shovel.png" text={formatMessage(messages.skills)} />}
           {!isAuthenticated && <SideBarLink toLink="/login" imageSrc="/images/logout.png" text={formatMessage(messages.login)} />}
           {isAuthenticated && <SideBarLink onClick={this.props.requestLogout} toLink="/" imageSrc="/images/logout.png" text={formatMessage(messages.logout)} />}
         </ul>

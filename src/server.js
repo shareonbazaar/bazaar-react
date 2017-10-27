@@ -110,6 +110,20 @@ app.post('/api/confirmTransaction', passport.authenticate('jwt', { session: fals
 app.post('/api/reviews', passport.authenticate('jwt', { session: false }), transactionController.postReview);
 app.get('/api/categories', skillController.apiGetCategories);
 
+const validateSkill = [
+  check('skill').exists(),
+  check('category').exists(),
+];
+
+const UNAUTHORIZED = 401;
+const ensureAdmin = (req, res, next) => {
+  if (!req.user.isAdmin) return res.status(UNAUTHORIZED).json('Unauthorized');
+  return next();
+};
+
+app.post('/api/skills', passport.authenticate('jwt', { session: false }), ensureAdmin, validateSkill, verify, skillController.addSkill);
+app.delete('/api/skills/:id', passport.authenticate('jwt', { session: false }), ensureAdmin, skillController.deleteSkill);
+
 const validateContact = [
   check('name').exists(),
   check('email').isEmail(),
