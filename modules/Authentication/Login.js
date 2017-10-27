@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { Helmet } from 'react-helmet';
 import { push } from 'react-router-redux';
-import { Button, FormGroup, Alert } from 'react-bootstrap';
+import { Button, Alert } from 'react-bootstrap';
 
 import { FormattedMessage, injectIntl } from 'react-intl';
 import ResponsiveInputField from './ResponsiveInputField';
@@ -58,53 +58,6 @@ class Login extends React.Component {
     });
   }
 
-  renderLoginButton() {
-    return (
-      <FormGroup>
-        <div className="form-offset">
-          <Button
-            type="submit"
-            className="login-button"
-            bsStyle="primary"
-          >
-            <FormattedMessage
-              id={'Signup.login'}
-              defaultMessage={'Login'}
-            />
-          </Button>
-          <Link
-            className="forgot-link"
-            to="/forgot"
-          >
-            <FormattedMessage
-              id={'Signup.forgotpassword'}
-              defaultMessage={'Forgot password?'}
-            />
-          </Link>
-        </div>
-      </FormGroup>
-    );
-  }
-
-  renderSignupButton() {
-    return (
-      <FormGroup>
-        <div className="form-offset">
-          <FormattedMessage
-            id={'Signup.noaccount'}
-            defaultMessage={"Don't have an account?"}
-          />
-          <Link className="sign-up-link" to="/onboarding">
-            <FormattedMessage
-              id={'Signup.signup'}
-              defaultMessage={'Sign up'}
-            />
-          </Link>
-        </div>
-      </FormGroup>
-    );
-  }
-
   render() {
     const { response } = this.props;
     const { emailText, password } = this.state;
@@ -145,13 +98,45 @@ class Login extends React.Component {
             formControlOnChange={(e) => { this.onChange(e, 'password'); }}
             messageText={formatMessage(loginMessages.signupPassword)}
           />
-          {this.renderLoginButton()}
-          {this.renderSignupButton()}
-          <SocialMediaLogin
-            className="form-offset"
-            responseGoogle={this.responseGoogle}
-            responseFacebook={this.responseFacebook}
-          />
+          <ResponsiveInputField customInput>
+            <Button
+              type="submit"
+              bsStyle="primary"
+              style={{ padding: '10px 25px' }}
+            >
+              <FormattedMessage
+                id={'Signup.login'}
+                defaultMessage={'Login'}
+              />
+            </Button>
+            <Link
+              className="forgot-link"
+              to="/forgot"
+            >
+              <FormattedMessage
+                id={'Signup.forgotpassword'}
+                defaultMessage={'Forgot password?'}
+              />
+            </Link>
+          </ResponsiveInputField>
+          <ResponsiveInputField customInput>
+            <FormattedMessage
+              id={'Signup.noaccount'}
+              defaultMessage={"Don't have an account?"}
+            />
+            <Link className="sign-up-link" to="/onboarding">
+              <FormattedMessage
+                id={'Signup.signup'}
+                defaultMessage={'Sign up'}
+              />
+            </Link>
+          </ResponsiveInputField>
+          <ResponsiveInputField customInput>
+            <SocialMediaLogin
+              responseGoogle={this.responseGoogle}
+              responspeFacebook={this.responseFacebook}
+            />
+          </ResponsiveInputField>
         </form>
       </div>
     );

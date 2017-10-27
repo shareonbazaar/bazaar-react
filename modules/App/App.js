@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { StyleRoot } from 'radium';
 
 import { IndexLink } from 'react-router';
 import { Navbar } from 'react-bootstrap';
@@ -49,60 +50,62 @@ class App extends React.Component {
     const { children } = this.props;
     const { openSideBar } = this.state;
     return (
-      <div className="app">
-        <Helmet>
-          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
-        </Helmet>
-        <Navbar style={{ background: BAZAAR_GREY }} fixedTop fluid>
-          {
-            location.pathname !== '/onboarding' &&
-            <IndexLink onClick={() => this.props.loadUsers()} to="/">
-              <img alt="" width="20" src="/images/logo.png" />
-              <span className="brand-title">Bazaar</span>
-            </IndexLink>
-          }
-          {
-            this.topBarComponent()
-          }
-          <button
-            onClick={() => this.setState({ openSideBar: !openSideBar })}
-            type="button"
-            style={{
-              display: 'inline-block',
-              marginRight: '0px',
-              border: 'none',
-              float: 'right',
-              padding: '9px 10px',
-              marginTop: '8px',
-              background: 'transparent',
-              outline: 'none',
-            }}
-          >
+      <StyleRoot>
+        <div className="app">
+          <Helmet>
+            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+          </Helmet>
+          <Navbar style={{ background: BAZAAR_GREY }} fixedTop fluid>
             {
-              Array(3).fill(0).map((v, i) =>
-                (
-                  <span
-                    key={i}
-                    style={{
-                      backgroundColor: 'white',
-                      display: 'block',
-                      width: '22px',
-                      height: '2px',
-                      borderRadius: '1px',
-                      marginTop: i > 0 ? '4px' : '0px',
-                    }}
-                  />
-                )
-              )
+              location.pathname !== '/onboarding' &&
+              <IndexLink onClick={() => this.props.loadUsers()} to="/">
+                <img alt="" width="20" src="/images/logo.png" />
+                <span className="brand-title">Bazaar</span>
+              </IndexLink>
             }
-          </button>
-        </Navbar>
-        <SideBar toggled={openSideBar} />
-        <div style={{ minHeight: '100vh' }}>
-          {children}
+            {
+              this.topBarComponent()
+            }
+            <button
+              onClick={() => this.setState({ openSideBar: !openSideBar })}
+              type="button"
+              style={{
+                display: 'inline-block',
+                marginRight: '0px',
+                border: 'none',
+                float: 'right',
+                padding: '9px 10px',
+                marginTop: '8px',
+                background: 'transparent',
+                outline: 'none',
+              }}
+            >
+              {
+                Array(3).fill(0).map((v, i) =>
+                  (
+                    <span
+                      key={i}
+                      style={{
+                        backgroundColor: 'white',
+                        display: 'block',
+                        width: '22px',
+                        height: '2px',
+                        borderRadius: '1px',
+                        marginTop: i > 0 ? '4px' : '0px',
+                      }}
+                    />
+                  )
+                )
+              }
+            </button>
+          </Navbar>
+          <SideBar toggled={openSideBar} />
+          <div style={{ minHeight: '100vh' }}>
+            {children}
+          </div>
+          <LinkedFooter />
         </div>
-        <LinkedFooter />
-      </div>
+      </StyleRoot>
     );
   }
 }

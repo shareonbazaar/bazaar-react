@@ -669,33 +669,14 @@ h5 {
     padding-top: 5px;
   }
 
-  .form-control, .skill-select {
-    display: inline-block;
-    @media (min-width: 768px) {
-      width: 60%;
-    }
-  }
-
   .skill-select {
     background-color: initial;
     width: 100%;
   }
 
-  .control-label {
-    margin-right: 10px;
-    vertical-align: -webkit-baseline-middle;
-    @media (min-width: 768px) {
-      text-align: right;
-      width: 25%;
-    }
-  }
-
   .radio-block {
     display: flex;
     width: 100%;
-    @media (min-width: 768px) {
-      width: 60%;
-    }
   }
 
   .save-button {
@@ -793,10 +774,5 @@ h5 {
     padding: 10px 0;
     border-bottom: 1px dashed lightgray;
   }
-}
-
-
-.onboarding {
-  min-height: 100vh;
 }
 

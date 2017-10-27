@@ -1,8 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Radium from 'radium';
 import { FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 
-export default function ResponsiveInputField(props) {
+function ResponsiveInputField(props) {
+  const inputWrapperStyle = {
+    display: 'inline-block',
+    width: '100%',
+    '@media (min-width: 768px)': {
+      width: '60%',
+    }
+  };
+  const controlLabelStyle = {
+    display: 'inline-block',
+    marginRight: '10px',
+    verticalAlign: '-webkit-baseline-middle',
+    '@media (min-width: 768px)': {
+      textAlign: 'right',
+      width: '25%',
+    }
+  };
   const {
     formControlValue,
     formControlType,
@@ -18,22 +35,27 @@ export default function ResponsiveInputField(props) {
     <FormGroup
       validationState={!formGroupIsValid ? 'error' : null}
     >
-      <ControlLabel className={className}>
-        {messageText}
-      </ControlLabel>
-      {customInput ?
-        children :
-        (<FormControl
-          type={formControlType}
-          value={formControlValue}
-          placeholder={formControlPlaceHolder}
-          onChange={formControlOnChange}
-          {...rest}
-        >
-          {children}
-        </FormControl>
-        )
-      }
+      <div style={controlLabelStyle}>
+        <ControlLabel>
+          {messageText}
+        </ControlLabel>
+      </div>
+
+      <div style={inputWrapperStyle}>
+        {customInput ?
+          children :
+          (<FormControl
+            type={formControlType}
+            value={formControlValue}
+            placeholder={formControlPlaceHolder}
+            onChange={formControlOnChange}
+            {...rest}
+          >
+            {children}
+          </FormControl>
+          )
+        }
+      </div>
     </FormGroup>
   );
 }
@@ -59,3 +81,5 @@ ResponsiveInputField.defaultProps = {
   customInput: false,
   messageText: '',
 };
+
+export default Radium(ResponsiveInputField);
