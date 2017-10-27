@@ -64,11 +64,11 @@ export default class ConfirmationModal extends React.Component {
 }
 
 ConfirmationModal.defaultProps = {
-  buttonStyle: '',
+  buttonStyle: 'primary',
   buttonText: '',
   title: '',
-  cancelStyle: '',
-  confirmStyle: '',
+  cancelStyle: 'danger',
+  confirmStyle: 'primary',
   onConfirmation: () => {},
 };
 
