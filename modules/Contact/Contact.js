@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, Alert, FormGroup } from 'react-bootstrap';
-import validator from 'email-validator';
+import validator from 'validator';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 import { submitContact, clearContactAlert } from '../../utils/actions';
@@ -56,7 +56,7 @@ class Contact extends React.Component {
   render() {
     const { name, email, message, hasClickedSubmit } = this.state;
     const nameValid = name.length > 0;
-    const emailValid = validator.validate(email);
+    const emailValid = validator.isEmail(email);
     const messageValid = message.length > 0;
     const { response } = this.props;
     const { formatMessage } = this.props.intl;

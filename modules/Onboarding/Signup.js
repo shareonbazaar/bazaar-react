@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormGroup, Alert } from 'react-bootstrap';
-import validator from 'email-validator';
+import validator from 'validator';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Link } from 'react-router';
 
@@ -101,7 +101,7 @@ class Signup extends React.Component {
     } = this.state;
     const firstNameValid = firstName.length > 0;
     const lastNameValid = lastName.length > 0;
-    const emailValid = validator.validate(emailText);
+    const emailValid = validator.isEmail(emailText);
     const passwordsValid = (password.length > 0);
 
     const onSignupClicked = (e) => {

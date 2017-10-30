@@ -1,9 +1,7 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
-// import validator from 'email-validator';
 import { Button, FormGroup, FormControl, ControlLabel, Alert, Checkbox } from 'react-bootstrap';
 import { updateProfile, deleteAccount, clearProfileAlert } from '../../utils/actions';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import validator from 'email-validator';
+import validator from 'validator';
 
 import { Button, Grid, Col, Row, Alert, FormGroup } from 'react-bootstrap';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -125,7 +125,7 @@ Authentic
     const { response } = this.props;
     const firstNameValid = firstName.length > 0;
     const lastNameValid = lastName.length > 0;
-    const emailValid = validator.validate(emailText);
+    const emailValid = validator.isEmail(emailText);
     const passwordsValid = (password.length > 0 && password === confirmPassword);
     const { formatMessage } = this.props.intl;
     const onSignupClicked = (e) => {
