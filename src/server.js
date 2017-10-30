@@ -20,6 +20,7 @@ import userController from './controllers/user';
 import transactionController from './controllers/transaction';
 import messageController from './controllers/message';
 import skillController from './controllers/skill';
+import eventController from './controllers/event';
 import contactController from './controllers/contact';
 
 // Use native promises
@@ -123,6 +124,17 @@ const ensureAdmin = (req, res, next) => {
 
 app.post('/api/skills', passport.authenticate('jwt', { session: false }), ensureAdmin, validateSkill, verify, skillController.addSkill);
 app.delete('/api/skills/:id', passport.authenticate('jwt', { session: false }), ensureAdmin, skillController.deleteSkill);
+
+const validateEvent = [
+  check('title').exists(),
+  check('description').exists(),
+  check('happenedAt').exists(),
+  check('link').exists(),
+];
+
+app.get('/api/events', passport.authenticate('jwt', { session: false }), eventController.getEvents);
+app.post('/api/events', passport.authenticate('jwt', { session: false }), ensureAdmin, validateEvent, verify, eventController.addEvent);
+app.delete('/api/events/:id', passport.authenticate('jwt', { session: false }), ensureAdmin, eventController.deleteEvent);
 
 const validateContact = [
   check('name').exists(),

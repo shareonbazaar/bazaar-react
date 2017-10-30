@@ -17,6 +17,7 @@ import Signup from './Authentication/Signup';
 import Forgot from './Authentication/Forgot';
 import Onboarding from './Onboarding/Container';
 import ManageSkills from './ManageSkills/Container';
+import ManageEvents from './ManageEvents/Container';
 
 export default (store) => {
   // validate authentication for private routes
@@ -67,7 +68,8 @@ export default (store) => {
       <Route path="onboarding" component={Onboarding} />
       <Route path="terms" component={Terms} />
       <Route path="imprint" component={Imprint} />
-      <Route path="skills" component={ManageSkills} onEnter={requireAdmin} />
+      <Route path="/admin/skills" component={ManageSkills} onEnter={requireAdmin} />
+      <Route path="/admin/events" component={ManageEvents} onEnter={requireAdmin} />
     </Route>
   );
 };

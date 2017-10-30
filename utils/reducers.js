@@ -219,6 +219,26 @@ function skills(state = {
   }
 }
 
+function events(state = {
+  isFetching: false,
+  items: []
+}, action) {
+  switch (action.type) {
+    case actions.EVENTS_REQUEST:
+      return Object.assign({}, state, {
+        isFetching: true,
+      });
+    case actions.EVENTS_RECEIVED:
+      return Object.assign({}, state, {
+        isFetching: false,
+        items: action.events
+      });
+    default:
+      return state;
+  }
+}
+
+
 function contact(state = {
   response: null
 }, action) {
@@ -322,6 +342,7 @@ const appReducer = combineReducers({
   contact,
   onboarding,
   skills,
+  events,
 });
 
 export default (state, action) => {

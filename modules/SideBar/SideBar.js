@@ -28,6 +28,10 @@ const messages = defineMessages({
     id: 'SideBar.skills',
     defaultMessage: 'Skills',
   },
+  events: {
+    id: 'SideBar.events',
+    defaultMessage: 'Events',
+  },
   login: {
     id: 'SideBar.login',
     defaultMessage: 'Login',
@@ -62,6 +66,7 @@ class SideBar extends React.Component {
           {isAuthenticated && <SideBarLink toLink="/settings/" imageSrc="/images/settings.png" text={formatMessage(messages.settings)} />}
           <SideBarLink toLink="/contact" imageSrc="/images/help.png" text={formatMessage(messages.contact)} />
           {isAuthenticated && isAdmin && <SideBarLink toLink="/admin/skills" imageSrc="/images/shovel.png" text={formatMessage(messages.skills)} />}
+          {isAuthenticated && isAdmin && <SideBarLink toLink="/admin/events" imageSrc="/images/calendar.png" text={formatMessage(messages.events)} />}
           {!isAuthenticated && <SideBarLink toLink="/login" imageSrc="/images/logout.png" text={formatMessage(messages.login)} />}
           {isAuthenticated && <SideBarLink onClick={this.props.requestLogout} toLink="/" imageSrc="/images/logout.png" text={formatMessage(messages.logout)} />}
         </ul>

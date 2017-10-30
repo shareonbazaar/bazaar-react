@@ -41,6 +41,12 @@ export const ADD_SKILL = 'ADD_SKILL';
 export const CONFIRM_SKILL_SUBMISSION = 'CONFIRM_SKILL_SUBMISSION';
 export const DELETE_SKILL = 'DELETE_SKILL';
 export const CONFIRM_SKILL_DELETION = 'CONFIRM_SKILL_DELETION';
+export const ADD_EVENT = 'ADD_EVENT';
+export const CONFIRM_EVENT_SUBMISSION = 'CONFIRM_EVENT_SUBMISSION';
+export const DELETE_EVENT = 'DELETE_EVENT';
+export const CONFIRM_EVENT_DELETION = 'CONFIRM_EVENT_DELETION';
+export const EVENTS_REQUEST = 'EVENTS_REQUEST';
+export const EVENTS_RECEIVED = 'EVENTS_RECEIVED';
 
 function callApi(endpoint, method = 'GET', data = {}) {
   const config = {
@@ -167,6 +173,40 @@ export function deleteSkill(skill_id) {
       .then(() => {
         dispatch({ type: CONFIRM_SKILL_DELETION });
         dispatch(loadCategories());
+      });
+  };
+}
+
+export function loadEvents() {
+  return (dispatch) => {
+    dispatch({ type: EVENTS_REQUEST });
+    return callApi('/api/events')
+      .then(events => dispatch({
+        type: EVENTS_RECEIVED,
+        events
+      }));
+  };
+}
+
+export function addEvent(data) {
+  return (dispatch) => {
+    dispatch({ type: ADD_EVENT });
+    return callApi('/api/events', 'POST', data)
+      .then(({ error }) => {
+        if (error) console.log(error);
+        dispatch({ type: CONFIRM_EVENT_SUBMISSION });
+        dispatch(loadEvents());
+      });
+  };
+}
+
+export function deleteEvent(event_id) {
+  return (dispatch) => {
+    dispatch({ type: DELETE_EVENT });
+    return callApi(`/api/events/${event_id}`, 'DELETE')
+      .then(() => {
+        dispatch({ type: CONFIRM_EVENT_DELETION });
+        dispatch(loadEvents());
       });
   };
 }
