@@ -134,7 +134,7 @@ class Login extends React.Component {
           <ResponsiveInputField customInput>
             <SocialMediaLogin
               responseGoogle={this.responseGoogle}
-              responspeFacebook={this.responseFacebook}
+              responseFacebook={this.responseFacebook}
             />
           </ResponsiveInputField>
         </form>
