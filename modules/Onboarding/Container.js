@@ -11,6 +11,7 @@ import {
   loadCategories,
   loginUser,
   onNewcomerSelect,
+  clearLoginAlert,
   onboardingSearch } from '../../utils/actions';
 
 function mapStateToProps({ onboarding, categories, auth }) {
@@ -71,4 +72,5 @@ export default connect(mapStateToProps, {
   loginUser,
   onboardingSearch,
   onNewcomerSelect,
+  clearLoginAlert,
 }, mergeProps)(View);

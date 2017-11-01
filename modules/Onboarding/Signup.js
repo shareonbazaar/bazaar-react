@@ -28,6 +28,10 @@ class Signup extends React.Component {
     this.responseFacebook = this.responseFacebook.bind(this);
   }
 
+  componentWillMount() {
+    this.props.clearLoginAlert();
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.isAuthenticated) {
       this.props.push('/editprofile');
@@ -186,12 +190,14 @@ class Signup extends React.Component {
 Signup.defaultProps = {
   isAuthenticated: false,
   loginResponse: null,
+  isNewcomer: null,
 };
 Signup.propTypes = {
   isAuthenticated: PropTypes.bool,
-  isNewcomer: PropTypes.bool.isRequired,
+  isNewcomer: PropTypes.bool,
   push: PropTypes.func.isRequired,
   loginUser: PropTypes.func.isRequired,
+  clearLoginAlert: PropTypes.func.isRequired,
   loginResponse: PropTypes.object,
   chosenSkills: PropTypes.array.isRequired,
   chosenInterests: PropTypes.array.isRequired,
