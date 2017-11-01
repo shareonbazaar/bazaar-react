@@ -3,9 +3,9 @@ import { defineMessages, injectIntl } from 'react-intl';
 import CardGrid from '../CardGrid/CardGrid';
 import { loadUsers, updateProfile } from '../../utils/actions';
 
-const communityMessages = defineMessages({
+const userSearchMessages = defineMessages({
   noUsersMessage: {
-    id: 'Community.noUsers',
+    id: 'UserSearch.noUsers',
     defaultMessage: 'No users found to match your search',
   }
 });
@@ -27,12 +27,12 @@ export const Bookmarks = connect(state =>
 { loadUsers, updateProfile }
 )(injectIntl(CardGrid));
 
-export const Community = connect(state =>
+export const UserSearch = connect(state =>
   ({
     users: state.users.items,
     isFetching: state.isFetching,
     loggedInUser: state.auth.user,
-    localizedMessages: communityMessages,
+    localizedMessages: userSearchMessages,
   }),
 { loadUsers, updateProfile }
 )(injectIntl(CardGrid));

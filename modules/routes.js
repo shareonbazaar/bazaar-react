@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 
 import App from './App/App';
-import { Community, Bookmarks } from './CommunityContainer/CommunityContainer';
+import { UserSearch, Bookmarks } from './UserSearch/UserSearch';
 import Splash from './Splash/Splash';
 import VisibleTransactionList from './VisibleTransactionList/VisibleTransactionList';
 import Profile from './Profile/Profile';
@@ -53,7 +53,7 @@ export default (store) => {
 
   return (
     <Route path="/" component={AppContainer}>
-      <IndexRoute component={Community} />
+      <IndexRoute component={UserSearch} />
       <Route path="login" component={Login} onEnter={bypassAuth} />
       <Route path="forgot" component={Forgot} />
       <Route path="reset/:id" component={Forgot} />
