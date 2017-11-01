@@ -10,6 +10,7 @@ import LinkedFooter from '../LinkedFooter/LinkedFooter';
 import { loadUsers, selectStage } from '../../utils/actions';
 
 import SideBar from '../SideBar/SideBar';
+import Loader from '../Loader/Loader';
 import QueryBox from '../QueryBox/QueryBox';
 import ProgressButtons from '../Onboarding/ProgressButtons';
 import { BAZAAR_GREY } from '../Layout/Styles';
@@ -47,7 +48,7 @@ class App extends React.Component {
 
 
   render() {
-    const { children } = this.props;
+    const { children, isFetching } = this.props;
     const { openSideBar } = this.state;
     return (
       <StyleRoot>
@@ -101,6 +102,7 @@ class App extends React.Component {
           </Navbar>
           <SideBar toggled={openSideBar} />
           <div style={{ minHeight: '100vh' }}>
+            {(isFetching && <Loader />)}
             {children}
           </div>
           <LinkedFooter />
@@ -112,6 +114,7 @@ class App extends React.Component {
 
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
+  isFetching: state.auth.isFetching,
   stage: state.onboarding.stage,
   skills: state.onboarding.skills,
   interests: state.onboarding.interests,
@@ -120,6 +123,7 @@ const mapStateToProps = state => ({
 App.propTypes = {
   location: PropTypes.object,
   isAuthenticated: PropTypes.bool,
+  isFetching: PropTypes.bool,
   children: PropTypes.node,
   loadUsers: PropTypes.func.isRequired,
   selectStage: PropTypes.func.isRequired,
@@ -130,6 +134,7 @@ App.propTypes = {
 App.defaultProps = {
   location: {},
   isAuthenticated: false,
+  isFetching: false,
   children: null,
   stage: 0,
   skills: [],
