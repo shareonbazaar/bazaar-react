@@ -54,7 +54,7 @@ class TransactionList extends React.Component {
     return (
       <div className="empty-transaction-list">
         <p>Looks like there's nothing here.</p>
-        <p>Visit the <Link to={'/'}>user search page</Link> to find new users and set up exchanges</p>
+        <p>Visit the <Link to={'/users'}>user search page</Link> to find new users and set up exchanges</p>
       </div>
     );
   }

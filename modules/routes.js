@@ -18,6 +18,7 @@ import Forgot from './Authentication/Forgot';
 import Onboarding from './Onboarding/Container';
 import ManageSkills from './ManageSkills/Container';
 import ManageEvents from './ManageEvents/Container';
+import Community from './Community/Container';
 
 export default (store) => {
   // validate authentication for private routes
@@ -53,11 +54,12 @@ export default (store) => {
 
   return (
     <Route path="/" component={AppContainer}>
-      <IndexRoute component={UserSearch} />
+      <IndexRoute component={Community} />
       <Route path="login" component={Login} onEnter={bypassAuth} />
       <Route path="forgot" component={Forgot} />
       <Route path="reset/:id" component={Forgot} />
       <Route path="signup" component={Signup} onEnter={bypassAuth} />
+      <Route path="users" component={UserSearch} onEnter={requireAuth} />
       <Route path="transactions" component={VisibleTransactionList} onEnter={requireAuth} />
       <Route path="profile/:id" component={Profile} onEnter={requireAuth} />
       <Route path="editprofile" component={EditProfile} onEnter={requireAuth} />
