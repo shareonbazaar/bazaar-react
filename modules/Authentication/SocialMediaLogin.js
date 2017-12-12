@@ -3,11 +3,14 @@ import PropTypes from 'prop-types';
 import GoogleLogin from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
 import { FormGroup } from 'react-bootstrap';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
+
+import { loginMessages } from './messages';
 /* global FACEBOOK_ID: true GOOGLE_ID: true */
 
 function SocialMediaLogin(props) {
   const { disabled, responseGoogle, responseFacebook } = props;
+  const { formatMessage } = props.intl;
   const socialMediaStyles = {
     width: '100%',
     borderRadius: '3px',
@@ -38,12 +41,8 @@ function SocialMediaLogin(props) {
           callback={responseFacebook}
           icon={<i className="fa fa-facebook" style={iconStyle} />}
           cssClass="social-media-buttons facebook-login"
-        >
-          <FormattedMessage
-            id={'Signup.loginwithFacebook'}
-            defaultMessage={'Login with Facebook'}
-          />
-        </FacebookLogin>
+          textButton={formatMessage(loginMessages.loginwithFacebook)}
+        />
         <GoogleLogin
           style={{ backgroundColor: '#dd4b39', ...socialMediaStyles }}
           disabled={disabled}
@@ -74,7 +73,8 @@ SocialMediaLogin.defaultProps = {
 SocialMediaLogin.propTypes = {
   responseFacebook: PropTypes.func.isRequired,
   responseGoogle: PropTypes.func.isRequired,
+  intl: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
 };
 
-export default SocialMediaLogin;
+export default injectIntl(SocialMediaLogin);

@@ -9,6 +9,10 @@ const loginMessages = defineMessages({
     id: 'Signup.password',
     defaultMessage: 'Password',
   },
+  loginwithFacebook: {
+    id: 'Signup.loginwithFacebook',
+    defaultMessage: 'Login with Facebook',
+  },
 });
 
 const signupMessages = defineMessages({
