@@ -2,8 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { BAZAAR_BLUE, BAZAAR_ORANGE } from '../Layout/Styles';
 
-export default function SkillLabel(props) {
-  const { skill, isInterest, isSelected, onClick, children, style } = props;
+export function SkillLabel(props) {
+  const { skill, onClick, children, style } = props;
+  let { isInterest, isSelected } = props;
+  if (typeof isInterest === 'function') isInterest = isInterest(skill);
+  if (typeof isSelected === 'function') isSelected = isInterest(skill);
   const skillLabelStyles = {
     borderRadius: '5px',
     textAlign: 'center',
@@ -27,7 +30,7 @@ export default function SkillLabel(props) {
   }
 
   return (
-    <div onClick={onClick} style={skillLabelStyles}>
+    <div onClick={() => onClick(skill)} style={skillLabelStyles}>
       {skill.label.en}
       {children}
     </div>
@@ -35,8 +38,8 @@ export default function SkillLabel(props) {
 }
 
 SkillLabel.propTypes = {
-  isInterest: PropTypes.bool.isRequired,
-  isSelected: PropTypes.bool,
+  isInterest: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]).isRequired,
+  isSelected: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]).isRequired,
   skill: PropTypes.object.isRequired,
   style: PropTypes.object,
   children: PropTypes.node,
@@ -48,4 +51,39 @@ SkillLabel.defaultProps = {
   children: null,
   isSelected: false,
   style: {},
+};
+
+export function SkillLabelContainer(props) {
+  const { skills, isSelectedFunc, isInterestFunc } = props;
+  return (
+    <div style={{
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'space-between',
+    }}
+    >
+      {
+        skills.map(skill => (
+          <SkillLabel
+            key={skill._id}
+            skill={skill}
+            {...props}
+            isInterest={isInterestFunc(skill)}
+            isSelected={isSelectedFunc(skill)}
+            style={{ flexBasis: '48%', margin: '1% 0' }}
+          />
+        ))
+      }
+    </div>
+  );
+}
+
+SkillLabelContainer.propTypes = {
+  isSelectedFunc: PropTypes.func,
+  isInterestFunc: PropTypes.func.isRequired,
+  skills: PropTypes.array.isRequired,
+};
+
+SkillLabelContainer.defaultProps = {
+  isSelectedFunc: () => false,
 };

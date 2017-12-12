@@ -6,6 +6,8 @@ import { FormattedMessage, defineMessages, injectIntl } from 'react-intl';
 
 import { skillRequest } from '../../utils/actions';
 import { RequestType, StatusType } from '../../src/utils/Enums';
+import ActionButton from '../Actions/ActionButton';
+import { SkillLabelContainer } from '../EditProfile/SkillLabel';
 
 
 const messages = defineMessages({
@@ -150,20 +152,12 @@ class RequestButton extends React.Component {
                   <p>{errorMessage}</p>
                 </Alert>
               }
-              <div className="skill-select">
-                {activities.map((skill, i) => {
-                  const extraClass = selectedSkill === skill._id ? 'selected' : '';
-                  return (
-                    <div
-                      onClick={() => this.setState({ selectedSkill: skill._id })}
-                      key={i}
-                      className={`skill-label ${extraClass}`}
-                    >
-                      {skill.label.en}
-                    </div>
-                  );
-                })}
-              </div>
+              <SkillLabelContainer
+                isInterestFunc={() => exchange_type === RequestType.SHARE}
+                isSelectedFunc={s => s._id === selectedSkill}
+                onClick={skill => this.setState({ selectedSkill: skill._id })}
+                skills={activities}
+              />
             </FormGroup>
             <FormGroup>
               <ControlLabel>
@@ -189,12 +183,12 @@ class RequestButton extends React.Component {
             </Button>
           </Modal.Footer>
         </Modal>
-        <Button onClick={this.onOpen} bsStyle="primary" bsSize="large" block>
+        <ActionButton onClick={this.onOpen} bsSize="large" block>
           <FormattedMessage
             id={'RequestButton.makerequest'}
             defaultMessage={'Request'}
           />
-        </Button>
+        </ActionButton>
       </div>
     );
   }

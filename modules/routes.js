@@ -54,7 +54,7 @@ export default (store) => {
 
   return (
     <Route path="/" component={AppContainer}>
-      <IndexRoute component={Community} />
+      <IndexRoute component={UserSearch} />
       <Route path="login" component={Login} onEnter={bypassAuth} />
       <Route path="forgot" component={Forgot} />
       <Route path="reset/:id" component={Forgot} />
@@ -65,7 +65,7 @@ export default (store) => {
       <Route path="editprofile" component={EditProfile} onEnter={requireAuth} />
       <Route path="contact" component={Contact} />
       <Route path="terms" component={Terms} />
-      <Route path="bookmarks" component={Bookmarks} />
+      <Route path="bookmarks" component={Bookmarks} onEnter={requireAuth} />
       <Route path="settings" component={Settings} onEnter={requireAuth} />
       <Route path="onboarding" component={Onboarding} />
       <Route path="terms" component={Terms} />

@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import RequestButton from '../RequestButton/RequestButton';
+import { SkillLabel, SkillLabelContainer } from '../EditProfile/SkillLabel';
+
 
 //eslint-disable-next-line
 class UserCard extends React.Component {
@@ -40,8 +42,29 @@ class UserCard extends React.Component {
             <h4>{user.location}</h4>
           </div>
           <hr className="separator" />
-          <div className="skill-icons">
-            {user.skills.map((skill, i) => this.renderSkill(skill, i))}
+          <SkillLabelContainer
+            isInterestFunc={() => false}
+            isSelectedFunc={() => true}
+            onClick={skill => this.setState({ selectedSkill: skill._id })}
+            skills={user.skills}
+          />
+          <div style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'space-between',
+          }}
+          >
+            {
+              user.skills.map(skill => (
+                <SkillLabel
+                  key={skill._id}
+                  skill={skill}
+                  isInterest={false}
+                  isSelected
+                  style={{ flexBasis: '48%', margin: '1% 0' }}
+                />
+              ))
+            }
           </div>
         </div>
         <RequestButton user={user} />

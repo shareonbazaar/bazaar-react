@@ -157,7 +157,7 @@ function requests(state = {
 function users(state = {
   isFetching: false,
   errorMessage: '',
-  items: null
+  items: []
 }, action) {
   switch (action.type) {
     case actions.USERS_REQUEST:
