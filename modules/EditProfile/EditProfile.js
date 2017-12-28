@@ -10,7 +10,7 @@ import SkillsModal from './SkillsModal';
 import { updateProfile, clearProfileAlert } from '../../utils/actions';
 import Radio from './Radio';
 import UploadPhoto from './UploadPhoto';
-import SkillLabel from './SkillLabel';
+import { SkillLabel } from './SkillLabel';
 import { editProfileMessages } from './messages';
 import ResponsiveInputField from '../Authentication/ResponsiveInputField';
 import ActionButton from '../Actions/ActionButton';

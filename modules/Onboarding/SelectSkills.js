@@ -4,7 +4,7 @@ import { FormControl, Modal } from 'react-bootstrap';
 import { TransitionMotion, spring } from 'react-motion';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 
-import SkillLabel from '../EditProfile/SkillLabel';
+import { SkillLabel } from '../EditProfile/SkillLabel';
 import { Header1, Header2 } from '../Layout/Headers';
 import CloseButton from '../Actions/CloseButton';
 import { BAZAAR_BLUE, BAZAAR_ORANGE, LIGHT_GREY } from '../Layout/Styles';
