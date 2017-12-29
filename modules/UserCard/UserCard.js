@@ -48,24 +48,6 @@ class UserCard extends React.Component {
             onClick={skill => this.setState({ selectedSkill: skill._id })}
             skills={user.skills}
           />
-          <div style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'space-between',
-          }}
-          >
-            {
-              user.skills.map(skill => (
-                <SkillLabel
-                  key={skill._id}
-                  skill={skill}
-                  isInterest={false}
-                  isSelected
-                  style={{ flexBasis: '48%', margin: '1% 0' }}
-                />
-              ))
-            }
-          </div>
         </div>
         <RequestButton user={user} />
       </div>

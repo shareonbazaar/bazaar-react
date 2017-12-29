@@ -6,6 +6,7 @@ import { push } from 'react-router-redux';
 import { FormattedMessage } from 'react-intl';
 import { Button, Grid, Row, Col } from 'react-bootstrap';
 import { loadProfile } from '../../utils/actions';
+import { SkillLabel, SkillLabelContainer } from '../EditProfile/SkillLabel';
 
 import RequestButton from '../RequestButton/RequestButton';
 import Review from '../Review/Review';
@@ -94,7 +95,11 @@ class Profile extends React.Component {
                       defaultMessage={'I can offer'}
                     />
                   </h4>
-                  {profiledUser.skills.map((skill, i) => <div className="skill-label offer" key={i}>{skill.label.en}</div>)}
+                  <SkillLabelContainer
+                    isInterestFunc={() => false}
+                    isSelectedFunc={() => true}
+                    skills={profiledUser.skills}
+                  />
                 </div>
               </div>
               <div className="skills-box">
@@ -105,7 +110,11 @@ class Profile extends React.Component {
                       defaultMessage={'I am interested in'}
                     />
                   </h4>
-                  {profiledUser.interests.map((skill, i) => <div className="skill-label receive" key={i}>{skill.label.en}</div>)}
+                  <SkillLabelContainer
+                    isInterestFunc={() => true}
+                    isSelectedFunc={() => true}
+                    skills={profiledUser.interests}
+                  />
                 </div>
               </div>
             </Col>
