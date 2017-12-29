@@ -41,7 +41,7 @@ class AddNewSkill extends React.Component {
       skillEN: '',
       skillAR: '',
       skillDE: '',
-      category: this.props.categories[0]._id,
+      category: this.props.categories.length > 0 ? this.props.categories[0]._id : null,
     };
   }
 
@@ -49,6 +49,9 @@ class AddNewSkill extends React.Component {
     const { showModal, skillAR, skillEN, skillDE, category, started } = this.state;
     const { categories } = this.props;
     const { formatMessage } = this.props.intl;
+    if (category === null) {
+      return <div>Something is wrong. There are no categories.</div>;
+    }
     return (
       <div>
         <Modal
