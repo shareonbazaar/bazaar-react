@@ -81,7 +81,7 @@ class Contact extends React.Component {
             </Alert>
           }
           <ResponsiveInputField
-            formGroupIsValid={(hasClickedSubmit && !nameValid)}
+            formGroupIsValid={(!hasClickedSubmit || nameValid)}
             formControlType="name"
             formControlValue={name}
             formControlPlaceHolder="John Doe"
@@ -89,7 +89,7 @@ class Contact extends React.Component {
             messageText={formatMessage(contactMessages.name)}
           />
           <ResponsiveInputField
-            formGroupIsValid={(hasClickedSubmit && !emailValid)}
+            formGroupIsValid={(!hasClickedSubmit || emailValid)}
             formControlType="email"
             formControlValue={email}
             formControlPlaceHolder="Email"
@@ -98,7 +98,7 @@ class Contact extends React.Component {
           />
           <ResponsiveInputField
             className="label-top"
-            formGroupIsValid={(hasClickedSubmit && !messageValid)}
+            formGroupIsValid={(!hasClickedSubmit || messageValid)}
             formControlType="textarea"
             formControlValue={message}
             formControlPlaceHolder="Enter text"
