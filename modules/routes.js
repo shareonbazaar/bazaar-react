@@ -20,6 +20,14 @@ import ManageSkills from './ManageSkills/Container';
 import ManageEvents from './ManageEvents/Container';
 import Community from './Community/Container';
 
+function NotFound() {
+  return (
+    <div className="empty-transaction-list">
+      <p>There&apos;s nothing here. This is a 404 page</p>
+    </div>
+  );
+}
+
 export default (store) => {
   // validate authentication for private routes
   const requireAuth = (nextState, replace) => {
@@ -72,6 +80,7 @@ export default (store) => {
       <Route path="imprint" component={Imprint} />
       <Route path="/admin/skills" component={ManageSkills} onEnter={requireAdmin} />
       <Route path="/admin/events" component={ManageEvents} onEnter={requireAdmin} />
+      <Route path="*" component={NotFound} />
     </Route>
   );
 };
