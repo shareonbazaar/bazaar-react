@@ -9,7 +9,7 @@ import { loginMessages } from './messages';
 /* global FACEBOOK_ID: true GOOGLE_ID: true */
 
 function SocialMediaLogin(props) {
-  const { disabled, responseGoogle, responseFacebook } = props;
+  const { disabled, responseGoogle, responseFacebook, onFailure } = props;
   const { formatMessage } = props.intl;
   const socialMediaStyles = {
     width: '100%',
@@ -39,6 +39,7 @@ function SocialMediaLogin(props) {
           autoLoad={false}
           fields="name,email,picture"
           callback={responseFacebook}
+          onFailure={onFailure}
           icon={<i className="fa fa-facebook" style={iconStyle} />}
           cssClass="social-media-buttons facebook-login"
           textButton={formatMessage(loginMessages.loginwithFacebook)}
@@ -49,7 +50,7 @@ function SocialMediaLogin(props) {
           clientId={GOOGLE_ID}
           buttonText="Login with Google"
           onSuccess={responseGoogle}
-          onFailure={responseGoogle}
+          onFailure={onFailure}
           disabledStyle={{}}
           fetchBasicProfile
           className="social-media-buttons google-login"
@@ -68,11 +69,13 @@ function SocialMediaLogin(props) {
 }
 SocialMediaLogin.defaultProps = {
   disabled: false,
+  onFailure: err => console.log(err),
 };
 
 SocialMediaLogin.propTypes = {
   responseFacebook: PropTypes.func.isRequired,
   responseGoogle: PropTypes.func.isRequired,
+  onFailure: PropTypes.func,
   intl: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
 };
