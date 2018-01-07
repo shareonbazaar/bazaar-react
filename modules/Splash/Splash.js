@@ -41,6 +41,7 @@ export default class Splash extends React.Component {
     return (
       <div className="landing">
         <Helmet>
+          <title>Share On Bazaar</title>
           <meta name="viewport" content="width=device-width, initial-scale=1" />
         </Helmet>
         <div className={`page-wrapper ${this.state.openSideBar ? 'menu-visible' : ''}`}>
