@@ -8,6 +8,7 @@ import { Helmet } from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
 // eslint-disable-next-line
 import styles from '../../public/css/splash.css';
+import LinkedFooter from '../LinkedFooter/LinkedFooter';
 
 export default class Splash extends React.Component {
   constructor(props) {
@@ -251,6 +252,7 @@ export default class Splash extends React.Component {
             <ul className="copyright">
               <li>© Bazaar</li>
             </ul>
+            <LinkedFooter />
           </footer>
         </div>
         <div className={`menu ${this.state.openSideBar ? 'toggled' : ''}`}>
