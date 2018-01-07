@@ -9,10 +9,14 @@ const footerStyle = {
   padding: 5,
   fontSize: 12,
 };
+const linkStyle = {
+  padding: 4,
+  margin: '0 2px',
+};
 const LinkedFooter = () =>
   (<div style={footerStyle}>
-    <Link to="imprint" style={{ padding: 4 }}>Imprint</Link>
-    <Link to="/terms" style={{ padding: 4 }}>Terms & Conditions</Link>
+    <Link to="imprint" style={linkStyle}>Imprint</Link>
+    <Link to="/terms" style={linkStyle}>Terms & Conditions</Link>
   </div>
   );
 
