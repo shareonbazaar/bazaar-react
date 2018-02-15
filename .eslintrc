@@ -12,6 +12,7 @@
       "ignoreComments": false,
       "ignoreStrings": true,
     }],
+    "func-names": "off",
     "no-underscore-dangle": "off",
     "import/no-duplicates": "off",
     "camelcase": "off",
