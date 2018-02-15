@@ -6,7 +6,8 @@ import { Button } from 'react-bootstrap';
 import { BAZAAR_BLUE } from '../Layout/Styles';
 
 export default function Event(props) {
-  const { title, description, link, happenedAt } = props.event;
+  const { name, description, start_time, id } = props.event;
+  const link = `https://www.facebook.com/events/${id}`;
   return (
     <div style={{
       display: 'flex',
@@ -22,8 +23,8 @@ export default function Event(props) {
       }}
       />
       <div>
-        <span style={{ fontWeight: 'bold', color: BAZAAR_BLUE }}>{moment(happenedAt).format('DD.MM.YYYY')} - </span>
-        <span style={{ fontWeight: 'bold' }}>{title}</span>
+        <span style={{ fontWeight: 'bold', color: BAZAAR_BLUE }}>{moment(start_time).format('DD.MM.YYYY')} - </span>
+        <span style={{ fontWeight: 'bold' }}>{name}</span>
       </div>
       <p style={{ color: BAZAAR_BLUE, flexGrow: 1 }}>{description}</p>
       <Button style={{ backgroundColor: BAZAAR_BLUE, color: 'white', width: '100%' }}>
@@ -46,10 +47,11 @@ export default function Event(props) {
 
 Event.propTypes = {
   event: PropTypes.shape({
-    title: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
-    link: PropTypes.string.isRequired,
-    happenedAt: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    start_time: PropTypes.string.isRequired,
+    end_time: PropTypes.string.isRequired,
   }).isRequired,
   style: PropTypes.object,
 };

@@ -17,7 +17,6 @@ import Signup from './Authentication/Signup';
 import Forgot from './Authentication/Forgot';
 import Onboarding from './Onboarding/Container';
 import ManageSkills from './ManageSkills/Container';
-import ManageEvents from './ManageEvents/Container';
 import Community from './Community/Container';
 
 function NotFound() {
@@ -68,6 +67,7 @@ export default (store) => {
       <Route path="reset/:id" component={Forgot} />
       <Route path="signup" component={Signup} onEnter={bypassAuth} />
       <Route path="users" component={UserSearch} onEnter={requireAuth} />
+      <Route path="community" component={Community} onEnter={requireAuth} />
       <Route path="transactions" component={VisibleTransactionList} onEnter={requireAuth} />
       <Route path="profile/:id" component={Profile} onEnter={requireAuth} />
       <Route path="editprofile" component={EditProfile} onEnter={requireAuth} />
@@ -79,7 +79,6 @@ export default (store) => {
       <Route path="terms" component={Terms} />
       <Route path="imprint" component={Imprint} />
       <Route path="/admin/skills" component={ManageSkills} onEnter={requireAdmin} />
-      <Route path="/admin/events" component={ManageEvents} onEnter={requireAdmin} />
       <Route path="*" component={NotFound} />
     </Route>
   );

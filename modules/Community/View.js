@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Carousel from 'nuka-carousel';
 
-import Event from '../ManageEvents/Event';
+import Event from '../Community/Event';
 import { Header1 } from '../Layout/Headers';
+/* global FACEBOOK_ID: true */
 
 function Controls(props) {
   const buttonStyle = active => ({
@@ -70,7 +71,7 @@ class View extends React.Component {
             }
           ]}
         >
-          {events.map(e => <Event style={{ height: '300px' }} key={e._id} event={e} />)}
+          {events.slice(0, 3).map(e => <Event style={{ height: '300px' }} key={e.id} event={e} />)}
         </Carousel>
       </div>
     );
