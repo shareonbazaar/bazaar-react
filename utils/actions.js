@@ -392,6 +392,7 @@ export function loginUser(creds) {
   };
 }
 
+const event_fields = ['cover', 'name', 'description', 'start_time', 'end_time'];
 /* global FACEBOOK_ID: true FACEBOOK_PAGE_ID: true FACEBOOK_PAGE_TOKEN: true */
 export function loadEvents() {
   return (dispatch) => {
@@ -409,7 +410,7 @@ export function loadEvents() {
       });
 
       window.FB.api(
-        `/${FACEBOOK_PAGE_ID}/events?access_token=${FACEBOOK_PAGE_TOKEN}`,
+        `/${FACEBOOK_PAGE_ID}/events?fields=${event_fields.join(',')}&access_token=${FACEBOOK_PAGE_TOKEN}`,
         (response) => {
           if (response && !response.error) {
             dispatch({
