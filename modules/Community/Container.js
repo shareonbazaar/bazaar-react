@@ -1,11 +1,12 @@
 import { connect } from 'react-redux';
 import View from './View';
-import { loadEvents } from '../../utils/actions';
+import { loadEvents, loadUsers } from '../../utils/actions';
 
-function mapStateToProps({ events }) {
+function mapStateToProps({ events, users }) {
   return {
     events: events.items,
+    users: users.items,
   };
 }
 
-export default connect(mapStateToProps, { loadEvents })(View);
+export default connect(mapStateToProps, { loadEvents, loadUsers })(View);

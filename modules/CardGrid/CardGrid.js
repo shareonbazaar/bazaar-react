@@ -81,21 +81,15 @@ export default class CardGrid extends React.Component {
 CardGrid.propTypes = {
   users: PropTypes.array,
   isFetching: PropTypes.bool,
-  loadUsers: PropTypes.func,
-  loggedInUser: PropTypes.object,
-  bookmarkCard: PropTypes.func,
-  updateProfile: PropTypes.func,
+  loadUsers: PropTypes.func.isRequired,
+  loggedInUser: PropTypes.object.isRequired,
+  updateProfile: PropTypes.func.isRequired,
   localizedMessages: PropTypes.object,
-  intl: PropTypes.object,
+  intl: PropTypes.object.isRequired,
 };
 
 CardGrid.defaultProps = {
   users: [],
   isFetching: false,
-  loadUsers: () => {},
-  loggedInUser: {},
-  bookmarkCard: () => {},
-  updateProfile: () => {},
   localizedMessages: {},
-  intl: null,
 };
