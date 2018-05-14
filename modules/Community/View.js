@@ -2,19 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Carousel from 'nuka-carousel';
 
-import Event from '../ManageEvents/Event';
+import UserCard from '../UserCard/UserCard';
+import Event from '../Community/Event';
 import { Header1 } from '../Layout/Headers';
+import { BAZAAR_BLUE } from '../Layout/Styles';
+/* global FACEBOOK_ID: true */
 
 function Controls(props) {
   const buttonStyle = active => ({
     border: 0,
     background: 'transparent',
-    color: 'black',
+    color: active ? BAZAAR_BLUE : 'white',
     cursor: 'pointer',
     padding: 10,
     outline: 0,
     fontSize: 24,
-    opacity: active ? 1 : 0.5
   });
   return (
     <ul style={{
@@ -48,20 +50,23 @@ Controls.propTypes = {
   goToSlide: PropTypes.func.isRequired,
 };
 
+const NUM_EVENTS = 3;
+const NUM_SUGGESTED_MATCHES = 6;
+
 class View extends React.Component {
   componentDidMount() {
     window.scrollTo(0, 0);
     this.props.loadEvents();
+    this.props.loadUsers();
   }
 
   render() {
-    const { events } = this.props;
-
+    const { events, users } = this.props;
     return (
       <div className="content-page">
         <Header1>Bazaar Community Events</Header1>
         <Carousel
-          frameOverflow="visible"
+          frameOverflow="hidden"
           cellSpacing={10}
           decorators={[
             {
@@ -70,8 +75,25 @@ class View extends React.Component {
             }
           ]}
         >
-          {events.map(e => <Event style={{ height: '300px' }} key={e._id} event={e} />)}
+          {events.slice(0, NUM_EVENTS).map(e => <Event style={{ height: '300px' }} key={e.id} event={e} />)}
         </Carousel>
+
+        <Header1>Suggested Matches</Header1>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'row',
+          overflowX: 'scroll',
+        }}
+        >
+          {
+            users.slice(0, NUM_SUGGESTED_MATCHES).map(u => (
+              <div style={{flex: 1, minWidth: '300px', margin: '0 5px'}}>
+                <UserCard shouldExpand user={u} key={u._id} onBookmarkClicked={() => {}} />
+              </div>
+            )
+            )
+          }
+        </div>
       </div>
     );
   }
@@ -79,11 +101,14 @@ class View extends React.Component {
 
 View.propTypes = {
   events: PropTypes.array,
+  users: PropTypes.array,
   loadEvents: PropTypes.func.isRequired,
+  loadUsers: PropTypes.func.isRequired,
 };
 
 View.defaultProps = {
   events: [],
+  users: [],
 };
 
 export default View;

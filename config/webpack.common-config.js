@@ -17,6 +17,8 @@ module.exports = {
     new webpack.DefinePlugin({
       GOOGLE_MAP_API: JSON.stringify(process.env.GOOGLE_MAP_API),
       FACEBOOK_ID: JSON.stringify(process.env.FACEBOOK_ID),
+      FACEBOOK_PAGE_TOKEN: JSON.stringify(process.env.FACEBOOK_PAGE_TOKEN),
+      FACEBOOK_PAGE_ID: JSON.stringify(process.env.FACEBOOK_PAGE_ID),
       GOOGLE_ID: JSON.stringify(process.env.GOOGLE_ID),
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
     }),
