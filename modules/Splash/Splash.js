@@ -38,6 +38,7 @@ export default class Splash extends React.Component {
   }
   /* eslint-enable */
   render() {
+    const shouldAllowLogin = false;
     return (
       <div className="landing">
         <Helmet>
@@ -47,20 +48,22 @@ export default class Splash extends React.Component {
         <div className={`page-wrapper ${this.state.openSideBar ? 'menu-visible' : ''}`}>
           <header className={`header ${this.state.showHeader ? '' : 'alt'}`}>
             <h1><Link to="/">Bazaar</Link></h1>
-            <nav className="nav">
-              <ul>
-                <li className="special">
-                  <a onClick={() => this.setState({ openSideBar: true })} className="menuToggle">
-                    <span>
-                      <FormattedMessage
-                        id={'Splash.menu'}
-                        defaultMessage={'Menu'}
-                      />
-                    </span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
+            {shouldAllowLogin ?
+              <nav className="nav">
+                <ul>
+                  <li className="special">
+                    <a onClick={() => this.setState({ openSideBar: true })} className="menuToggle">
+                      <span>
+                        <FormattedMessage
+                          id={'Splash.menu'}
+                          defaultMessage={'Menu'}
+                        />
+                      </span>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+              : null }
           </header>
           <section className="banner">
             <div className="inner">
@@ -72,16 +75,18 @@ export default class Splash extends React.Component {
                 </div>
               </h2>
               <p>HALLO, SALAM,<br />              HELLO, BONJOUR,<br />              MARHABA, OLÁ!</p>
-              <ul className="actions">
-                <li>
-                  <Link to="/login" className="button special">
-                    <FormattedMessage
-                      id={'Signup.login'}
-                      defaultMessage={'Login'}
-                    />
-                  </Link>
-                </li>
-              </ul>
+              {shouldAllowLogin ?
+                <ul className="actions">
+                  <li>
+                    <Link to="/login" className="button special">
+                      <FormattedMessage
+                        id={'Signup.login'}
+                        defaultMessage={'Login'}
+                      />
+                    </Link>
+                  </li>
+                </ul>
+                : null }
             </div>
             <ScrollLink className="more" to="zero" smooth duration={500}>
               <FormattedMessage
@@ -208,40 +213,42 @@ export default class Splash extends React.Component {
             </div>
           </section>
           <section className="cta wrapper style4" style={{ padding: '12em 0 10em 0' }}>
-            <div className="inner">
-              <header>
-                <h2>
-                  <FormattedMessage
-                    id={'Splash.start1'}
-                    defaultMessage={'Sound good?'}
-                  />
-                </h2>
-                <p>
-                  <FormattedMessage
-                    id={'Splash.start2'}
-                    defaultMessage={"Let's get started! It's easy."}
-                  />
-                </p>
-              </header>
-              <ul className="actions vertical">
-                <li>
-                  <Link to="/onboarding" className="button fit special">
+            { shouldAllowLogin ?
+              <div className="inner">
+                <header>
+                  <h2>
                     <FormattedMessage
-                      id={'Signup.signup'}
-                      defaultMessage={'Sign up'}
+                      id={'Splash.start1'}
+                      defaultMessage={'Sound good?'}
                     />
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/login" className="button fit">
+                  </h2>
+                  <p>
                     <FormattedMessage
-                      id={'Signup.login'}
-                      defaultMessage={'Login'}
+                      id={'Splash.start2'}
+                      defaultMessage={"Let's get started! It's easy."}
                     />
-                  </Link>
-                </li>
-              </ul>
-            </div>
+                  </p>
+                </header>
+                <ul className="actions vertical">
+                  <li>
+                    <Link to="/onboarding" className="button fit special">
+                      <FormattedMessage
+                        id={'Signup.signup'}
+                        defaultMessage={'Sign up'}
+                      />
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/login" className="button fit">
+                      <FormattedMessage
+                        id={'Signup.login'}
+                        defaultMessage={'Login'}
+                      />
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+              : null }
           </section>
           <footer className="footer">
             <ul className="icons">

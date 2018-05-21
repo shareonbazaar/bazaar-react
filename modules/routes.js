@@ -62,21 +62,21 @@ export default (store) => {
   return (
     <Route path="/" component={AppContainer}>
       <IndexRoute component={UserSearch} />
-      <Route path="login" component={Login} onEnter={bypassAuth} />
-      <Route path="forgot" component={Forgot} />
-      <Route path="reset/:id" component={Forgot} />
-      <Route path="signup" component={Signup} onEnter={bypassAuth} />
-      <Route path="users" component={UserSearch} onEnter={requireAuth} />
-      <Route path="community" component={Community} onEnter={requireAuth} />
-      <Route path="transactions" component={VisibleTransactionList} onEnter={requireAuth} />
-      <Route path="profile/:id" component={Profile} onEnter={requireAuth} />
-      <Route path="editprofile" component={EditProfile} onEnter={requireAuth} />
-      <Route path="contact" component={Contact} />
+      <Route path="login" component={Login} onEnter={requireAdmin} />
+      <Route path="forgot" component={Forgot} onEnter={requireAdmin} />
+      <Route path="reset/:id" component={Forgot} onEnter={requireAdmin} />
+      <Route path="signup" component={Signup} onEnter={requireAdmin} />
+      <Route path="users" component={UserSearch} onEnter={requireAdmin} />
+      <Route path="community" component={Community} onEnter={requireAdmin} />
+      <Route path="transactions" component={VisibleTransactionList} onEnter={requireAdmin} />
+      <Route path="profile/:id" component={Profile} onEnter={requireAdmin} />
+      <Route path="editprofile" component={EditProfile} onEnter={requireAdmin} />
+      <Route path="contact" component={Contact} onEnter={requireAdmin} />
       <Route path="terms" component={Terms} />
-      <Route path="bookmarks" component={Bookmarks} onEnter={requireAuth} />
-      <Route path="settings" component={Settings} onEnter={requireAuth} />
-      <Route path="onboarding" component={Onboarding} />
-      <Route path="terms" component={Terms} />
+      <Route path="bookmarks" component={Bookmarks} onEnter={requireAdmin} />
+      <Route path="settings" component={Settings} onEnter={requireAdmin} />
+      <Route path="onboarding" component={Onboarding} onEnter={requireAdmin} />
+      <Route path="terms" component={Terms} onEnter={requireAdmin} />
       <Route path="imprint" component={Imprint} />
       <Route path="/admin/skills" component={ManageSkills} onEnter={requireAdmin} />
       <Route path="*" component={NotFound} />
